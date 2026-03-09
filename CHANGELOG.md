@@ -1,12 +1,10 @@
 ## Changelog
 
-## v1.5.2 Stable
-
-### Improve
-- Config.conf
+## v1.5.2 rc1
 
 ### Fix
-- Fixed bug.
+- Fixed Refresh rate option
+- Fixed server cek udpate
 
 ---
 
