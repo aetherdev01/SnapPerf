@@ -1,5 +1,11 @@
 ## Changelog
 
+## v1.5.1 Stable 
+### Improve
+- Fix config not saved on reboot
+
+---
+
 ## v1.5 Stable — 2026-03-09
 
 ### Added
