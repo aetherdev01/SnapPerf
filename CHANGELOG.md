@@ -1,6 +1,6 @@
 ## Changelog
 
-## v1.5.2rc1
+## v1.5.2 (Beta)
 
 ### Fix
 - Fixed Refresh rate option
