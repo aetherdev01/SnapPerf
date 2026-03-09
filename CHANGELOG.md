@@ -1,7 +1,7 @@
 ## Changelog
 
 ## v1.5.1 Stable 
-### Improve
+### Fix
 - Fix config not saved on reboot
 
 ---
