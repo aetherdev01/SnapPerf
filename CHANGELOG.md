@@ -1,5 +1,15 @@
 ## Changelog
 
+## v1.5.2 Stable
+
+### Improve
+- Config.conf
+
+### Fix
+- Fixed bug.
+
+---
+
 ## v1.5.1 Stable 
 ### Fix
 - Fix config not saved on reboot
@@ -26,21 +36,3 @@
 - Dark mode toggle state not syncing on tab switch
 - Stats panel not updating after offline recovery
 - Fixed Bug
-
-
----
-
-## v1.1 Beta — 2026-03-07
-
-### Added
-- Balanced, Performance, and Battery profiles
-- Hero card showing active profile with status pill
-- RAM clear, deep clean, and cache drop buttons
-- Device info panel: model, chipset, root, SELinux
-- KernelSU exec support alongside HTTP API
-- Toast notifications for all user actions
-
-### Fixed
-- SELinux label missing on some custom ROMs
-- Uptime counter drifting after long sessions
-- Profile button not highlighted on first load
