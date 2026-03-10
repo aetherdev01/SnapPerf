@@ -1,5 +1,7 @@
-## v1.5.2 Stable
+## v1.5.3 Stable
 
 ### Fix
-- Fixed refresh rate option not applying correctly
+- Penyesuaian Profile Balanced, Performance, Battery
+- Penyesuaian Tweak
+- Delete Option Touch Boost & Refresh Rate
 - Fixed server check update not fetching latest version
