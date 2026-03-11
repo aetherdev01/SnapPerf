@@ -1,22 +1,22 @@
-.reveal{opacity:0;transform:translateY(26px);transition:opacity .6s cubic-bezier(.22,.68,0,1.2),transform .6s cubic-bezier(.22,.68,0,1.2)}
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .55s cubic-bezier(.22,.68,0,1.2),transform .55s cubic-bezier(.22,.68,0,1.2)}
 .reveal.visible{opacity:1;transform:translateY(0)}
 @keyframes rippleAnim{to{transform:scale(4);opacity:0}}
-@keyframes blobFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(28px,18px) scale(1.07)}}
-@keyframes float{from{transform:translateY(0)}to{transform:translateY(-13px)}}
-@keyframes popBounce{0%{opacity:0;transform:scale(.7) translateY(-6px)}60%{transform:scale(1.06) translateY(2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
-@keyframes popClose{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.75) translateY(-6px)}}
+@keyframes blobFloat{from{transform:translate(0,0) scale(1)}to{transform:translate(26px,16px) scale(1.07)}}
+@keyframes float{from{transform:translateY(0)}to{transform:translateY(-12px)}}
+@keyframes popBounce{0%{opacity:0;transform:scale(.72) translateY(-5px)}60%{transform:scale(1.05) translateY(2px)}100%{opacity:1;transform:scale(1) translateY(0)}}
+@keyframes popClose{from{opacity:1;transform:scale(1)}to{opacity:0;transform:scale(.76) translateY(-5px)}}
 @keyframes btnSpring{0%{transform:scale(1)}30%{transform:scale(.93)}70%{transform:scale(1.04)}100%{transform:scale(1)}}
-@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:translateY(0)}}
 @keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.4}}
-.btn-spring{animation:btnSpring .35s cubic-bezier(.34,1.56,.64,1)}
-.hero-content{animation:fadeUp .8s cubic-bezier(.22,.68,0,1.2) .1s both}
-.hero-image{animation:fadeUp .8s cubic-bezier(.22,.68,0,1.2) .25s both}
-.page-hero-content{animation:fadeUp .7s cubic-bezier(.22,.68,0,1.2) .15s both}
+@keyframes pageIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.btn-spring{animation:btnSpring .32s cubic-bezier(.34,1.56,.64,1)}
+.hero-content{animation:fadeUp .75s cubic-bezier(.22,.68,0,1.2) .08s both}
+.hero-image{animation:fadeUp .75s cubic-bezier(.22,.68,0,1.2) .22s both}
+.page-hero-content{animation:fadeUp .65s cubic-bezier(.22,.68,0,1.2) .12s both}
+body.page-in{animation:pageIn .28s cubic-bezier(.22,.68,0,1.2) both}
 .hamburger.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
 .hamburger.open span:nth-child(2){opacity:0;transform:scaleX(0)}
 .hamburger.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 .status-dot.green{animation:dotPulse 2.5s ease-in-out infinite}
-.social-card{transition:all .3s cubic-bezier(.34,1.56,.64,1)}
-.filter-btn{transition:all .2s cubic-bezier(.34,1.56,.64,1)}
 .filter-btn:active{transform:scale(.94)}
 .mob-link:active{transform:scale(.97)}

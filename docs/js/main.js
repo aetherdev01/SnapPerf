@@ -1,9 +1,12 @@
 'use strict';
 (function(){
-  const saved=localStorage.getItem('sp-theme')||'light';
-  document.documentElement.setAttribute('data-theme',saved);
+  const t=localStorage.getItem('sp-theme')||'light';
+  document.documentElement.setAttribute('data-theme',t);
 })();
+
 document.addEventListener('DOMContentLoaded',()=>{
+  document.body.classList.add('page-in');
+
   const bar=document.createElement('div');
   bar.className='scroll-progress';
   document.body.prepend(bar);
@@ -15,10 +18,10 @@ document.addEventListener('DOMContentLoaded',()=>{
   const themeBtn=document.getElementById('themeToggle');
   if(themeBtn){
     themeBtn.addEventListener('click',()=>{
-      const cur=document.documentElement.getAttribute('data-theme');
-      const next=cur==='light'?'dark':'light';
-      document.documentElement.setAttribute('data-theme',next);
-      localStorage.setItem('sp-theme',next);
+      const c=document.documentElement.getAttribute('data-theme');
+      const n=c==='light'?'dark':'light';
+      document.documentElement.setAttribute('data-theme',n);
+      localStorage.setItem('sp-theme',n);
     });
   }
 
@@ -69,8 +72,18 @@ document.addEventListener('DOMContentLoaded',()=>{
     entries.forEach(e=>{
       if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
     });
-  },{threshold:.1,rootMargin:'0px 0px -40px 0px'});
+  },{threshold:.08,rootMargin:'0px 0px -30px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  document.querySelectorAll('a.nav-link, a.mob-link, a.footer-links a').forEach(link=>{
+    const href=link.getAttribute('href');
+    if(!href||href.startsWith('http')||href.startsWith('#'))return;
+    link.addEventListener('click',(e)=>{
+      e.preventDefault();
+      document.body.classList.add('page-leaving');
+      setTimeout(()=>{window.location.href=href;},200);
+    });
+  });
 
   document.querySelectorAll('.post-dots').forEach(wrapper=>{
     const btn=wrapper.querySelector('.dots-btn');
@@ -131,17 +144,71 @@ document.addEventListener('DOMContentLoaded',()=>{
     });
   }
 
+  loadUpdateJson();
+
   document.addEventListener('selectstart',(e)=>{
     if(!e.target.closest('a[href]'))e.preventDefault();
   });
   document.addEventListener('contextmenu',(e)=>{
     if(!e.target.closest('a[href]')&&!e.target.closest('img'))e.preventDefault();
   });
-
   document.addEventListener('keydown',(e)=>{
-    if((e.ctrlKey||e.metaKey)&&['u','s','a'].includes(e.key.toLowerCase())){
-      if(e.key.toLowerCase()==='a'&&!e.target.closest('input, textarea'))return;
-      e.preventDefault();
-    }
+    if((e.ctrlKey||e.metaKey)&&['u','s'].includes(e.key.toLowerCase()))e.preventDefault();
   });
 });
+
+async function loadUpdateJson(){
+  try{
+    const res=await fetch('https://raw.githubusercontent.com/aetherdev22/snapperf/main/update.json',{cache:'no-store'});
+    if(!res.ok)return;
+    const d=await res.json();
+    const ver=d.version||'';
+    const zipUrl=d.zipUrl||d.zipUrl||'';
+    const mirror=d.link||'';
+    const short=ver.replace(' (Stable)','').replace(' Stable','');
+
+    const heroV=document.getElementById('heroVersion');
+    if(heroV)heroV.textContent=short+' Stable';
+    const dlV=document.getElementById('dlVersion');
+    if(dlV)dlV.textContent=short;
+    const dlT=document.getElementById('dlTitle');
+    if(dlT)dlT.textContent='SnapPerf '+short;
+    const dlVT=document.getElementById('dlVersionText');
+    if(dlVT)dlVT.textContent=short+' Stable';
+    const clB=document.getElementById('clBadge');
+    if(clB)clB.textContent=short;
+    const clT=document.getElementById('changelogTitle');
+    if(clT)clT.textContent='Changelog '+short;
+    const heroDl=document.getElementById('heroDl');
+    if(heroDl&&zipUrl)heroDl.href=zipUrl;
+    const dlBtn=document.getElementById('dlBtn');
+    if(dlBtn&&zipUrl)dlBtn.href=zipUrl;
+    const mirBtn=document.getElementById('mirrorBtn');
+    if(mirBtn&&mirror)mirBtn.href=mirror;
+
+    if(d.changelog){
+      loadChangelog(d.changelog);
+    }
+  }catch(err){}
+}
+
+async function loadChangelog(url){
+  try{
+    const res=await fetch(url,{cache:'no-store'});
+    if(!res.ok)return;
+    const text=await res.text();
+    const lines=text.split('\n');
+    const items=[];
+    const colors=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
+    let i=0;
+    for(const line of lines){
+      const m=line.match(/^[-*]\s+(.+)/);
+      if(m){items.push({text:m[1].trim(),color:colors[i%colors.length]});i++;}
+    }
+    if(!items.length)return;
+    const cl=document.getElementById('clList');
+    if(cl){
+      cl.innerHTML=items.map(it=>`<li><span class="cl-dot" style="background:${it.color}"></span>${it.text}</li>`).join('');
+    }
+  }catch(err){}
+}
