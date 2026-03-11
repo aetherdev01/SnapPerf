@@ -45,27 +45,27 @@
   <div class="blob blob-1" style="opacity:.4"></div>
   <div class="blob blob-2" style="opacity:.3"></div>
   <div class="page-hero-content reveal">
-    <span class="badge badge-blue">Release History</span>
+    <span class="badge badge-blue">Live from GitHub</span>
     <h1>Updates &amp; Releases</h1>
-    <p>Changelogs, release notes, and development updates — synced from GitHub Releases.</p>
+    <p>Changelogs, release notes, and development updates — synced directly from GitHub Releases.</p>
   </div>
 </div>
 
 <section class="section">
   <div class="container">
-    <!-- Controls: search top, filters below -->
+    <!-- Controls: search + filter in one row -->
     <div class="updates-controls reveal">
-      <div class="search-row">
-        <div class="search-box">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="search" id="postSearch" placeholder="Search releases…" autocomplete="off" spellcheck="false"/>
-        </div>
-      </div>
       <div class="filter-row">
         <button class="filter-btn active ripple-btn" data-filter="all">All</button>
         <button class="filter-btn ripple-btn" data-filter="stable">Stable</button>
         <button class="filter-btn ripple-btn" data-filter="fix">Fix</button>
         <button class="filter-btn ripple-btn" data-filter="beta">Beta</button>
+      </div>
+      <div class="search-row">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" id="postSearch" placeholder="Search releases…" autocomplete="off" spellcheck="false"/>
+        </div>
       </div>
     </div>
 
@@ -247,9 +247,6 @@
       loading.style.display='none';
       grid.style.display='';
 
-      // Apply current active filter after loading
-      if(window.applyFilters)window.applyFilters();
-
       // Re-init IntersectionObserver for new cards
       var obs=new IntersectionObserver(function(entries){
         entries.forEach(function(e){
@@ -278,27 +275,17 @@
         });
       });
 
+      // Wire search input
+      var si=document.getElementById('postSearch');
+      if(si){
+        si.addEventListener('input',function(){
+          if(window.applyFilters)window.applyFilters();
+        });
+      }
     }catch(err){
       loading.style.display='none';
       errEl.style.display='';
     }
-  }
-
-  // Wire filter buttons
-  document.querySelectorAll('.filter-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){
-      document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
-      btn.classList.add('active');
-      if(window.applyFilters)window.applyFilters();
-    });
-  });
-
-  // Wire search input
-  var si=document.getElementById('postSearch');
-  if(si){
-    si.addEventListener('input',function(){
-      if(window.applyFilters)window.applyFilters();
-    });
   }
 
   // Wait for main.js DOMContentLoaded to fire first, then load releases
