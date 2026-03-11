@@ -52,6 +52,7 @@
       <span class="badge badge-green">Magisk Module</span>
       <span class="badge badge-purple">Snapdragon</span>
     </div>
+    </br>
     <h1 class="hero-title">Snap<span class="grad-text">Perf</span></h1>
     <p class="hero-desc" style="margin-top:1.4rem">A powerful Magisk performance module engineered for Snapdragon devices. Unlock your device&rsquo;s true potential &mdash; smoother, faster, smarter.</p>
     <div class="hero-actions">
