@@ -125,7 +125,18 @@ document.addEventListener('DOMContentLoaded',function(){
       },{once:true});
     });
   }
-  document.addEventListener('click',closeAllPopups);
+  document.addEventListener('click',function(e){
+    if(!e.target.closest('.filter-btn'))closeAllPopups();
+  });
+
+  // Filter buttons for updates page
+  document.addEventListener('click',function(e){
+    var btn=e.target.closest('.filter-btn');
+    if(!btn)return;
+    document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+    btn.classList.add('active');
+    if(window.applyFilters)window.applyFilters();
+  });
 
   // Security hardening
   document.addEventListener('selectstart',function(e){
@@ -141,15 +152,6 @@ document.addEventListener('DOMContentLoaded',function(){
   loadUpdateJson();
 });
 
-// Wire filter buttons on updates page
-document.addEventListener('click',function(e){
-  var btn=e.target.closest('.filter-btn');
-  if(!btn)return;
-  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
-  btn.classList.add('active');
-  if(window.applyFilters)window.applyFilters();
-});
-
 // Global filter function used by updates page search + filter buttons
 window.applyFilters=function(){
   var activeBtn=document.querySelector('.filter-btn.active');
@@ -157,16 +159,16 @@ window.applyFilters=function(){
   var si=document.getElementById('postSearch');
   var searchVal=si?si.value.toLowerCase().trim():'';
   document.querySelectorAll('.post-card').forEach(function(card){
-    var tags=(card.dataset.tags||'').split(' ');
+    var tags=(card.dataset.tags||'').split(/\s+/);
     var text=card.textContent.toLowerCase();
-    var matchFilter=(f==='all'||tags.includes(f));
-    var matchSearch=!searchVal||text.includes(searchVal);
+    var matchFilter=(f==='all'||tags.indexOf(f)!==-1);
+    var matchSearch=!searchVal||text.indexOf(searchVal)!==-1;
     if(matchFilter&&matchSearch){
-      card.style.display='';
-      setTimeout(function(){card.style.opacity='1';},10);
+      card.style.removeProperty('display');
+      card.style.opacity='1';
     }else{
+      card.style.display='none';
       card.style.opacity='0';
-      setTimeout(function(){card.style.display='none';},200);
     }
   });
 };
