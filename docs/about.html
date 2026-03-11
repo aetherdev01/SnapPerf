@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About – SnapPerf</title>
+  <meta name="description" content="Learn about SnapPerf and the developer aetherdev22." />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="css/style.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <nav class="navbar" id="navbar">
+    <div class="nav-pill">
+      <a href="index.html" class="nav-logo">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#lg1)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg>
+        <span>SnapPerf</span>
+      </a>
+      <div class="nav-links">
+        <a href="index.html" class="nav-link ripple-btn">Home</a>
+        <a href="posts.html" class="nav-link ripple-btn">Posts</a>
+        <a href="draws.html" class="nav-link ripple-btn">Draw List</a>
+        <a href="about.html" class="nav-link active ripple-btn">About</a>
+      </div>
+      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="mob-link ripple-btn">🏠 Home</a>
+    <a href="posts.html" class="mob-link ripple-btn">📝 Posts</a>
+    <a href="draws.html" class="mob-link ripple-btn">🎨 Draw List</a>
+    <a href="about.html" class="mob-link ripple-btn">👤 About</a>
+  </div>
+
+  <div class="page-hero">
+    <div class="blob blob-1" style="opacity:.4"></div>
+    <div class="blob blob-2" style="opacity:.3"></div>
+    <div class="page-hero-content reveal">
+      <span class="badge badge-purple">About</span>
+      <h1>About SnapPerf</h1>
+      <p>The story behind the module and the developer.</p>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container about-container">
+
+      <!-- Dev Card -->
+      <div class="about-dev-card reveal">
+        <div class="dev-avatar">
+          <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="32" r="32" fill="url(#avlg)"/>
+            <circle cx="32" cy="26" r="12" fill="rgba(255,255,255,.2)"/>
+            <ellipse cx="32" cy="54" rx="18" ry="10" fill="rgba(255,255,255,.15)"/>
+            <path d="M24 26l5 5 11-11" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="avlg" x1="0" y1="0" x2="64" y2="64"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div class="dev-info">
+          <h2>aetherdev22</h2>
+          <p class="dev-role">Android Developer · Magisk Module Creator</p>
+          <div class="dev-badges">
+            <span class="badge badge-blue">Developer</span>
+            <span class="badge badge-green">Open Source</span>
+            <span class="badge badge-purple">Android</span>
+          </div>
+          <div class="dev-links">
+            <a href="https://github.com/aetherdev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" fill="currentColor"/></svg>
+              GitHub
+            </a>
+            <a href="https://t.me/aetherdev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21.198 2.433a2.242 2.242 0 00-1.022.215l-8.609 3.33c-2.068.966-9.116 3.49-9.116 3.49s-2.523.99-.944 2.49c.803.77 2.554 1.47 2.554 1.47l6.246 2.104c.408.134.859.01 1.135-.31l.5-.6c.276-.33.696-.46 1.1-.34l3.37.9c.558.15 1.08-.14 1.19-.68l2.25-10.92c.12-.56-.19-1.15-.748-1.39z" fill="#29b6f6"/></svg>
+              Telegram
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Module -->
+      <div class="about-section-card reveal" style="animation-delay:.05s">
+        <div class="about-section-icon" style="--ic:#3b8fff">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#3b8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="about-section-content">
+          <h3>What is SnapPerf?</h3>
+          <p>SnapPerf is a Magisk module specifically engineered for Snapdragon-powered Android devices. It applies a curated set of kernel and system-level tweaks to improve overall performance, reduce latency, extend battery life, and enhance display smoothness.</p>
+          <p>Unlike one-size-fits-all tweaks, SnapPerf targets Qualcomm's unique architecture — including Kryo CPU clusters, Adreno GPU, and the Hexagon DSP — to deliver meaningful, measurable improvements.</p>
+        </div>
+      </div>
+
+      <div class="about-section-card reveal" style="animation-delay:.1s">
+        <div class="about-section-icon" style="--ic:#bf5af2">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#bf5af2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="about-section-content">
+          <h3>Requirements</h3>
+          <ul class="about-list">
+            <li>Rooted Android device (Magisk v24+ or KernelSU)</li>
+            <li>Qualcomm Snapdragon SoC</li>
+            <li>Android 10 or later recommended</li>
+            <li>At least 3GB RAM</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="about-section-card reveal" style="animation-delay:.15s">
+        <div class="about-section-icon" style="--ic:#00c787">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M9 11l3 3L22 4M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11" stroke="#00c787" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+        <div class="about-section-content">
+          <h3>How to Install</h3>
+          <ol class="about-list">
+            <li>Download the <code>.zip</code> file from the releases page.</li>
+            <li>Open Magisk Manager or KernelSU Manager.</li>
+            <li>Tap "Modules" → "Install from storage".</li>
+            <li>Select the downloaded zip and reboot.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="about-section-card reveal" style="animation-delay:.2s">
+        <div class="about-section-icon" style="--ic:#ff9f0a">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#ff9f0a" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"/></svg>
+        </div>
+        <div class="about-section-content">
+          <h3>Disclaimer</h3>
+          <p>SnapPerf is provided as-is. The developer is not responsible for any damage to your device. Always keep a backup before flashing any module. Use at your own risk.</p>
+        </div>
+      </div>
+
+      <!-- License Card -->
+      <div class="license-card reveal" style="animation-delay:.25s">
+        <h3>MIT License</h3>
+        <p>SnapPerf is open source software released under the MIT License. You are free to use, modify, and distribute this software with proper attribution.</p>
+        <a href="https://github.com/aetherdev22/snapperf/blob/main/LICENSE" class="btn btn-outline btn-sm ripple-btn" target="_blank" rel="noopener">View Full License →</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#flg3)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="flg3" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg>
+          <span>SnapPerf</span>
+        </div>
+        <p class="footer-copy">© 2024 aetherdev22. Open source under MIT License.</p>
+        <div class="footer-links">
+          <a href="https://github.com/aetherdev22/snapperf/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
+          <a href="https://github.com/aetherdev22/snapperf" target="_blank" rel="noopener">GitHub</a>
+          <a href="about.html">About</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+  <script src="js/main.js"></script>
+</body>
+</html>

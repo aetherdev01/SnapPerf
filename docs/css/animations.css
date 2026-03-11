@@ -1,0 +1,99 @@
+/* ===========================
+   SnapPerf – animations.css
+   =========================== */
+
+/* ─── Reveal on scroll ─── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .6s cubic-bezier(.22,.68,0,1.2), transform .6s cubic-bezier(.22,.68,0,1.2);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ─── Ripple ─── */
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+/* ─── Blob float ─── */
+@keyframes blobFloat {
+  from { transform: translate(0, 0) scale(1); }
+  to   { transform: translate(30px, 20px) scale(1.08); }
+}
+
+/* ─── Phone float ─── */
+@keyframes float {
+  from { transform: translateY(0); }
+  to   { transform: translateY(-14px); }
+}
+
+/* ─── Popup bounce ─── */
+@keyframes popBounce {
+  0%   { opacity: 0; transform: scale(.7) translateY(-6px); }
+  60%  { transform: scale(1.06) translateY(2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+@keyframes popClose {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(.75) translateY(-6px); }
+}
+
+/* ─── Button click spring ─── */
+@keyframes btnSpring {
+  0%   { transform: scale(1); }
+  30%  { transform: scale(.93); }
+  70%  { transform: scale(1.04); }
+  100% { transform: scale(1); }
+}
+.btn-spring { animation: btnSpring .35s cubic-bezier(.34,1.56,.64,1); }
+
+/* ─── Page load stagger ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-content { animation: fadeUp .8s cubic-bezier(.22,.68,0,1.2) .1s both; }
+.hero-image { animation: fadeUp .8s cubic-bezier(.22,.68,0,1.2) .25s both; }
+.page-hero-content { animation: fadeUp .7s cubic-bezier(.22,.68,0,1.2) .15s both; }
+
+/* ─── Hamburger open ─── */
+.hamburger.open span:nth-child(1) { transform: translateY(6px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+.hamburger.open span:nth-child(3) { transform: translateY(-6px) rotate(-45deg); }
+
+/* ─── Scroll progress ─── */
+@keyframes shimmer {
+  from { background-position: -200% center; }
+  to   { background-position: 200% center; }
+}
+
+/* ─── Img card hover ─── */
+.img-card { transition: transform .4s cubic-bezier(.34,1.56,.64,1), box-shadow .4s; }
+.img-card:hover { transform: scale(1.02) rotate(-1deg); box-shadow: 0 32px 80px rgba(0,85,255,.25); }
+
+/* ─── Feature card entrance ─── */
+.feature-card.visible { animation: none; }
+
+/* ─── Social card hover glow ─── */
+.social-card { transition: all .3s cubic-bezier(.34,1.56,.64,1); }
+
+/* ─── Table row hover ─── */
+.draw-table tbody tr { transition: background .15s; }
+
+/* ─── Filter btn ─── */
+.filter-btn { transition: all .2s cubic-bezier(.34,1.56,.64,1); }
+.filter-btn:active { transform: scale(.94); }
+
+/* ─── Mobile menu item hover ─── */
+.mob-link { transition: all .2s cubic-bezier(.34,1.56,.64,1); }
+.mob-link:active { transform: scale(.97); }
+
+/* ─── Dot pulse (status) ─── */
+@keyframes dotPulse {
+  0%,100% { opacity: 1; }
+  50%      { opacity: .4; }
+}
+.status-dot.green { animation: dotPulse 2.5s ease-in-out infinite; }
