@@ -20,499 +20,175 @@
 <link rel="icon" href="assets/aether.webp" type="image/webp"/>
 <link rel="stylesheet" href="css/style.css"/>
 <link rel="stylesheet" href="css/animations.css"/>
-<style>
-.hero{
-min-height:auto;
-padding:7rem 2rem 4rem;
-gap:4rem;
-align-items:center
-}
-
-.hero-content{
-max-width:520px
-}
-
-.badge-row{
-gap:.4rem;
-margin-bottom:1.4rem
-}
-
-.hero-title{
-font-size:clamp(2.8rem,5.5vw,4.8rem);
-margin:0 0 1.2rem;
-line-height:1.1
-}
-
-.hero-desc{
-margin-top:0;
-font-size:.96rem;
-max-width:440px;
-line-height:1.7
-}
-
-.hero-actions{
-margin-top:1.8rem;
-gap:.6rem
-}
-
-.hero-image{
-max-width:420px
-}
-
-.idx-section{
-padding:4rem 0
-}
-
-.idx-section+.idx-section{
-border-top:1px solid var(--border)
-}
-
-.idx-header{
-text-align:center;
-margin-bottom:2.2rem
-}
-
-.idx-label{
-display:inline-flex;
-align-items:center;
-font-size:.67rem;
-font-weight:800;
-text-transform:uppercase;
-letter-spacing:.1em;
-color:var(--accent2);
-background:var(--accent-soft);
-padding:.22rem .7rem;
-border-radius:999px;
-margin-bottom:.48rem
-}
-
-.idx-title{
-font-size:clamp(1.45rem,2.8vw,2rem);
-font-weight:800;
-letter-spacing:-.03em;
-color:var(--text);
-margin-bottom:.3rem
-}
-
-.idx-sub{
-font-size:.86rem;
-color:var(--text2)
-}
-
-.feat-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:1.2rem
-}
-
-.feat-card{
-background:var(--card-bg);
-backdrop-filter:var(--card-blur);
--webkit-backdrop-filter:var(--card-blur);
-border:1px solid var(--border);
-border-radius:1.1rem;
-padding:1.4rem;
-display:flex;
-flex-direction:column;
-gap:.55rem;
-transition:transform .28s cubic-bezier(.34,1.56,.64,1),box-shadow .28s,border-color .2s;
-position:relative;
-overflow:hidden
-}
-
-.feat-card::before{
-content:'';
-position:absolute;
-inset:0;
-background:linear-gradient(135deg,rgba(255,255,255,.05),transparent);
-pointer-events:none
-}
-
-.feat-card:hover{
-transform:translateY(-4px);
-box-shadow:var(--shadow-lg);
-border-color:var(--border2)
-}
-
-.feat-icon-wrap{
-width:36px;
-height:36px;
-background:color-mix(in srgb,var(--ic) 12%,transparent);
-border:1px solid color-mix(in srgb,var(--ic) 20%,transparent);
-border-radius:.6rem;
-display:flex;
-align-items:center;
-justify-content:center
-}
-
-.feat-card h3{
-font-size:.86rem;
-font-weight:700;
-color:var(--text)
-}
-
-.feat-card p{
-font-size:.79rem;
-color:var(--text2);
-line-height:1.58;
-flex:1
-}
-
-.feat-tag{
-display:inline-block;
-padding:.11rem .42rem;
-border-radius:999px;
-font-size:.63rem;
-font-weight:700;
-text-transform:uppercase;
-letter-spacing:.03em;
-background:var(--bc);
-color:var(--bt);
-align-self:flex-start;
-margin-top:auto
-}
-
-.comm-grid{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:1rem
-}
-
-.comm-card{
-display:flex;
-align-items:center;
-gap:.8rem;
-background:var(--card-bg);
-backdrop-filter:var(--card-blur);
--webkit-backdrop-filter:var(--card-blur);
-border:1px solid var(--border);
-border-radius:1.05rem;
-padding:.95rem 1.1rem;
-transition:transform .25s cubic-bezier(.34,1.56,.64,1),box-shadow .25s,border-color .2s;
-cursor:pointer
-}
-
-.comm-card:hover{
-transform:translateY(-3px);
-box-shadow:var(--shadow-lg);
-border-color:var(--border2)
-}
-
-.comm-icon{
-width:38px;
-height:38px;
-border-radius:.6rem;
-display:flex;
-align-items:center;
-justify-content:center;
-flex-shrink:0
-}
-
-.comm-tg{
-background:rgba(41,182,246,.12);
-border:1px solid rgba(41,182,246,.2)
-}
-
-.comm-yt{
-background:rgba(255,55,95,.12);
-border:1px solid rgba(255,55,95,.2)
-}
-
-.comm-gh{
-background:rgba(48,209,88,.12);
-border:1px solid rgba(48,209,88,.2)
-}
-
-[data-theme="dark"] .comm-gh{
-background:rgba(200,200,220,.08);
-border:1px solid rgba(200,200,220,.14)
-}
-
-.comm-body{
-display:flex;
-flex-direction:column;
-gap:.07rem;
-min-width:0
-}
-
-.comm-name{
-font-weight:700;
-font-size:.85rem;
-color:var(--text)
-}
-
-.comm-handle{
-font-size:.72rem;
-color:var(--text3);
-white-space:nowrap;
-overflow:hidden;
-text-overflow:ellipsis
-}
-
-.cl-wrap{
-background:var(--card-bg);
-backdrop-filter:var(--card-blur);
--webkit-backdrop-filter:var(--card-blur);
-border:1px solid var(--border);
-border-radius:1.2rem;
-padding:1.4rem 1.5rem;
-max-width:560px;
-margin:0 auto
-}
-
-.cl-badges{
-display:flex;
-gap:.35rem;
-margin-bottom:.9rem
-}
-
-.cl-items{
-display:flex;
-flex-direction:column;
-gap:.48rem;
-margin-bottom:1rem
-}
-
-.cl-item{
-display:flex;
-align-items:center;
-gap:.58rem;
-font-size:.83rem;
-color:var(--text2)
-}
-
-.cl-dot{
-width:6px;
-height:6px;
-border-radius:50%;
-flex-shrink:0
-}
-
-@media (max-width:900px){
-.comm-grid{grid-template-columns:1fr}
-}
-
-@media (max-width:768px){
-.hero{
-padding:5.5rem 1.25rem 2.5rem;
-gap:2.5rem;
-flex-direction:column;
-text-align:center
-}
-.hero-actions{justify-content:center}
-.hero-image{max-width:100%}
-.hero-desc{max-width:100%}
-.feat-grid{grid-template-columns:1fr 1fr;gap:.9rem}
-.comm-grid{grid-template-columns:1fr}
-}
-
-@media (max-width:480px){
-.feat-grid{grid-template-columns:1fr}
-}
-</style>
 </head>
 <body class="page-transitioning">
-
-<!-- NAV -->
 <nav class="navbar" id="navbar">
   <div class="nav-pill">
-    <a href="index.html" class="nav-logo">
-      <img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/>
-      <span>SnapPerf</span>
-    </a>
+    <a href="index.html" class="nav-logo"><img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/><span>SnapPerf</span></a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link active ripple-btn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>
-        Home
-      </a>
-      <a href="updates.html" class="nav-link ripple-btn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        Updates
-      </a>
-      <a href="about.html" class="nav-link ripple-btn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        About
-      </a>
+      <a href="index.html" class="nav-link active ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
+      <a href="updates.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Updates</a>
+      <a href="about.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
     </div>
     <div class="nav-right">
-      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme">
-        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
+      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme"><svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
-
-<!-- MOBILE MENU -->
 <div class="mobile-menu" id="mobileMenu">
   <a href="index.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
   <a href="updates.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Updates</a>
   <a href="about.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
 </div>
 
-<!-- ═══ HERO ═══ -->
 <section class="hero">
   <div class="hero-bg">
-    <div class="blob blob-1"></div>
-    <div class="blob blob-2"></div>
-    <div class="blob blob-3"></div>
+    <div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div>
   </div>
   <div class="hero-content reveal">
     <div class="badge-row">
-      <span class="badge badge-blue" id="heroVersion">AetherDev</span>
+      <span class="badge badge-blue" id="heroVersion">aether dev</span>
       <span class="badge badge-green">Magisk Module</span>
       <span class="badge badge-purple">Snapdragon</span>
     </div>
     <h1 class="hero-title">Snap<span class="grad-text">Perf</span></h1>
     <p class="hero-desc">A powerful Magisk performance module engineered for Snapdragon devices. Unlock your device&rsquo;s true potential &mdash; smoother, faster, smarter.</p>
     <div class="hero-actions">
-      <a href="https://github.com/aetherdev22/snapperf/releases/" class="btn btn-primary ripple-btn" id="heroDl" target="_blank" rel="noopener noreferrer">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>
-        Download
-      </a>
-      <a href="https://t.me/get01projects" class="btn btn-outline ripple-btn" target="_blank" rel="noopener noreferrer">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg>
-        Telegram
-      </a>
-      <a href="https://github.com/aetherdev22/snapperf" class="btn btn-ghost ripple-btn" target="_blank" rel="noopener noreferrer">
-        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        GitHub
-      </a>
+      <a href="https://github.com/aetherdev22/snapperf/releases/" class="btn btn-primary ripple-btn" id="heroDl" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download Module</a>
+      <a href="https://t.me/get01projects" class="btn btn-outline ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Telegram</a>
+      <a href="https://github.com/aetherdev22/snapperf" class="btn btn-ghost ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>
     </div>
   </div>
-  <div class="hero-image reveal" style="animation-delay:.15s">
+  <div class="hero-image reveal" style="animation-delay:.2s">
     <div class="img-card">
-      <img src="assets/banner.webp" alt="SnapPerf Banner" loading="lazy" class="banner-img"/>
+      <img src="banner.webp" alt="SnapPerf Banner" loading="lazy" class="banner-img"/>
       <div class="img-glow"></div>
     </div>
   </div>
 </section>
 
-<!-- ═══ FEATURES ═══ -->
-<section class="idx-section">
+<section class="section features-section">
   <div class="container">
-    <div class="idx-header reveal">
-      <div class="idx-label">Features</div>
-      <h2 class="idx-title">Why SnapPerf?</h2>
-      <p class="idx-sub">Engineered for Snapdragon. Built for performance enthusiasts.</p>
+    <div class="section-header reveal">
+      <span class="section-tag">Features</span>
+      <h2 class="section-title">Why SnapPerf?</h2>
+      <p class="section-sub">Engineered for Snapdragon. Built for performance enthusiasts.</p>
     </div>
-    <div class="feat-grid">
-      <div class="feat-card reveal" style="animation-delay:.04s">
-        <div class="feat-icon-wrap" style="--ic:#3b8fff">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#3b8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+    <div class="features-grid">
+      <div class="feature-card reveal" style="animation-delay:.04s">
+        <div class="feat-icon" style="--ic:#3b8fff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#3b8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Performance Boost</h3>
         <p>Optimized CPU governor and scheduler tweaks for maximum responsiveness on every Snapdragon core cluster.</p>
-        <span class="feat-tag" style="--bc:rgba(59,143,255,.12);--bt:#3b8fff">Performance</span>
+        <span class="feat-badge" style="--bc:rgba(59,143,255,.12);--bt:#3b8fff">Performance</span>
       </div>
-      <div class="feat-card reveal" style="animation-delay:.07s">
-        <div class="feat-icon-wrap" style="--ic:#00c787">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#00c787" stroke-width="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4" stroke="#00c787" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+      <div class="feature-card reveal" style="animation-delay:.08s">
+        <div class="feat-icon" style="--ic:#00c787"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#00c787" stroke-width="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2M12 12v4M10 14h4" stroke="#00c787" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h3>Battery Saver</h3>
         <p>Intelligent power profiles reduce unnecessary drain without sacrificing the user experience.</p>
-        <span class="feat-tag" style="--bc:rgba(0,199,135,.12);--bt:#00c787">Battery</span>
+        <span class="feat-badge" style="--bc:rgba(0,199,135,.12);--bt:#00c787">Battery</span>
       </div>
-      <div class="feat-card reveal" style="animation-delay:.10s">
-        <div class="feat-icon-wrap" style="--ic:#bf5af2">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#bf5af2" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#bf5af2" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+      <div class="feature-card reveal" style="animation-delay:.12s">
+        <div class="feat-icon" style="--ic:#bf5af2"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" stroke="#bf5af2" stroke-width="2"/><path d="M8 21h8M12 17v4" stroke="#bf5af2" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h3>Display Smoothness</h3>
         <p>Fine-tuned frame pacing and Adreno GPU settings for a consistently fluid display experience.</p>
-        <span class="feat-tag" style="--bc:rgba(191,90,242,.12);--bt:#bf5af2">Display</span>
+        <span class="feat-badge" style="--bc:rgba(191,90,242,.12);--bt:#bf5af2">Display</span>
       </div>
-      <div class="feat-card reveal" style="animation-delay:.13s">
-        <div class="feat-icon-wrap" style="--ic:#ff9f0a">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+      <div class="feature-card reveal" style="animation-delay:.16s">
+        <div class="feat-icon" style="--ic:#ff9f0a"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Thermal Control</h3>
-        <p>Manages heat throttling to sustain peak performance during extended gaming sessions.</p>
-        <span class="feat-tag" style="--bc:rgba(255,159,10,.12);--bt:#ff9f0a">Thermal</span>
+        <p>Manages heat throttling behavior to sustain peak performance during extended gaming sessions.</p>
+        <span class="feat-badge" style="--bc:rgba(255,159,10,.12);--bt:#ff9f0a">Thermal</span>
       </div>
-      <div class="feat-card reveal" style="animation-delay:.16s">
-        <div class="feat-icon-wrap" style="--ic:#ff375f">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M1 6h22M1 12h22M1 18h22" stroke="#ff375f" stroke-width="2" stroke-linecap="round"/></svg>
-        </div>
+      <div class="feature-card reveal" style="animation-delay:.20s">
+        <div class="feat-icon" style="--ic:#ff375f"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M1 6h22M1 12h22M1 18h22" stroke="#ff375f" stroke-width="2" stroke-linecap="round"/></svg></div>
         <h3>Network Boost</h3>
-        <p>TCP buffer and scheduler optimisations to reduce latency in online games and apps.</p>
-        <span class="feat-tag" style="--bc:rgba(255,55,95,.12);--bt:#ff375f">Network</span>
+        <p>TCP buffer and scheduler optimisations to reduce network latency in online games and apps.</p>
+        <span class="feat-badge" style="--bc:rgba(255,55,95,.12);--bt:#ff375f">Network</span>
       </div>
-      <div class="feat-card reveal" style="animation-delay:.19s">
-        <div class="feat-icon-wrap" style="--ic:#30d158">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#30d158" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+      <div class="feature-card reveal" style="animation-delay:.24s">
+        <div class="feat-icon" style="--ic:#30d158"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#30d158" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#30d158" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
         <h3>Easy Install</h3>
         <p>Flash via Magisk or KernelSU Manager. No ADB required. Instant effect after reboot.</p>
-        <span class="feat-tag" style="--bc:rgba(48,209,88,.12);--bt:#30d158">Plug-and-play</span>
+        <span class="feat-badge" style="--bc:rgba(48,209,88,.12);--bt:#30d158">Plug-and-play</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ═══ COMMUNITY ═══ -->
-<section class="idx-section">
+<section class="section download-section">
   <div class="container">
-    <div class="idx-header reveal">
-      <div class="idx-label">Community</div>
-      <h2 class="idx-title">Join the Community</h2>
+    <div class="download-card reveal">
+      <div class="dl-blur"></div>
+      <div class="dl-content">
+        <div class="dl-badges">
+          <span class="badge badge-blue" id="dlVersion">v1.5.3</span>
+          <span class="badge badge-green">Stable</span>
+        </div>
+        <h2 id="dlTitle">SnapPerf v1.5.3</h2>
+        <p>The latest stable release for all supported Snapdragon devices.</p>
+        <div class="dl-info">
+          <div class="dl-info-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 6v6l4 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span id="dlVersionText">v1.5.3 Stable</span></div>
+          <div class="dl-info-item"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>Snapdragon Only</span></div>
+        </div>
+        <div class="dl-actions">
+          <a href="https://github.com/aetherdev22/snapperf/releases/download/snapperfv1.5.3(Stable)/SnapPerfV1.5.3.Stable.zip" class="btn btn-primary ripple-btn" id="dlBtn" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Direct Download</a>
+          <a href="https://safefileku.com/download/4tzoKgpayB0vYhxY" class="btn btn-outline ripple-btn" id="mirrorBtn" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Mirror Link</a>
+        </div>
+      </div>
+      <div class="dl-art">
+        <div class="dl-phone">
+          <svg width="108" height="188" viewBox="0 0 120 200" fill="none"><rect x="5" y="5" width="110" height="190" rx="20" fill="url(#pg)" stroke="rgba(59,143,255,.3)" stroke-width="1.5"/><rect x="15" y="20" width="90" height="155" rx="12" fill="rgba(59,143,255,.08)"/><circle cx="60" cy="185" r="6" fill="rgba(59,143,255,.3)"/><text x="60" y="100" text-anchor="middle" font-size="30" fill="#3b8fff">&#9889;</text><text x="60" y="123" text-anchor="middle" font-size="11" fill="rgba(59,143,255,.8)" font-family="system-ui,sans-serif">SnapPerf</text><defs><linearGradient id="pg" x1="5" y1="5" x2="115" y2="195" gradientUnits="userSpaceOnUse"><stop stop-color="rgba(59,143,255,.15)"/><stop offset="1" stop-color="rgba(0,85,255,.05)"/></linearGradient></defs></svg>
+        </div>
+      </div>
     </div>
-    <div class="comm-grid">
-      <a href="https://t.me/get01projects" class="comm-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.04s">
-        <div class="comm-icon comm-tg">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg>
-        </div>
-        <div class="comm-body">
-          <span class="comm-name">Telegram</span>
-          <span class="comm-handle">@get01projects</span>
-        </div>
+  </div>
+</section>
+
+<section class="section community-section">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="section-tag">Community</span>
+      <h2 class="section-title">Join the Community</h2>
+    </div>
+    <div class="community-grid">
+      <a href="https://t.me/get01projects" class="community-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.04s">
+        <div class="cc-icon cc-tg"><svg width="22" height="22" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg></div>
+        <div class="cc-body"><span class="cc-name">Telegram</span><span class="cc-handle">@get01projects</span></div>
       </a>
-      <a href="https://youtube.com/@aldiofficial_18" class="comm-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.08s">
-        <div class="comm-icon comm-yt">
-          <svg width="19" height="19" viewBox="0 0 24 24" fill="none"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" fill="#ff375f"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg>
-        </div>
-        <div class="comm-body">
-          <span class="comm-name">YouTube</span>
-          <span class="comm-handle">@aldiofficial_18</span>
-        </div>
+      <a href="https://youtube.com/@aldiofficial_18?si=aRFocninfRDFUWNT" class="community-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.08s">
+        <div class="cc-icon cc-yt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M22.54 6.42a2.78 2.78 0 00-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46A2.78 2.78 0 001.46 6.42 29 29 0 001 12a29 29 0 00.46 5.58 2.78 2.78 0 001.95 1.95C5.12 20 12 20 12 20s6.88 0 8.59-.47a2.78 2.78 0 001.95-1.95A29 29 0 0023 12a29 29 0 00-.46-5.58z" fill="#ff375f"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="#fff"/></svg></div>
+        <div class="cc-body"><span class="cc-name">YouTube</span><span class="cc-handle">@aldiofficial_18</span></div>
       </a>
-      <a href="https://github.com/aetherdev22/snapperf" class="comm-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.12s">
-        <div class="comm-icon comm-gh">
-          <svg width="19" height="19" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
-        </div>
-        <div class="comm-body">
-          <span class="comm-name">GitHub</span>
-          <span class="comm-handle">aetherdev22/snapperf</span>
-        </div>
+      <a href="https://github.com/aetherdev22/snapperf" class="community-card ripple-btn reveal" target="_blank" rel="noopener noreferrer" style="animation-delay:.12s">
+        <div class="cc-icon cc-gh"><svg width="22" height="22" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg></div>
+        <div class="cc-body"><span class="cc-name">GitHub</span><span class="cc-handle">aetherdev22/snapperf</span></div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- ═══ CHANGELOG ═══ -->
-<section class="idx-section">
+<section class="section changelog-section">
   <div class="container">
-    <div class="idx-header reveal">
-      <div class="idx-label">What&rsquo;s New</div>
-      <h2 class="idx-title" id="changelogTitle">Changelog v1.5.3</h2>
+    <div class="section-header reveal">
+      <span class="section-tag">What&rsquo;s New</span>
+      <h2 class="section-title" id="changelogTitle">Changelog v1.5.3</h2>
     </div>
-    <div class="cl-wrap reveal">
-      <div class="cl-badges">
+    <div class="changelog-card reveal">
+      <div class="cl-header">
         <span class="badge badge-blue" id="clBadge">v1.5.3</span>
         <span class="badge badge-green">Stable</span>
       </div>
-      <div class="cl-items" id="clList">
-        <div class="cl-item"><span class="cl-dot" style="background:#3b8fff"></span>Penyesuaian Profile Balanced, Performance, Battery</div>
-        <div class="cl-item"><span class="cl-dot" style="background:#00c787"></span>Penyesuaian Tweak</div>
-        <div class="cl-item"><span class="cl-dot" style="background:#ff375f"></span>Delete Option Touch Boost &amp; Refresh Rate</div>
-        <div class="cl-item"><span class="cl-dot" style="background:#bf5af2"></span>Fixed server check update not fetching latest version</div>
-      </div>
-      <a href="updates.html" class="btn btn-ghost btn-sm ripple-btn">View all updates</a>
+      <ul class="cl-list" id="clList">
+        <li><span class="cl-dot" style="background:#3b8fff"></span>Penyesuaian Profile Balanced, Performance, Battery</li>
+        <li><span class="cl-dot" style="background:#00c787"></span>Penyesuaian Tweak</li>
+        <li><span class="cl-dot" style="background:#ff375f"></span>Delete Option Touch Boost &amp; Refresh Rate</li>
+        <li><span class="cl-dot" style="background:#bf5af2"></span>Fixed server check update not fetching latest version</li>
+      </ul>
+      <a href="updates.html" class="btn btn-ghost ripple-btn" style="margin-top:1rem">View all updates</a>
     </div>
   </div>
 </section>
-
-<!-- FOOTER -->
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
@@ -525,7 +201,6 @@ text-align:center
     </div>
   </div>
 </footer>
-
 <script src="js/main.js"></script>
 </body>
 </html>
