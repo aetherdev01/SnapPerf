@@ -265,3 +265,50 @@ a[href]{user-select:text;-webkit-user-select:text}
 .community-grid{grid-template-columns:1fr}
 .posts-grid{grid-template-columns:1fr}
 }
+
+/* === UPDATES PAGE DYNAMIC STYLES === */
+.updates-controls{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center;margin-bottom:1.5rem}
+.updates-controls .filter-row{margin-bottom:0;flex:1;min-width:0}
+.updates-controls .search-row{margin-bottom:0;flex-shrink:0}
+.search-box{max-width:260px}
+
+.releases-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 1rem;gap:.85rem;color:var(--text3)}
+.releases-loading .spin{width:28px;height:28px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spinAnim .7s linear infinite}
+@keyframes spinAnim{to{transform:rotate(360deg)}}
+.releases-empty{text-align:center;padding:4rem 1rem;color:var(--text3);font-size:.88rem}
+.releases-error{text-align:center;padding:3rem 1rem;color:#ff375f;font-size:.84rem}
+
+/* === DONATE BUTTON – WARM STYLE === */
+.btn-donate{background:linear-gradient(135deg,#ff375f,#ff6b35);color:#fff;box-shadow:0 4px 16px rgba(255,55,95,.28)}
+.btn-donate:hover{box-shadow:0 7px 26px rgba(255,55,95,.42)}
+
+/* === DONATE CARD REDESIGN === */
+.donate-card{background:linear-gradient(135deg,rgba(255,55,95,.07),rgba(255,107,53,.05));border:1px solid rgba(255,55,95,.18);border-radius:var(--r-lg);padding:1.4rem 1.6rem;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:1rem}
+.donate-card .donate-icon{width:44px;height:44px;background:rgba(255,55,95,.12);border:1px solid rgba(255,55,95,.22);border-radius:.75rem;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.donate-card .donate-text{min-width:0}
+.donate-card .donate-text h3{font-size:.92rem;font-weight:700;margin-bottom:.22rem}
+.donate-card .donate-text p{font-size:.79rem;color:var(--text2);line-height:1.55}
+.donate-card .btn-donate{white-space:nowrap;flex-shrink:0}
+@media(max-width:600px){
+  .donate-card{grid-template-columns:auto 1fr;grid-template-rows:auto auto}
+  .donate-card .btn-donate{grid-column:1/-1;justify-content:center;text-align:center}
+}
+
+/* === DESKTOP NAV – tighter on wider screens === */
+@media(min-width:901px){
+  .navbar{max-width:900px}
+  .nav-pill{padding:.4rem .75rem .4rem .95rem}
+}
+
+/* === DESKTOP LAYOUT FIXES – no excessive gaps === */
+@media(min-width:769px){
+  .hero{max-width:1120px;margin:0 auto;padding-left:2rem;padding-right:2rem}
+  .section{padding:2.8rem 0}
+  .page-hero{padding:7rem 2rem 2.5rem}
+  .features-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+  .posts-grid{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:.85rem}
+  .filter-row{margin-bottom:1.1rem}
+}
+@media(min-width:1100px){
+  .posts-grid{grid-template-columns:repeat(3,1fr)}
+}
