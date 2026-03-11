@@ -9,11 +9,15 @@ document.addEventListener('DOMContentLoaded',()=>{
 
   const bar=document.createElement('div');
   bar.className='scroll-progress';
-  document.body.prepend(bar);
-  window.addEventListener('scroll',()=>{
-    const total=document.documentElement.scrollHeight-window.innerHeight;
-    bar.style.width=(total>0?(window.scrollY/total)*100:0)+'%';
-  },{passive:true});
+  bar.style.width='0%';
+  document.body.appendChild(bar);
+  function updateBar(){
+    const scrollTop=window.scrollY||document.documentElement.scrollTop;
+    const total=document.documentElement.scrollHeight-document.documentElement.clientHeight;
+    bar.style.width=(total>0?Math.min(100,(scrollTop/total)*100):0)+'%';
+  }
+  window.addEventListener('scroll',updateBar,{passive:true});
+  updateBar();
 
   const themeBtn=document.getElementById('themeToggle');
   if(themeBtn){

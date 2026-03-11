@@ -42,10 +42,10 @@ a[href]{user-select:text;-webkit-user-select:text}
 .navbar{position:fixed;top:.85rem;left:50%;transform:translateX(-50%);z-index:1000;width:calc(100% - 2rem);max-width:820px}
 .nav-pill{display:flex;align-items:center;gap:.5rem;background:var(--nav-bg);backdrop-filter:var(--nav-blur);-webkit-backdrop-filter:var(--nav-blur);border:1px solid var(--border);border-radius:var(--r-pill);padding:.45rem .7rem .45rem .9rem;box-shadow:var(--shadow);transition:background .3s,box-shadow .3s}
 .nav-logo{display:flex;align-items:center;gap:.38rem;font-weight:800;font-size:.9rem;letter-spacing:-.02em;color:var(--text);flex-shrink:0}
-.nav-links{display:flex;gap:.1rem;margin-left:auto}
+.nav-links{display:flex;gap:.1rem;flex:1;justify-content:center}
 .nav-link{display:inline-flex;align-items:center;gap:.3rem;font-size:.78rem;font-weight:600;color:var(--text2);padding:.3rem .6rem;border-radius:var(--r-pill);transition:all .2s}
 .nav-link:hover,.nav-link.active{color:var(--accent);background:var(--accent-soft)}
-.nav-right{display:flex;align-items:center;gap:.35rem;margin-left:.4rem;flex-shrink:0}
+.nav-right{display:flex;align-items:center;gap:.35rem;margin-left:auto;flex-shrink:0}
 .theme-toggle{background:var(--bg3);border:1px solid var(--border);border-radius:50%;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);transition:all .2s;padding:0;flex-shrink:0}
 .theme-toggle:hover{background:var(--accent-soft);color:var(--accent)}
 [data-theme="light"] .icon-moon{display:none}
@@ -238,7 +238,7 @@ a[href]{user-select:text;-webkit-user-select:text}
 .ripple{position:absolute;border-radius:50%;background:rgba(255,255,255,.30);transform:scale(0);animation:rippleAnim .55s linear;pointer-events:none}
 [data-theme="dark"] .ripple{background:rgba(255,255,255,.12)}
 .btn-ghost .ripple,.btn-outline .ripple{background:rgba(59,143,255,.16)}
-.scroll-progress{position:fixed;top:0;left:0;height:3px;background:var(--grad-blue);z-index:9999;transition:width .1s linear;border-radius:0 2px 2px 0}
+.scroll-progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--grad-blue);z-index:99999;pointer-events:none;border-radius:0 2px 2px 0;transition:width .08s linear}
 
 .page-transitioning{opacity:1;transition:opacity .22s ease}
 .page-leaving{opacity:0}

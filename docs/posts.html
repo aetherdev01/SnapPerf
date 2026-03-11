@@ -20,10 +20,10 @@
   <div class="nav-pill">
     <a href="index.html" class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#nlg)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="nlg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg><span>SnapPerf</span></a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link  ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
-      <a href="posts.html" class="nav-link active ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Posts</a>
-      <a href="draws.html" class="nav-link  ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Draw List</a>
-      <a href="about.html" class="nav-link  ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
+      <a href="index.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
+      <a href="posts.html" class="nav-link  active ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Posts</a>
+      <a href="draws.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Draw List</a>
+      <a href="about.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
     </div>
     <div class="nav-right">
       <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme"><svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -52,7 +52,6 @@
     <div class="filter-row reveal">
       <button class="filter-btn active ripple-btn" data-filter="all">All</button>
       <button class="filter-btn ripple-btn" data-filter="stable">Stable</button>
-      <button class="filter-btn ripple-btn" data-filter="beta">Beta</button>
       <button class="filter-btn ripple-btn" data-filter="fix">Fix</button>
     </div>
     <div class="posts-grid">
@@ -61,7 +60,7 @@
         <div class="post-card-inner">
           <div class="post-header">
             <div class="post-badges"><span class="badge badge-blue">v1.5.3</span><span class="badge badge-green">Stable</span></div>
-            <div class="post-dots" data-popup="pop-1"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-1"><a href="https://github.com/aetherdev22/snapperf/releases/download/snapperfv1.5.3(Stable)/SnapPerfV1.5.3.Stable.zip" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Download</a><a href="https://github.com/aetherdev22/snapperf" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Telegram</a></div></div>
+            <div class="post-dots" data-popup="pop-1"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-1"><a href="https://github.com/aetherdev22/snapperf/releases/download/snapperfv1.5.3(Stable)/SnapPerfV1.5.3.Stable.zip" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Download</a><a href="https://github.com/aetherdev22/snapperf" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Telegram</a></div></div>
           </div>
           <h2 class="post-title">SnapPerf v1.5.3 Stable Release</h2>
           <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 09 Mar 2026 &middot; Stable</p>
@@ -72,8 +71,9 @@
             <li><span class="cl-dot" style="background:#bf5af2"></span>Fixed server check update not fetching latest version</li>
           </ul>
           <div class="post-footer">
-            <a href="https://github.com/aetherdev22/snapperf/releases/download/snapperfv1.5.3(Stable)/SnapPerfV1.5.3.Stable.zip" class="btn btn-primary btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>
+            <a href="https://github.com/aetherdev22/snapperf/releases/download/snapperfv1.5.3(Stable)/SnapPerfV1.5.3.Stable.zip" class="btn btn-primary btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>
             <a href="https://safefileku.com/download/4tzoKgpayB0vYhxY" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Mirror</a>
+            <a href="https://raw.githubusercontent.com/aetherdev22/snapperf/main/CHANGELOG.md" class="btn btn-outline btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Full Changelog</a>
           </div>
         </div>
       </article>
@@ -82,13 +82,14 @@
         <div class="post-card-inner">
           <div class="post-header">
             <div class="post-badges"><span class="badge badge-blue">v1.5.2</span><span class="badge badge-green">Stable</span></div>
-            <div class="post-dots" data-popup="pop-2"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-2"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.2(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Telegram</a></div></div>
+            <div class="post-dots" data-popup="pop-2"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-2"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.2(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Telegram</a></div></div>
           </div>
           <h2 class="post-title">SnapPerf v1.5.2 Stable Release</h2>
           <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 09 Mar 2026 &middot; Stable</p>
           <p class="post-body">Update download link in update.json. Maintenance release with updated mirror links and download URLs.</p>
           <div class="post-footer">
-            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.2(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release &rarr;</a>
+            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.2(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release</a>
+            <a href="https://raw.githubusercontent.com/aetherdev22/snapperf/main/CHANGELOG.md" class="btn btn-outline btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Full Changelog</a>
           </div>
         </div>
       </article>
@@ -97,13 +98,14 @@
         <div class="post-card-inner">
           <div class="post-header">
             <div class="post-badges"><span class="badge badge-blue">v1.5.1</span><span class="badge badge-green">Stable</span></div>
-            <div class="post-dots" data-popup="pop-3"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-3"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.1(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Telegram</a></div></div>
+            <div class="post-dots" data-popup="pop-3"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-3"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.1(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Telegram</a></div></div>
           </div>
           <h2 class="post-title">SnapPerf v1.5.1 Stable Release</h2>
           <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 09 Mar 2026 &middot; Stable</p>
           <p class="post-body">Update download link in update.json. Patch release to fix the download URL for module installation.</p>
           <div class="post-footer">
-            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.1(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release &rarr;</a>
+            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5.1(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release</a>
+            <a href="https://raw.githubusercontent.com/aetherdev22/snapperf/main/CHANGELOG.md" class="btn btn-outline btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Full Changelog</a>
           </div>
         </div>
       </article>
@@ -112,7 +114,7 @@
         <div class="post-card-inner">
           <div class="post-header">
             <div class="post-badges"><span class="badge badge-blue">v1.5</span><span class="badge badge-green">Stable</span></div>
-            <div class="post-dots" data-popup="pop-4"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-4"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Telegram</a></div></div>
+            <div class="post-dots" data-popup="pop-4"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-4"><a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5(Stable)" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Telegram</a></div></div>
           </div>
           <h2 class="post-title">SnapPerf v1.5 Stable Release</h2>
           <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> 09 Mar 2026 &middot; Stable</p>
@@ -125,7 +127,8 @@
             <li><span class="cl-dot" style="background:#30d158"></span>Battery Saver modes: light and aggressive</li>
           </ul>
           <div class="post-footer">
-            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release &rarr;</a>
+            <a href="https://github.com/aetherdev22/snapperf/releases/tag/snapperfv1.5(Stable)" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release</a>
+            <a href="https://raw.githubusercontent.com/aetherdev22/snapperf/main/CHANGELOG.md" class="btn btn-outline btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Full Changelog</a>
           </div>
         </div>
       </article>
@@ -134,13 +137,13 @@
         <div class="post-card-inner">
           <div class="post-header">
             <div class="post-badges"><span class="badge badge-red">Bug Report</span></div>
-            <div class="post-dots" data-popup="pop-5"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-5"><a href="https://github.com/aetherdev22/snapperf/issues" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Open Issue</a><a href="https://github.com/aetherdev22/snapperf" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>GitHub</a></div></div>
+            <div class="post-dots" data-popup="pop-5"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="pop-5"><a href="https://github.com/aetherdev22/snapperf/issues" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Open Issue</a><a href="https://github.com/aetherdev22/snapperf" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> GitHub</a></div></div>
           </div>
           <h2 class="post-title">Bug Reports &amp; Known Issues</h2>
           <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Ongoing</p>
-          <p class="post-body">Found a bug? Report it on GitHub Issues. Please include your device model, Snapdragon variant, Android version, and a logcat if possible.</p>
+          <p class="post-body">Found a bug? Report it on GitHub Issues. Include your device model, Snapdragon variant, Android version, and a logcat if possible.</p>
           <div class="post-footer">
-            <a href="https://github.com/aetherdev22/snapperf/issues" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Open Issue &rarr;</a>
+            <a href="https://github.com/aetherdev22/snapperf/issues" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">Open Issue</a>
           </div>
         </div>
       </article>
@@ -151,7 +154,7 @@
 <footer class="footer">
   <div class="container">
     <div class="footer-inner">
-      <div class="footer-brand"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#flg)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="flg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg><span>SnapPerf</span></div>
+      <div class="footer-brand"><span>SnapPerf</span></div>
       <p class="footer-copy">&copy; 2026 AetherDev. All rights reserved.</p>
       <div class="footer-links">
         <a href="https://github.com/aetherdev22/snapperf" target="_blank" rel="noopener noreferrer">GitHub</a>
