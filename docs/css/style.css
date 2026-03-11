@@ -267,10 +267,10 @@ a[href]{user-select:text;-webkit-user-select:text}
 }
 
 /* === UPDATES PAGE DYNAMIC STYLES === */
-.updates-controls{display:flex;flex-direction:column;gap:.75rem;margin-bottom:1.8rem}
-.updates-controls .filter-row{margin-bottom:0}
-.updates-controls .search-row{margin-bottom:0}
-.updates-controls .search-box{max-width:100%}
+.updates-controls{display:flex;flex-direction:column;gap:0;margin-bottom:1.8rem}
+.updates-controls .search-row{margin-bottom:.7rem;order:1}
+.updates-controls .filter-row{margin-bottom:0;order:2}
+.updates-controls .search-box{max-width:100%;width:100%}
 
 .releases-loading{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:4rem 1rem;gap:.85rem;color:var(--text3)}
 .releases-loading .spin{width:28px;height:28px;border:2.5px solid var(--border2);border-top-color:var(--accent);border-radius:50%;animation:spinAnim .7s linear infinite}
