@@ -1,243 +1,139 @@
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Draw List – SnapPerf</title>
-  <meta name="description" content="SnapPerf supported device draw list and compatibility." />
-  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
-  <link rel="stylesheet" href="css/style.css" />
-  <link rel="stylesheet" href="css/animations.css" />
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Draw List – SnapPerf</title>
+<meta name="description" content="SnapPerf – Magisk Performance Module for Snapdragon devices."/>
+<meta name="author" content="AetherDev"/>
+<meta name="robots" content="noindex,nofollow"/>
+<meta property="og:title" content="Draw List – SnapPerf"/>
+<meta property="og:image" content="banner.webp"/>
+<meta property="og:type" content="website"/>
+<meta name="theme-color" content="#ffffff"/>
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml"/>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/animations.css"/>
 </head>
 <body>
-  <nav class="navbar" id="navbar">
-    <div class="nav-pill">
-      <a href="index.html" class="nav-logo">
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#lg1)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="lg1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg>
-        <span>SnapPerf</span>
-      </a>
-      <div class="nav-links">
-        <a href="index.html" class="nav-link ripple-btn">Home</a>
-        <a href="posts.html" class="nav-link ripple-btn">Posts</a>
-        <a href="draws.html" class="nav-link active ripple-btn">Draw List</a>
-        <a href="about.html" class="nav-link ripple-btn">About</a>
-      </div>
-      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme">
-        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </button>
-      <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu">
-        <span></span><span></span><span></span>
-      </button>
+<nav class="navbar" id="navbar">
+  <div class="nav-pill">
+    <a href="index.html" class="nav-logo"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#nlg)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="nlg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg><span>SnapPerf</span></a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link ripple-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Home</a>
+      <a href="posts.html" class="nav-link ripple-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Posts</a>
+      <a href="draws.html" class="nav-link active ripple-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Draw List</a>
+      <a href="about.html" class="nav-link ripple-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> About</a>
     </div>
-  </nav>
-  <div class="mobile-menu" id="mobileMenu">
-    <a href="index.html" class="mob-link ripple-btn">🏠 Home</a>
-    <a href="posts.html" class="mob-link ripple-btn">📝 Posts</a>
-    <a href="draws.html" class="mob-link ripple-btn">🎨 Draw List</a>
-    <a href="about.html" class="mob-link ripple-btn">👤 About</a>
-  </div>
-
-  <div class="page-hero">
-    <div class="blob blob-1" style="opacity:.4"></div>
-    <div class="blob blob-2" style="opacity:.3"></div>
-    <div class="page-hero-content reveal">
-      <span class="badge badge-orange">Compatibility</span>
-      <h1>Draw List</h1>
-      <p>Supported Snapdragon SoCs and device compatibility overview.</p>
+    <div class="nav-right">
+      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme"><svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="mob-link ripple-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg> Home</a>
+  <a href="posts.html" class="mob-link ripple-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Posts</a>
+  <a href="draws.html" class="mob-link ripple-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Draw List</a>
+  <a href="about.html" class="mob-link ripple-btn"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> About</a>
+</div>
 
-  <section class="section">
-    <div class="container">
-      <!-- Search -->
-      <div class="search-row reveal">
-        <div class="search-box">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="text" id="drawSearch" placeholder="Search SoC or device..." autocomplete="off" />
+<div class="page-hero">
+  <div class="blob blob-1" style="opacity:.4"></div>
+  <div class="blob blob-2" style="opacity:.3"></div>
+  <div class="page-hero-content reveal">
+    <span class="badge badge-orange">Compatibility</span>
+    <h1>Draw List</h1>
+    <p>Supported Snapdragon SoCs and device compatibility overview.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="search-row reveal">
+      <div class="search-box">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <input type="text" id="drawSearch" placeholder="Search SoC or device..." autocomplete="off"/>
+      </div>
+    </div>
+    <div class="legend-row reveal">
+      <div class="legend-item"><span class="status-dot green"></span>Fully Supported</div>
+      <div class="legend-item"><span class="status-dot yellow"></span>Partial / Testing</div>
+      <div class="legend-item"><span class="status-dot red"></span>Not Supported</div>
+    </div>
+    <div class="table-wrap reveal" style="animation-delay:.05s">
+      <table class="draw-table" id="drawTable">
+        <thead>
+          <tr><th>Snapdragon SoC</th><th>Series</th><th>Example Devices</th><th>Status</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>SD 8 Gen 3</strong></td><td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td><td>Galaxy S24, Find X7 Pro</td><td><span class="status-dot green"></span> Full</td><td>All profiles stable</td></tr>
+          <tr><td><strong>SD 8 Gen 2</strong></td><td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td><td>Galaxy S23, Xiaomi 13 Pro</td><td><span class="status-dot green"></span> Full</td><td>Excellent results</td></tr>
+          <tr><td><strong>SD 8 Gen 1</strong></td><td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td><td>Galaxy S22, Xiaomi 12 Pro</td><td><span class="status-dot green"></span> Full</td><td>Thermal fixes included</td></tr>
+          <tr><td><strong>SD 888</strong></td><td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td><td>Galaxy S21, Mi 11</td><td><span class="status-dot green"></span> Full</td><td>All profiles ok</td></tr>
+          <tr><td><strong>SD 870</strong></td><td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td><td>Poco F3, Redmi K40</td><td><span class="status-dot green"></span> Full</td><td>Stable, recommended</td></tr>
+          <tr><td><strong>SD 865</strong></td><td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td><td>Galaxy S20, OnePlus 8 Pro</td><td><span class="status-dot green"></span> Full</td><td>Good performance gain</td></tr>
+          <tr><td><strong>SD 855</strong></td><td><span class="chip-badge" style="--cc:#00c787">Plus</span></td><td>Galaxy S10, Poco X2</td><td><span class="status-dot green"></span> Full</td><td>Tested, stable</td></tr>
+          <tr><td><strong>SD 845</strong></td><td><span class="chip-badge" style="--cc:#00c787">Plus</span></td><td>Galaxy S9, OnePlus 6</td><td><span class="status-dot yellow"></span> Partial</td><td>Battery profile limited</td></tr>
+          <tr><td><strong>SD 778G</strong></td><td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td><td>Galaxy A52s, Realme GT Master</td><td><span class="status-dot green"></span> Full</td><td>All profiles tested</td></tr>
+          <tr><td><strong>SD 750G</strong></td><td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td><td>Galaxy A51 5G, Moto G 5G</td><td><span class="status-dot yellow"></span> Partial</td><td>Performance only</td></tr>
+          <tr><td><strong>SD 732G</strong></td><td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td><td>Redmi Note 9 Pro</td><td><span class="status-dot yellow"></span> Partial</td><td>Testing in progress</td></tr>
+          <tr><td><strong>SD 680</strong></td><td><span class="chip-badge" style="--cc:#ff375f">Entry</span></td><td>Redmi Note 11</td><td><span class="status-dot red"></span> No</td><td>Not supported</td></tr>
+          <tr><td><strong>SD 662</strong></td><td><span class="chip-badge" style="--cc:#ff375f">Entry</span></td><td>Redmi 9T</td><td><span class="status-dot red"></span> No</td><td>Not supported</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="info-note reveal" style="animation-delay:.1s">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3b8fff" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#3b8fff" stroke-width="2" stroke-linecap="round"/></svg>
+      <p>This list is community-sourced. If your device/SoC is not listed, you can test and <a href="https://github.com/aetherdev22/snapperf/issues" target="_blank" rel="noopener noreferrer">submit a report</a> on GitHub.</p>
+    </div>
+    <div class="section-header reveal" style="margin-top:3rem">
+      <span class="section-tag">Profiles</span>
+      <h2 class="section-title">Available Profiles</h2>
+    </div>
+    <div class="profiles-grid">
+      <div class="profile-card reveal" style="--pc:#3b8fff;animation-delay:.05s">
+        <div class="profile-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#3b8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Performance</h3>
+        <p>Maximum CPU/GPU clocks. Best for gaming and heavy workloads. Higher battery usage.</p>
+        <div class="profile-meters">
+          <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:95%;background:#3b8fff"></div></div></div>
+          <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:35%;background:#3b8fff"></div></div></div>
         </div>
       </div>
-
-      <!-- Legend -->
-      <div class="legend-row reveal">
-        <div class="legend-item"><span class="status-dot green"></span>Fully Supported</div>
-        <div class="legend-item"><span class="status-dot yellow"></span>Partial / Testing</div>
-        <div class="legend-item"><span class="status-dot red"></span>Not Supported</div>
-      </div>
-
-      <!-- Table -->
-      <div class="table-wrap reveal" style="animation-delay:.05s">
-        <table class="draw-table" id="drawTable">
-          <thead>
-            <tr>
-              <th>Snapdragon SoC</th>
-              <th>Series</th>
-              <th>Example Devices</th>
-              <th>Status</th>
-              <th>Notes</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>SD 8 Gen 3</strong></td>
-              <td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td>
-              <td>Galaxy S24, Find X7 Pro</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>All profiles stable</td>
-            </tr>
-            <tr>
-              <td><strong>SD 8 Gen 2</strong></td>
-              <td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td>
-              <td>Galaxy S23, Xiaomi 13 Pro</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>Excellent results</td>
-            </tr>
-            <tr>
-              <td><strong>SD 8 Gen 1</strong></td>
-              <td><span class="chip-badge" style="--cc:#3b8fff">Elite</span></td>
-              <td>Galaxy S22, Xiaomi 12 Pro</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>Thermal fixes included</td>
-            </tr>
-            <tr>
-              <td><strong>SD 888</strong></td>
-              <td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td>
-              <td>Galaxy S21, Mi 11</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>All profiles ok</td>
-            </tr>
-            <tr>
-              <td><strong>SD 870</strong></td>
-              <td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td>
-              <td>Poco F3, Redmi K40</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>Stable, recommended</td>
-            </tr>
-            <tr>
-              <td><strong>SD 865</strong></td>
-              <td><span class="chip-badge" style="--cc:#bf5af2">Pro</span></td>
-              <td>Galaxy S20, OnePlus 8 Pro</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>Good performance gain</td>
-            </tr>
-            <tr>
-              <td><strong>SD 855</strong></td>
-              <td><span class="chip-badge" style="--cc:#00c787">Plus</span></td>
-              <td>Galaxy S10, Poco X2</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>Tested, stable</td>
-            </tr>
-            <tr>
-              <td><strong>SD 845</strong></td>
-              <td><span class="chip-badge" style="--cc:#00c787">Plus</span></td>
-              <td>Galaxy S9, OnePlus 6</td>
-              <td><span class="status-dot yellow"></span> Partial</td>
-              <td>Battery profile limited</td>
-            </tr>
-            <tr>
-              <td><strong>SD 778G</strong></td>
-              <td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td>
-              <td>Galaxy A52s, Realme GT Master</td>
-              <td><span class="status-dot green"></span> Full</td>
-              <td>All profiles tested</td>
-            </tr>
-            <tr>
-              <td><strong>SD 750G</strong></td>
-              <td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td>
-              <td>Galaxy A51 5G, Moto G 5G</td>
-              <td><span class="status-dot yellow"></span> Partial</td>
-              <td>Performance only</td>
-            </tr>
-            <tr>
-              <td><strong>SD 732G</strong></td>
-              <td><span class="chip-badge" style="--cc:#ff9f0a">Mid</span></td>
-              <td>Redmi Note 9 Pro</td>
-              <td><span class="status-dot yellow"></span> Partial</td>
-              <td>Testing in progress</td>
-            </tr>
-            <tr>
-              <td><strong>SD 680</strong></td>
-              <td><span class="chip-badge" style="--cc:#ff375f">Entry</span></td>
-              <td>Redmi Note 11</td>
-              <td><span class="status-dot red"></span> No</td>
-              <td>Not supported</td>
-            </tr>
-            <tr>
-              <td><strong>SD 662</strong></td>
-              <td><span class="chip-badge" style="--cc:#ff375f">Entry</span></td>
-              <td>Redmi 9T</td>
-              <td><span class="status-dot red"></span> No</td>
-              <td>Not supported</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- Note -->
-      <div class="info-note reveal" style="animation-delay:.1s">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#3b8fff" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="#3b8fff" stroke-width="2" stroke-linecap="round"/></svg>
-        <p>This list is community-sourced. If your device/SoC is not listed, you can test and <a href="https://github.com/aetherdev22/snapperf/issues" target="_blank" rel="noopener">submit a report</a> on GitHub.</p>
-      </div>
-
-      <!-- Profiles -->
-      <div class="section-header reveal" style="margin-top:3rem">
-        <span class="section-tag">Profiles</span>
-        <h2 class="section-title">Available Profiles</h2>
-      </div>
-      <div class="profiles-grid">
-        <div class="profile-card reveal" style="--pc:#3b8fff;animation-delay:.05s">
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="#3b8fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>Performance</h3>
-          <p>Maximum CPU/GPU clocks. Best for gaming and heavy workloads. Higher battery usage.</p>
-          <div class="profile-meters">
-            <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:95%;background:#3b8fff"></div></div></div>
-            <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:35%;background:#3b8fff"></div></div></div>
-          </div>
+      <div class="profile-card reveal" style="--pc:#00c787;animation-delay:.1s">
+        <div class="profile-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="#00c787" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="#00c787" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3>Balanced</h3>
+        <p>Smart adaptive scaling. Best all-round profile for daily drivers. Recommended default.</p>
+        <div class="profile-meters">
+          <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:70%;background:#00c787"></div></div></div>
+          <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:70%;background:#00c787"></div></div></div>
         </div>
-        <div class="profile-card reveal" style="--pc:#00c787;animation-delay:.1s">
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="#00c787" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          </div>
-          <h3>Balanced</h3>
-          <p>Smart adaptive scaling. Best all-round profile for daily drivers. Recommended default.</p>
-          <div class="profile-meters">
-            <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:70%;background:#00c787"></div></div></div>
-            <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:70%;background:#00c787"></div></div></div>
-          </div>
-        </div>
-        <div class="profile-card reveal" style="--pc:#ff9f0a;animation-delay:.15s">
-          <div class="profile-icon">
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#ff9f0a" stroke-width="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"/></svg>
-          </div>
-          <h3>Battery</h3>
-          <p>Conservative power management. Maximize screen-on time with minimal performance trade-off.</p>
-          <div class="profile-meters">
-            <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:45%;background:#ff9f0a"></div></div></div>
-            <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:95%;background:#ff9f0a"></div></div></div>
-          </div>
+      </div>
+      <div class="profile-card reveal" style="--pc:#ff9f0a;animation-delay:.15s">
+        <div class="profile-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="2" y="7" width="20" height="14" rx="2" stroke="#ff9f0a" stroke-width="2"/><path d="M16 7V5a2 2 0 00-2-2h-4a2 2 0 00-2 2v2" stroke="#ff9f0a" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <h3>Battery</h3>
+        <p>Conservative power management. Maximize screen-on time with minimal performance trade-off.</p>
+        <div class="profile-meters">
+          <div class="meter-row"><span>Speed</span><div class="meter"><div class="meter-fill" style="width:45%;background:#ff9f0a"></div></div></div>
+          <div class="meter-row"><span>Battery</span><div class="meter"><div class="meter-fill" style="width:95%;background:#ff9f0a"></div></div></div>
         </div>
       </div>
     </div>
-  </section>
-
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-inner">
-        <div class="footer-brand">
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#flg4)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="flg4" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg>
-          <span>SnapPerf</span>
-        </div>
-        <p class="footer-copy">© 2024 aetherdev22. Open source under MIT License.</p>
-        <div class="footer-links">
-          <a href="https://github.com/aetherdev22/snapperf/blob/main/LICENSE" target="_blank" rel="noopener">License</a>
-          <a href="https://github.com/aetherdev22/snapperf" target="_blank" rel="noopener">GitHub</a>
-          <a href="about.html">About</a>
-        </div>
+  </div>
+</section>
+<footer class="footer">
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-brand"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" fill="url(#flg)"/><path d="M8 12l3 3 5-6" stroke="#fff" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><defs><linearGradient id="flg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#3b8fff"/><stop offset="1" stop-color="#0055ff"/></linearGradient></defs></svg><span>SnapPerf</span></div>
+      <p class="footer-copy">&copy; 2026 AetherDev. All rights reserved.</p>
+      <div class="footer-links">
+        <a href="https://github.com/aetherdev22/snapperf" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="about.html">About</a>
       </div>
     </div>
-  </footer>
-  <script src="js/main.js"></script>
+  </div>
+</footer>
+<script src="js/main.js"></script>
 </body>
 </html>
