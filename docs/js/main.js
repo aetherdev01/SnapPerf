@@ -141,6 +141,15 @@ document.addEventListener('DOMContentLoaded',function(){
   loadUpdateJson();
 });
 
+// Wire filter buttons on updates page
+document.addEventListener('click',function(e){
+  var btn=e.target.closest('.filter-btn');
+  if(!btn)return;
+  document.querySelectorAll('.filter-btn').forEach(function(b){b.classList.remove('active');});
+  btn.classList.add('active');
+  if(window.applyFilters)window.applyFilters();
+});
+
 // Global filter function used by updates page search + filter buttons
 window.applyFilters=function(){
   var activeBtn=document.querySelector('.filter-btn.active');

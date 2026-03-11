@@ -62,7 +62,7 @@ a[href]{user-select:text;-webkit-user-select:text}
 .blob-2{width:360px;height:310px;background:radial-gradient(circle,rgba(191,90,242,.16),transparent);top:20%;right:-5%;animation-delay:-3s}
 .blob-3{width:300px;height:240px;background:radial-gradient(circle,rgba(0,199,135,.13),transparent);bottom:5%;left:30%;animation-delay:-6s}
 
-.hero{min-height:auto;display:flex;align-items:center;justify-content:center;gap:3rem;padding:4.5rem 2rem 3rem;position:relative;overflow:hidden}
+.hero{min-height:auto;display:flex;align-items:center;justify-content:center;gap:3rem;padding:6.5rem 2rem 3rem;position:relative;overflow:hidden}
 .hero-bg{position:absolute;inset:0;overflow:hidden}
 .hero-content{flex:1;max-width:540px;z-index:1}
 .hero-title{font-size:clamp(3rem,6vw,5.2rem);font-weight:800;letter-spacing:-.04em;line-height:1.02;margin:.3rem 0 .85rem;color:var(--text)}
@@ -247,7 +247,7 @@ a[href]{user-select:text;-webkit-user-select:text}
 @media(max-width:768px){
 .nav-links{display:none}
 .hamburger{display:flex}
-.hero{flex-direction:column;padding:4.5rem 1.5rem 2.2rem;gap:1.5rem;text-align:center}
+.hero{flex-direction:column;padding:6.5rem 1.5rem 2.2rem;gap:1.5rem;text-align:center}
 .hero-actions{justify-content:center}
 .hero-image{max-width:100%}
 .download-card{flex-direction:column;gap:1.6rem;padding:1.6rem}
@@ -302,7 +302,7 @@ a[href]{user-select:text;-webkit-user-select:text}
 
 /* === DESKTOP LAYOUT FIXES – no excessive gaps === */
 @media(min-width:769px){
-  .hero{max-width:1120px;margin:0 auto;padding-left:2rem;padding-right:2rem}
+  .hero{max-width:1120px;margin:0 auto;padding-left:2rem;padding-right:2rem;padding-top:6.5rem}
   .section{padding:2.4rem 0}
   .page-hero{padding:5.8rem 2rem 1.8rem}
   .features-grid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
