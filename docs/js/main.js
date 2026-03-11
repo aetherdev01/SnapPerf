@@ -194,7 +194,6 @@ async function loadUpdateJson(){
     var short=ver.replace(/\s*\(Stable\)\s*/gi,'').replace(/\s*Stable\s*/gi,'').trim();
 
     var heroV=document.getElementById('heroVersion');
-    if(heroV)heroV.textContent=short+' Stable';
     var dlV=document.getElementById('dlVersion');
     if(dlV)dlV.textContent=short;
     var dlT=document.getElementById('dlTitle');
