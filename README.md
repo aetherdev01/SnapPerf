@@ -7,19 +7,6 @@
 # SnapPerf
 
 **A Magisk performance module built for Snapdragon.**  
-Real tweaks. Real gains. Zero bloat.
-
-[![Latest Release](https://img.shields.io/github/v/release/aetherdev22/snapperf?style=flat-square&color=1a6bff&label=release)](https://github.com/aetherdev01/SnapPerf/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/aetherdev22/snapperf/total?style=flat-square&color=00c787&label=downloads)](https://github.com/aetherdev01/SnapPerf/releases)
-[![Stars](https://img.shields.io/github/stars/aetherdev22/snapperf?style=flat-square&color=ff9f0a)](https://github.com/aetherdev22/snapperf/stargazers)
-[![License](https://img.shields.io/github/license/aetherdev22/snapperf?style=flat-square&color=bf5af2)](LICENSE)
-[![Telegram](https://img.shields.io/badge/Telegram-@get01projects-29b6f6?style=flat-square&logo=telegram)](https://t.me/get01projects)
-
-[Website](https://aetherdev01.github.io/SnapPerf) · [Releases](https://github.com/aetherdev01/SnapPerf/releases) · [Telegram](https://t.me/get01projects)
-
-</div>
-
----
 
 ## What it does
 
@@ -32,18 +19,15 @@ SnapPerf targets Qualcomm's architecture directly — Kryo CPU clusters, Adreno 
 - **Frame pacing** improvements for smoother display
 - **TCP buffer** and network scheduler tweaks
 - **Battery profiles** (Balanced / Performance / Battery Saver)
-- **WebUI** — configure everything from a browser, no ADB needed
-
----
 
 ## Requirements
 
 | Item | Minimum |
 |------|---------|
 | SoC | Qualcomm Snapdragon (any) |
-| Android | 10+ |
+| Android | 12+ |
 | Root manager | Magisk v24+ **or** KernelSU |
-| RAM | 3 GB |
+| RAM | 4 GB |
 
 ### Root manager compatibility
 
@@ -55,7 +39,6 @@ SnapPerf targets Qualcomm's architecture directly — Kryo CPU clusters, Adreno 
 | APatch | ✅ Tested |
 | Magisk Canary | ✅ Compatible |
 
----
 
 ## Supported devices
 
@@ -65,7 +48,6 @@ Any device running a Qualcomm Snapdragon SoC. Tested on mid-range to flagship ch
 **Snapdragon 7xx** — 720G, 730G, 732G, 750G, 765G, 778G, 780G, 7 Gen 1, 7s Gen 2, 7 Gen 3  
 **Snapdragon 8xx** — 845, 855, 860, 865, 870, 888, 8 Gen 1, 8+ Gen 1, 8 Gen 2, 8 Gen 3  
 
----
 
 ## Installation
 
@@ -84,20 +66,17 @@ Any device running a Qualcomm Snapdragon SoC. Tested on mid-range to flagship ch
 3. Flash the zip
 4. Reboot
 
----
 
 ## WebUI
 
 SnapPerf includes a built-in web interface served locally on the device.  
-No apps, no ADB, no root explorer needed.
 
-- Switch profiles (Balanced / Performance / Battery)
+Switchtch profiles (Balanced / Performance / Battery)
 - Toggle individual tweaks
 - View active governor settings
 - Per-app CPU governor overrides
 - Light and dark mode
 
----
 
 ## Profiles
 
@@ -107,7 +86,6 @@ No apps, no ADB, no root explorer needed.
 | **Performance** | Gaming sessions, benchmark runs, heavy multitasking |
 | **Battery** | Long travel days, low-charge situations |
 
----
 
 ## Uninstall
 
@@ -115,7 +93,6 @@ Remove via Magisk Manager or KernelSU Manager → **Modules** → tap the trash 
 
 All system values revert to stock defaults on uninstall.
 
----
 
 ## Support & community
 
@@ -123,7 +100,6 @@ All system values revert to stock defaults on uninstall.
 - **Developer:** [@AetherDev22](https://t.me/AetherDev22)
 - **GitHub Issues:** for bug reports and feature requests
 
----
 
 ## License
 
