@@ -9,13 +9,13 @@
 **A Magisk performance module built for Snapdragon.**  
 Real tweaks. Real gains. Zero bloat.
 
-[![Latest Release](https://img.shields.io/github/v/release/aetherdev22/snapperf?style=flat-square&color=1a6bff&label=release)](https://github.com/aetherdev01/SnapPerf/releases/latest)
-[![Downloads](https://img.shields.io/github/downloads/aetherdev22/snapperf/total?style=flat-square&color=00c787&label=downloads)](https://github.com/aetherdev01/SnapPerf/releases)
+[![Latest Release](https://img.shields.io/github/v/release/aetherdev22/snapperf?style=flat-square&color=1a6bff&label=release)](https://github.com/aetherdev22/snapperf/releases/latest)
+[![Downloads](https://img.shields.io/github/downloads/aetherdev22/snapperf/total?style=flat-square&color=00c787&label=downloads)](https://github.com/aetherdev22/snapperf/releases)
 [![Stars](https://img.shields.io/github/stars/aetherdev22/snapperf?style=flat-square&color=ff9f0a)](https://github.com/aetherdev22/snapperf/stargazers)
 [![License](https://img.shields.io/github/license/aetherdev22/snapperf?style=flat-square&color=bf5af2)](LICENSE)
 [![Telegram](https://img.shields.io/badge/Telegram-@get01projects-29b6f6?style=flat-square&logo=telegram)](https://t.me/get01projects)
 
-[Website](https://aetherdev01.github.io/SnapPerf) · [Releases](https://github.com/aetherdev01/SnapPerf/releases) · [Telegram](https://t.me/get01projects)
+[Website](https://aetherdev22.github.io/snapperf) · [Releases](https://github.com/aetherdev22/snapperf/releases) · [Telegram](https://t.me/get01projects)
 
 </div>
 
@@ -71,7 +71,7 @@ Any device running a Qualcomm Snapdragon SoC. Tested on mid-range to flagship ch
 
 **Via Magisk / KernelSU Manager (recommended)**
 
-1. Download the latest `.zip` from [Releases](https://github.com/aetherdev01/SnapPerf/releases/latest)
+1. Download the latest `.zip` from [Releases](https://github.com/aetherdev22/snapperf/releases/latest)
 2. Open Magisk Manager or KernelSU Manager
 3. Go to **Modules** → **Install from storage**
 4. Select the downloaded zip
