@@ -168,12 +168,15 @@ function dismissNotif(id){
 }
 
 function initAdminTrigger(){
-  var seq='';var target='snapperf';
-  document.addEventListener('keydown',function(e){
-    if(e.target.closest('input,textarea'))return;
-    seq+=(e.key||'').toLowerCase();if(seq.length>target.length)seq=seq.slice(-target.length);
-    if(seq===target){seq='';openAdminPanel();}
-  });
+  var logo=document.querySelector('.nav-logo');
+  if(!logo)return;
+  var holdTimer=null;
+  logo.addEventListener('mousedown',function(){holdTimer=setTimeout(openAdminPanel,2000);});
+  logo.addEventListener('mouseup',function(){clearTimeout(holdTimer);});
+  logo.addEventListener('mouseleave',function(){clearTimeout(holdTimer);});
+  logo.addEventListener('touchstart',function(e){e.preventDefault();holdTimer=setTimeout(openAdminPanel,2000);},{passive:false});
+  logo.addEventListener('touchend',function(){clearTimeout(holdTimer);});
+  logo.addEventListener('touchcancel',function(){clearTimeout(holdTimer);});
 }
 
 function openAdminPanel(){
