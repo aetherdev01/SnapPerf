@@ -51,11 +51,7 @@
     });
     var si=document.getElementById('postSearch');
     if(si&&!si._wired){si._wired=true;si.addEventListener('input',function(){if(window.applyFilters)window.applyFilters();});}
-    if(window.spLoadEngagement){
-      grid.querySelectorAll('.sp-engage-bar').forEach(function(bar){
-        window.spLoadEngagement(bar.dataset.tag,bar);
-      });
-    }
+    if(window.spUpdateAllBars)window.spUpdateAllBars();
   }
 
   function showError(loading,errEl){loading.style.display='none';errEl.style.display='flex';errEl.style.flexDirection='column';errEl.style.gap='.6rem';}
