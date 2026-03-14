@@ -392,7 +392,7 @@ async function renderNotif(){
       var gd=await getR.json();var sha=gd.sha;
       var payload={active:active,id:active?'notif_'+Date.now():'notif_default',type:type||'info',message:msg,timestamp:Date.now()};
       var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-      var putR=await fetch(SP_GH_NOTIF,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:active?'Push notification: '+msg.slice(0,50):'Clear notification',content:encoded,sha:sha})});
+      var putR=await fetch(SP_GH_NOTIF,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:active?'chore: push notification [skip ci]':'chore: clear notification [skip ci]',content:encoded,sha:sha})});
       if(!putR.ok)throw new Error('Gagal update ('+putR.status+')');
       if(st){st.className='adm-status ok';st.textContent='\u2713 Berhasil! Aktif dalam ~30 detik.';}
       toast('\u2713 Pengumuman berhasil dikirim!',true);
@@ -418,31 +418,40 @@ async function renderReleases(){
       html+='<tr><td class="adm-td-name">'+esc(rel.tag_name)+'</td><td class="adm-td-text">'+esc(rel.name||'')+'</td><td>'+badge+'</td><td class="adm-td-time">'+dlCount+' ↓</td><td class="adm-td-time">'+relTime(rel.published_at)+'</td><td><a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm">GitHub</a></td></tr>';
     });
     html+='</tbody></table></div>';
-    html+='<div class="adm-card"><div class="adm-card-title">Update update.json</div>'
-      +'<p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem">Update versi yang ditampilkan di website tanpa push ke GitHub manual.</p>'
+    var updateJsonUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
+    var curVer='',curDirect='',curMirror='',curCl='';
+    try{
+      var ujr=await fetch(updateJsonUrl,{headers:ghHeaders()});
+      if(ujr.ok){var ujd=await ujr.json();var ujc=JSON.parse(atob(ujd.content.replace(/\n/g,'')));curVer=ujc.version||'';curDirect=ujc.urlZip||ujc.zipUrl||'';curMirror=ujc.link||'';curCl=ujc.changelog||'';}
+    }catch(e){}
+    html+='<div class="adm-card"><div class="adm-card-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Edit update.json</div>'
+      +'<p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem">Update versi & link download yang ditampilkan di website.</p>'
       +'<div class="adm-form">'
-      +'<div><div class="adm-label" style="margin-bottom:.3rem">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.3 (Stable)"/></div>'
-      +'<div><div class="adm-label" style="margin-bottom:.3rem">URL Download</div><input class="adm-input" id="rel-url" type="text" placeholder="https://github.com/.../SnapPerf.zip"/></div>'
-      +'<div><div class="adm-label" style="margin-bottom:.3rem">URL Changelog (opsional)</div><input class="adm-input" id="rel-cl" type="text" placeholder="https://raw.githubusercontent.com/.../CHANGELOG.md"/></div>'
-      +'<div class="adm-actions"><button class="adm-btn adm-btn-primary" id="rel-save">Update update.json</button></div>'
+      +'<div><div class="adm-label" style="margin-bottom:.3rem">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.3 (Stable)" value="'+esc(curVer)+'"/></div>'
+      +'<div><div class="adm-label" style="margin-bottom:.3rem">Direct Link <code style="font-size:.65rem">urlZip</code></div><input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/.../releases/download/.../SnapPerf.zip" value="'+esc(curDirect)+'"/><div style="font-size:.67rem;color:var(--text3);margin-top:.25rem">Link download langsung dari GitHub releases</div></div>'
+      +'<div><div class="adm-label" style="margin-bottom:.3rem">Mirror Link <code style="font-size:.65rem">link</code></div><input class="adm-input" id="rel-mirror" type="text" placeholder="https://safefileku.com/..." value="'+esc(curMirror)+'"/><div style="font-size:.67rem;color:var(--text3);margin-top:.25rem">Link mirror (safefileku, dll)</div></div>'
+      +'<div><div class="adm-label" style="margin-bottom:.3rem">URL Changelog (opsional)</div><input class="adm-input" id="rel-cl" type="text" placeholder="https://raw.githubusercontent.com/.../CHANGELOG.md" value="'+esc(curCl)+'"/></div>'
+      +'<div class="adm-actions"><button class="adm-btn adm-btn-primary" id="rel-save"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Simpan update.json</button></div>'
       +'<div class="adm-status" id="rel-st"></div>'
       +'</div></div>';
     pg.innerHTML=html;
     document.getElementById('rel-save').addEventListener('click',async function(){
       var ver=document.getElementById('rel-ver').value.trim();
-      var url=document.getElementById('rel-url').value.trim();
+      var direct=document.getElementById('rel-direct').value.trim();
+      var mirror=document.getElementById('rel-mirror').value.trim();
       var cl=document.getElementById('rel-cl').value.trim();
       var st=document.getElementById('rel-st');
-      if(!ver||!url){toast('Versi dan URL wajib diisi',false);return;}
+      if(!ver||(!direct&&!mirror)){toast('Versi dan minimal satu URL wajib diisi',false);return;}
       if(st){st.className='adm-status checking';st.textContent='Mengupdate...';}
       try{
         var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
-        var getR=await fetch(apiUrl,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file');
+        var getR=await fetch(apiUrl,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file ('+getR.status+')');
         var gd=await getR.json();var sha=gd.sha;
-        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,5),zipUrl:url,link:url,changelog:cl||''};
+        var cur={};try{cur=JSON.parse(atob(gd.content.replace(/\n/g,'')));}catch(e){}
+        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,5),urlZip:direct||(cur.urlZip||cur.zipUrl||''),link:mirror||(cur.link||''),changelog:cl||cur.changelog||''};
         var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-        var putR=await fetch(apiUrl,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:'Update version to '+ver,content:encoded,sha:sha})});
-        if(!putR.ok)throw new Error('Gagal update');
+        var putR=await fetch(apiUrl,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:'chore: update version to '+ver+' [skip ci]',content:encoded,sha:sha})});
+        if(!putR.ok)throw new Error('Gagal update ('+putR.status+')');
         if(st){st.className='adm-status ok';st.textContent='\u2713 update.json berhasil diupdate!';}
         toast('\u2713 Versi diupdate ke '+ver,true);
       }catch(e){if(st){st.className='adm-status err';st.textContent='\u2717 '+e.message;}toast('\u2717 Gagal: '+e.message,false);}

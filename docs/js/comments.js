@@ -47,7 +47,7 @@ function spInjectAdminNav(data){
     var btn=document.createElement('button');
     btn.id='sp-admin-navbtn';
     btn.className='nav-link sp-admin-navlink ripple-btn';
-    btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Admin</span>';
+    btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Admin</span>';
     btn.addEventListener('click',function(){window.location.href='admin.html';});
     navLinks.appendChild(btn);
   }
@@ -57,19 +57,18 @@ function spInjectAdminNav(data){
     var ml=document.createElement('button');
     ml.id='sp-admin-moblink';
     ml.className='mob-link sp-admin-navlink ripple-btn';
-    ml.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Admin Panel</span>';
+    ml.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>Admin Panel</span>';
     ml.addEventListener('click',function(){window.location.href='admin.html';});
     mobMenu.appendChild(sep);
     mobMenu.appendChild(ml);
   }
-  var fab=document.getElementById('sp-owner-fab');
-  if(fab)fab.style.display='flex';
+  // FAB removed - admin link in navbar only
   document.querySelectorAll('.sp-cmt-delete').forEach(function(b){b.style.display='inline-flex';});
 }
 
 function spRemoveAdminNav(){
   ['sp-admin-navbtn','sp-admin-moblink'].forEach(function(id){var el=document.getElementById(id);if(el){var prev=el.previousElementSibling;if(prev&&prev.classList.contains('mob-sep'))prev.remove();el.remove();}});
-  var fab=document.getElementById('sp-owner-fab');if(fab)fab.style.display='none';
+  // FAB removed
   document.querySelectorAll('.sp-cmt-delete').forEach(function(b){b.style.display='none';});
 }
 
@@ -275,7 +274,7 @@ async function spTabNotif(body){
       var gd=await getR.json();var sha=gd.sha;
       var payload={active:active,id:active?'notif_'+Date.now():'notif_default',type:type||'info',message:msg,timestamp:Date.now()};
       var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-      var putR=await fetch(SP_GH_NOTIF_PATH,{method:'PUT',headers:{'Authorization':'Bearer '+spOwner.token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:active?'Push notification':'Clear notification',content:encoded,sha:sha})});
+      var putR=await fetch(SP_GH_NOTIF_PATH,{method:'PUT',headers:{'Authorization':'Bearer '+spOwner.token,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},body:JSON.stringify({message:active?'Push notification [skip ci]':'Clear notification [skip ci]',content:encoded,sha:sha})});
       if(!putR.ok)throw new Error('Gagal update');
       if(st){st.className='sp-owner-status';st.textContent='\u2713 Berhasil! Perubahan aktif dalam ~30 detik.';}
       spShowToast('\u2713 Pengumuman berhasil dikirim',true);

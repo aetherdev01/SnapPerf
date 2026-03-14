@@ -104,6 +104,7 @@ document.addEventListener('DOMContentLoaded',function(){
   document.addEventListener('keydown',function(e){if((e.ctrlKey||e.metaKey)&&['u','s'].includes(e.key.toLowerCase()))e.preventDefault();});
 
   loadUpdateJson();
+  loadNotification();
 });
 
 window.applyFilters=function(){var activeBtn=document.querySelector('.filter-btn.active');var f=activeBtn?activeBtn.dataset.filter:'all';var si=document.getElementById('postSearch');var sv=si?si.value.toLowerCase().trim():'';document.querySelectorAll('.post-card').forEach(function(card){var tags=(card.dataset.tags||'').split(/\s+/);var text=card.textContent.toLowerCase();var mf=(f==='all'||tags.indexOf(f)!==-1);var ms=!sv||text.indexOf(sv)!==-1;if(mf&&ms){card.style.removeProperty('display');card.style.animation='filterReveal .26s cubic-bezier(.16,1,.3,1) both';card.addEventListener('animationend',function(){card.style.animation='';},{once:true});}else{card.style.display='none';}});};
@@ -138,4 +139,41 @@ async function loadUpdateJson(){
 async function loadChangelog(url){
   var colors=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
   try{var res=await fetch(url,{cache:'no-store'});if(!res.ok)return;var text=await res.text();var items=[];text.split('\n').forEach(function(line){var m=line.match(/^[-*]\s+(.+)/);if(m)items.push({text:escHTML(m[1].trim()),color:colors[items.length%colors.length]});});if(!items.length)return;var cl=document.getElementById('clList');if(cl)cl.innerHTML=items.map(function(it){return'<li><span class="cl-dot" style="background:'+it.color+'"></span>'+it.text+'</li>';}).join('');}catch(e){}
+}
+
+async function loadNotification(){
+  var NOTIF_URL='https://raw.githubusercontent.com/aetherdev01/SnapPerf/main/server/notification.json';
+  try{
+    var res=await fetch(NOTIF_URL+'?t='+Date.now(),{cache:'no-store'});
+    if(!res.ok)return;
+    var d=await res.json();
+    if(!d||!d.active||!d.message)return;
+    var dismissed=localStorage.getItem('sp-notif-dismissed');
+    if(dismissed&&dismissed===String(d.id))return;
+    showNotifBanner(d);
+  }catch(e){}
+}
+
+function showNotifBanner(d){
+  var existing=document.getElementById('sp-notif-banner');
+  if(existing)existing.remove();
+  var icons={info:'ℹ️',success:'✅',warning:'⚠️',alert:'🚨'};
+  var type=(d.type&&['info','success','warning','alert'].indexOf(d.type)!==-1)?d.type:'info';
+  var banner=document.createElement('div');
+  banner.id='sp-notif-banner';
+  banner.className='sp-notif-banner sp-notif-'+type;
+  banner.innerHTML='<div class="sp-notif-inner"><span class="sp-notif-ico">'+(icons[type]||'ℹ️')+'</span><span class="sp-notif-msg">'+escHTML(d.message)+'</span><button class="sp-notif-close" id="sp-notif-x" aria-label="Tutup">&times;</button></div>';
+  document.body.insertBefore(banner,document.body.firstChild);
+  requestAnimationFrame(function(){requestAnimationFrame(function(){
+    banner.classList.add('sp-notif-show');
+    var nb=document.getElementById('navbar');
+    if(nb){var h=banner.offsetHeight;nb.style.transition='top .3s cubic-bezier(.16,1,.3,1)';nb.style.top='calc(.8rem + '+h+'px)';}
+  });});
+  document.getElementById('sp-notif-x').addEventListener('click',function(){
+    banner.classList.remove('sp-notif-show');
+    var nb=document.getElementById('navbar');
+    if(nb){nb.style.top='';}
+    banner.addEventListener('transitionend',function(){if(banner.parentNode)banner.remove();},{once:true});
+    if(d.id)localStorage.setItem('sp-notif-dismissed',String(d.id));
+  });
 }
