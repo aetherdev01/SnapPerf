@@ -69,3 +69,19 @@
 .sp-toast-err{background:rgba(255,55,95,.14);color:#ff375f;border-color:rgba(255,55,95,.28)}
 
 .sp-anon-wrap{display:flex;align-items:center;gap:.3rem;flex-shrink:0}
+
+.sp-engage-bar-wrap{display:flex;flex-direction:column}
+
+.sp-name-form{display:flex;gap:.4rem;align-items:center;margin-top:.2rem}
+.sp-name-input{flex:1;background:var(--glass);border:1.5px solid var(--glass-border2);border-radius:var(--r-pill);padding:.5rem .9rem;font-family:var(--font);font-size:.82rem;color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none;user-select:text;-webkit-user-select:text}
+.sp-name-input:focus{border-color:rgba(var(--accent-rgb),.5);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
+.sp-name-input::placeholder{color:var(--text3)}
+.sp-name-submit{padding:.48rem 1rem;border-radius:var(--r-pill);background:var(--accent);color:#fff;border:none;font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .18s,transform .2s cubic-bezier(.34,1.56,.64,1)}
+.sp-name-submit:hover{background:#1560f0;transform:scale(1.03)}
+.sp-anon-direct{width:100%;padding:.48rem 1rem;border-radius:var(--r-pill);background:var(--glass);border:1.5px solid var(--glass-border2);color:var(--text2);font-family:var(--font);font-size:.8rem;font-weight:700;cursor:pointer;transition:background .18s,color .18s}
+.sp-anon-direct:hover{background:var(--accent-soft);color:var(--accent);border-color:rgba(var(--accent-rgb),.3)}
+
+.sp-toast{position:fixed;bottom:1.8rem;left:50%;transform:translateX(-50%) translateY(24px);z-index:9999;padding:.55rem 1.2rem;border-radius:var(--r-pill);font-size:.8rem;font-weight:700;font-family:var(--font);box-shadow:var(--glass-shadow-lg);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid;opacity:0;transition:opacity .22s ease,transform .3s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap}
+.sp-toast.sp-toast-show{opacity:1;transform:translateX(-50%) translateY(0)}
+.sp-toast-ok{background:rgba(0,200,150,.2);color:var(--accent3);border-color:rgba(0,200,150,.35)}
+.sp-toast-err{background:rgba(255,55,95,.16);color:#ff375f;border-color:rgba(255,55,95,.3)}
