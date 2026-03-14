@@ -252,7 +252,7 @@ async function spLoadModList(q){
   }catch(e){list.innerHTML='<p class="sp-no-cmt sp-cmt-err">Gagal memuat.</p>';}
 }
 
-async async function spTabNotif(body){
+async function spTabNotif(body){
   var curMsg='',curType='info',curActive=false,curSha='';
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
   try{
