@@ -1,12 +1,12 @@
 'use strict';
 
-var SP_GOOGLE_CLIENT_ID='FILL_GOOGLE_CLIENT_ID.apps.googleusercontent.com';
-var SP_SB_URL='https://FILL_PROJECT.supabase.co';
-var SP_SB_ANON='FILL_SUPABASE_ANON_KEY';
-var SP_EJS_PK='FILL_EMAILJS_PUBLIC_KEY';
-var SP_EJS_SVC='FILL_EMAILJS_SERVICE_ID';
-var SP_EJS_TPL='FILL_EMAILJS_TEMPLATE_ID';
-var SP_OWN_EMAIL='FILL_OWNER_GMAIL';
+var SP_GOOGLE_CLIENT_ID='537556008394-ovkhtafjkuljmoumb03frmp7vb9b3f7q.apps.googleusercontent.com';
+var SP_SB_URL='https://mdielsfkmchwtdfrlidz.supabase.co';
+var SP_SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kaWVsc2ZrbWNod3RkZnJsaWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODMxNjUsImV4cCI6MjA4OTA1OTE2NX0.hjIv88F5pJMfeyM18-WdUeNYjL2mocl7KEQona9w1uY';
+var SP_EJS_PK='r6IpGiVo5FCdjbdFA';
+var SP_EJS_SVC='service_r5n8ytl';
+var SP_EJS_TPL='template_wznau9x';
+var SP_OWN_EMAIL='aldigeming41@gmail.com';
 
 var spUser=null,spSb=null,spAnonId=null;
 var SP_GSI_READY=SP_GOOGLE_CLIENT_ID.indexOf('FILL')===(-1);
