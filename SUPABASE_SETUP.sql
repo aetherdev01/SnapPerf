@@ -25,8 +25,6 @@ create policy "allow_insert_comments" on sp_comments for insert with check (true
 create policy "allow_read_likes" on sp_likes for select using (true);
 create policy "allow_insert_likes" on sp_likes for insert with check (true);
 create policy "allow_delete_likes" on sp_likes for delete using (true);
-create policy "allow_delete_comments" on sp_comments for delete using (true);
-
 
 -- Enable realtime (wajib untuk fitur komentar live)
 alter publication supabase_realtime add table sp_comments;
