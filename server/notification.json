@@ -1,8 +1,8 @@
 {
-  "active": false,
-  "id": "notif_default",
-  "type": "info",
-  "title": "",
-  "message": "",
-  "timestamp": 1773504631304
+  "active": true,
+  "id": "notif_1773518627279",
+  "type": "alert",
+  "title": "Info",
+  "message": "Website Masih Dalam Proses Pengerjaan, Jadi Mohon Maaf Jika Ada Bugs, Not a Smooth Experience.",
+  "timestamp": 1773518627279
 }
