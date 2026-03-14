@@ -1,7 +1,7 @@
 {
-  "active": false,
-  "id": "notif_default",
+  "active": true,
+  "id": "notif_1773491256696",
   "type": "info",
   "message": "kontolll",
-  "timestamp": 1773491197575
+  "timestamp": 1773491256696
 }
