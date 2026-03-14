@@ -48,7 +48,7 @@ function spInjectAdminNav(data){
     btn.id='sp-admin-navbtn';
     btn.className='nav-link sp-admin-navlink ripple-btn';
     btn.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Admin</span>';
-    btn.addEventListener('click',spOpenAdminPanel);
+    btn.addEventListener('click',function(){window.location.href='admin.html';});
     navLinks.appendChild(btn);
   }
   var mobMenu=document.getElementById('mobileMenu');
@@ -58,7 +58,7 @@ function spInjectAdminNav(data){
     ml.id='sp-admin-moblink';
     ml.className='mob-link sp-admin-navlink ripple-btn';
     ml.innerHTML='<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4L12 17l-6.2 4.3 2.4-7.4L2 9.4h7.6z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg><span>Admin Panel</span>';
-    ml.addEventListener('click',function(){spOpenAdminPanel();var h=document.getElementById('hamburger');var mm=document.getElementById('mobileMenu');if(h)h.classList.remove('open');if(mm)mm.classList.remove('open');});
+    ml.addEventListener('click',function(){window.location.href='admin.html';});
     mobMenu.appendChild(sep);
     mobMenu.appendChild(ml);
   }
@@ -125,7 +125,7 @@ window.spShowOwnerPanel=spOpenAdminPanel;
 function spOpenTokenInput(){
   if(document.getElementById('sp-token-modal'))return;
   var m=document.createElement('div');m.id='sp-token-modal';m.className='sp-auth-overlay';
-  m.innerHTML='<div class="sp-auth-card"><button class="sp-auth-x" id="sp-tok-x">\u00d7</button><div class="sp-auth-ico sp-owner-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 class="sp-auth-title">Masuk sebagai Owner</h3><p class="sp-auth-sub">Masukkan GitHub token (ghp_...) untuk mengakses admin panel.</p><div class="sp-name-form sp-token-form"><div class="sp-token-wrap"><input class="sp-name-input" id="sp-tok-inp" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"/><button class="sp-eye-btn" id="sp-tok-eye" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button></div><button class="sp-name-submit ripple-btn" id="sp-tok-ok">Verifikasi</button></div><div class="sp-owner-status" id="sp-tok-status"></div></div>';
+  m.innerHTML='<div class="sp-auth-card"><button class="sp-auth-x" id="sp-tok-x">\u00d7</button><div class="sp-auth-ico sp-owner-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><h3 class="sp-auth-title">Masuk sebagai Owner</h3><p class="sp-auth-sub">Masukkan GitHub token (ghp_...) untuk mengakses admin panel.</p><div class="sp-name-form sp-token-form"><div class="sp-token-wrap"><input class="sp-name-input" id="sp-tok-inp" type="password" placeholder="paste token GitHub kamu disini.." autocomplete="off" spellcheck="false"/><button class="sp-eye-btn" id="sp-tok-eye" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button></div><button class="sp-name-submit ripple-btn" id="sp-tok-ok">Verifikasi</button></div><div class="sp-owner-status" id="sp-tok-status"></div></div>';
   document.body.appendChild(m);
   requestAnimationFrame(function(){m.classList.add('sp-auth-open');});
   var inp=document.getElementById('sp-tok-inp');var eye=document.getElementById('sp-tok-eye');var ok=document.getElementById('sp-tok-ok');var st=document.getElementById('sp-tok-status');
