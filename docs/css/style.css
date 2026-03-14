@@ -334,3 +334,87 @@
   .comm-featured{padding:1.5rem 1.6rem}
   .comm-small{padding:1rem 1.15rem}
 }
+
+/* ── Admin Panel: Enhancements ──────────────────────── */
+
+/* Realtime dot */
+.sp-rt-status{display:flex;align-items:center;gap:.3rem;margin-left:auto;margin-right:.6rem;flex-shrink:0}
+.sp-rt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;transition:background .3s}
+.sp-rt-off{background:var(--glass-border2)}
+.sp-rt-on{background:#00c787;box-shadow:0 0 0 0 rgba(0,199,135,.6);animation:spRTPulse 2s infinite}
+@keyframes spRTPulse{0%{box-shadow:0 0 0 0 rgba(0,199,135,.6)}70%{box-shadow:0 0 0 5px rgba(0,199,135,0)}100%{box-shadow:0 0 0 0 rgba(0,199,135,0)}}
+.sp-rt-lbl{font-size:.62rem;font-weight:700;color:var(--text3)}
+
+/* Tab badge (new comment count) */
+.sp-tab-badge{display:inline-flex;align-items:center;justify-content:center;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#ff375f;color:#fff;font-size:.6rem;font-weight:800;margin-left:.25rem;line-height:1}
+
+/* Stats grid 4 columns */
+.sp-ap-stats-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;margin-bottom:.6rem}
+@media(max-width:480px){.sp-ap-stats-grid4{grid-template-columns:repeat(2,1fr)}}
+.sp-ap-stat{background:var(--glass);border:1px solid var(--glass-border2);border-radius:var(--r-lg);padding:.7rem .6rem;text-align:center;position:relative;overflow:hidden}
+.sp-ap-stat::before{content:'';position:absolute;inset:0;opacity:.06;pointer-events:none;border-radius:inherit}
+.sp-stat-blue::before{background:#3b8fff}.sp-stat-red::before{background:#ff375f}.sp-stat-green::before{background:#00c787}.sp-stat-purple::before{background:#bf5af2}
+.sp-ap-stat-ico{display:flex;align-items:center;justify-content:center;margin-bottom:.25rem;opacity:.55}
+.sp-stat-blue .sp-ap-stat-ico{color:#3b8fff;opacity:1}.sp-stat-red .sp-ap-stat-ico{color:#ff375f;opacity:1}.sp-stat-green .sp-ap-stat-ico{color:#00c787;opacity:1}.sp-stat-purple .sp-ap-stat-ico{color:#bf5af2;opacity:1}
+.sp-ap-stat-num{font-size:1.3rem;font-weight:900;letter-spacing:-.04em;color:var(--text)}
+.sp-stat-blue .sp-ap-stat-num{color:#3b8fff}.sp-stat-red .sp-ap-stat-num{color:#ff375f}.sp-stat-green .sp-ap-stat-num{color:#00c787}.sp-stat-purple .sp-ap-stat-num{color:#bf5af2}
+.sp-ap-stat-lbl{font-size:.6rem;color:var(--text3);font-weight:600;margin-top:.1rem}
+
+/* 7-day sparkline */
+.sp-ap-sparkline{display:flex;align-items:flex-end;gap:4px;height:56px;padding:0 .1rem .1rem}
+.sp-spark-col{display:flex;flex-direction:column;align-items:center;gap:2px;flex:1}
+.sp-spark-bar{width:100%;max-width:22px;border-radius:3px 3px 0 0;background:var(--accent);opacity:.7;transition:opacity .2s;min-height:4px}
+.sp-spark-bar:hover{opacity:1}
+.sp-spark-lbl{font-size:.58rem;color:var(--text3);font-weight:600;white-space:nowrap}
+.sp-spark-num{font-size:.58rem;color:var(--text3);font-weight:700}
+
+/* Anon vs Named ratio */
+.sp-ap-ratio-wrap{margin-bottom:.4rem}
+.sp-ap-ratio-bar{display:flex;height:8px;border-radius:4px;overflow:hidden;background:var(--glass-border2)}
+.sp-ap-ratio-fill{height:100%;transition:width .4s cubic-bezier(.16,1,.3,1)}
+.sp-ratio-anon{background:#ff9f0a}.sp-ratio-named{background:#3b8fff}
+.sp-ap-ratio-legend{display:flex;align-items:center;gap:.25rem;font-size:.68rem;color:var(--text2);margin-top:.35rem;flex-wrap:wrap}
+.sp-ratio-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;display:inline-block}
+.sp-ratio-anon-dot{background:#ff9f0a}.sp-ratio-named-dot{background:#3b8fff}
+
+/* Top releases bar list */
+.sp-ap-bar-list{display:flex;flex-direction:column;gap:.38rem}
+.sp-ap-bar-item{display:flex;align-items:center;gap:.5rem}
+.sp-ap-bar-tag{font-size:.68rem;font-weight:700;color:var(--accent);min-width:52px;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-ap-bar-track{flex:1;height:7px;background:var(--glass-border2);border-radius:4px;overflow:hidden}
+.sp-ap-bar-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--accent),rgba(59,143,255,.55));transition:width .5s cubic-bezier(.16,1,.3,1)}
+.sp-ap-bar-val{font-size:.68rem;font-weight:800;color:var(--text2);min-width:18px;text-align:right}
+
+/* XS button */
+.sp-ap-btn-xs{padding:.3rem .62rem;font-size:.7rem;display:inline-flex;align-items:center;gap:.28rem}
+
+/* Moderasi: reply + action group */
+.sp-ap-mitem-actions{display:flex;flex-direction:column;gap:.3rem;flex-shrink:0;align-items:flex-end}
+.sp-ap-reply-btn{display:inline-flex;align-items:center;justify-content:center;padding:.24rem .42rem;border-radius:var(--r-pill);background:rgba(59,143,255,.08);border:1px solid rgba(59,143,255,.2);color:#3b8fff;cursor:pointer;transition:background .15s,transform .18s cubic-bezier(.34,1.56,.64,1);font-family:var(--font)}
+.sp-ap-reply-btn:hover{background:rgba(59,143,255,.18);transform:scale(1.06)}
+.sp-ap-mitem .sp-ap-del-btn{padding:.22rem .38rem}
+
+/* Owner reply comment style */
+.sp-cmt-owner-reply{background:rgba(59,143,255,.04);border-left:2.5px solid rgba(59,143,255,.35);padding-left:.4rem;border-radius:0 .5rem .5rem 0}
+.sp-cmt-owner-name{color:#ff9f0a!important;font-weight:800!important}
+
+/* License tab */
+.sp-ap-license-card{background:var(--glass);border:1px solid var(--glass-border2);border-radius:var(--r-lg);overflow:hidden;margin-bottom:.2rem}
+.sp-ap-info-row{display:flex;align-items:baseline;justify-content:space-between;gap:.5rem;padding:.5rem .85rem;border-bottom:1px solid var(--glass-border);flex-wrap:wrap}
+.sp-ap-info-row:last-child{border-bottom:none}
+.sp-ap-info-lbl{font-size:.68rem;font-weight:700;color:var(--text3);white-space:nowrap;flex-shrink:0}
+.sp-ap-info-val{font-size:.75rem;color:var(--text2);font-weight:600;text-align:right;word-break:break-all;display:flex;align-items:center;gap:.35rem;flex-wrap:wrap;justify-content:flex-end}
+.sp-ap-info-val code{background:var(--accent-soft);color:var(--accent);padding:.1rem .38rem;border-radius:.35rem;font-size:.7rem;font-family:monospace}
+.sp-ap-info-extra{font-size:.65rem;color:var(--text3);font-weight:500}
+
+/* Status badge */
+.sp-ap-status-badge{display:inline-flex;align-items:center;gap:.22rem;padding:.18rem .55rem;border-radius:var(--r-pill);font-size:.68rem;font-weight:700}
+.sp-badge-ok{background:rgba(0,199,135,.12);color:#00c787;border:1px solid rgba(0,199,135,.25)}
+.sp-badge-err{background:rgba(255,55,95,.1);color:#ff375f;border:1px solid rgba(255,55,95,.2)}
+
+/* Progress bar (rate limit) */
+.sp-ap-progress-wrap{height:5px;background:var(--glass-border2);border-radius:3px;overflow:hidden;margin:.1rem .85rem .55rem}
+.sp-ap-progress-bar{height:100%;border-radius:3px;transition:width .4s cubic-bezier(.16,1,.3,1)}
+
+/* Sort toggle in mod toolbar */
+#sp-mod-sort-btn{white-space:nowrap}
