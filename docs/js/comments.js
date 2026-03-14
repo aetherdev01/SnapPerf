@@ -152,6 +152,14 @@ function spBuildFullPanel(){
   document.getElementById('sp-ap-close').addEventListener('click',function(){panel.classList.remove('sp-panel-open');setTimeout(function(){panel.remove();},320);});
   panel.querySelectorAll('.sp-ap-tab').forEach(function(btn){btn.addEventListener('click',function(){panel.querySelectorAll('.sp-ap-tab').forEach(function(b){b.classList.remove('active');});btn.classList.add('active');spAdminTab=btn.dataset.tab;spRenderAdminTab(spAdminTab);});});
   spAdminTab='stats';spRenderAdminTab('stats');
+  // Real-time: refresh admin stats on new comment
+  if(spSb){
+    try{
+      spSb.channel('admin_rt').on('postgres_changes',{event:'*',schema:'public',table:'sp_comments'},function(){
+        if(spAdminTab==='stats'||spAdminTab==='mod')spRenderAdminTab(spAdminTab);
+      }).subscribe();
+    }catch(e){}
+  }
 }
 
 async function spRenderAdminTab(tab){
@@ -159,7 +167,7 @@ async function spRenderAdminTab(tab){
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
   if(tab==='stats')await spTabStats(body);
   else if(tab==='mod')await spTabMod(body);
-  else if(tab==='notif')spTabNotif(body);
+  else if(tab==='notif')await spTabNotif(body);
   else if(tab==='settings')spTabSettings(body);
 }
 
@@ -244,7 +252,7 @@ async function spLoadModList(q){
   }catch(e){list.innerHTML='<p class="sp-no-cmt sp-cmt-err">Gagal memuat.</p>';}
 }
 
-async function spTabNotif(body){
+async async function spTabNotif(body){
   var curMsg='',curType='info',curActive=false,curSha='';
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
   try{

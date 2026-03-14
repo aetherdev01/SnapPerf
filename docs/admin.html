@@ -9,28 +9,41 @@ button{cursor:pointer;font-family:var(--font)}
 input,textarea,select{font-family:var(--font)}
 code{background:var(--accent-soft);color:var(--accent);padding:.1rem .35rem;border-radius:.3rem;font-size:.82em;font-family:monospace}
 
-#sp-lock{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.5rem}
-.lock-card{background:var(--glass2);border:1px solid var(--glass-border2);border-radius:1.6rem;padding:2rem 1.8rem;max-width:360px;width:100%;box-shadow:var(--glass-shadow-lg);text-align:center}
-.lock-ico{width:58px;height:58px;border-radius:1rem;background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.28);display:flex;align-items:center;justify-content:center;margin:0 auto .9rem}
-.lock-ico svg path{stroke:var(--gold)}
-.lock-title{font-size:1.1rem;font-weight:800;color:var(--text);margin-bottom:.3rem;letter-spacing:-.02em}
-.lock-sub{font-size:.78rem;color:var(--text2);margin-bottom:1.1rem;line-height:1.55}
-.lock-form{display:flex;gap:.4rem;align-items:center}
-.lock-inp{flex:1;background:var(--glass);border:1.5px solid var(--glass-border2);border-radius:var(--r-pill);padding:.52rem .85rem;font-size:.82rem;color:var(--text);outline:none;transition:border-color .18s;-webkit-appearance:none}
+#sp-lock{position:fixed;inset:0;background:var(--bg);z-index:9999;display:flex;align-items:center;justify-content:center;padding:1.5rem;overflow:hidden}
+#sp-lock::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 15% 20%,rgba(61,136,255,.12),transparent),radial-gradient(ellipse 50% 50% at 85% 80%,rgba(0,229,184,.08),transparent);pointer-events:none}
+.lock-card{background:var(--glass2);border:1px solid var(--glass-border2);border-radius:2rem;padding:2.2rem 2rem 1.8rem;max-width:400px;width:100%;box-shadow:0 24px 64px rgba(0,0,0,.3),0 0 0 .5px rgba(255,255,255,.07) inset;text-align:center;animation:lockCardIn .5s cubic-bezier(.34,1.56,.64,1) both;position:relative;overflow:hidden}
+.lock-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(255,255,255,.06) 0%,transparent 55%);pointer-events:none;border-radius:inherit}
+@keyframes lockCardIn{from{transform:translateY(28px) scale(.94);opacity:0}to{transform:none;opacity:1}}
+.lock-header{display:flex;flex-direction:column;align-items:center;gap:.5rem;margin-bottom:1.5rem;position:relative;z-index:1}
+.lock-logo{width:60px;height:60px;border-radius:1.2rem;overflow:hidden;border:2px solid var(--glass-border2);box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.lock-logo img{width:100%;height:100%;object-fit:cover;display:block}
+.lock-brand{font-size:1.3rem;font-weight:900;color:var(--text);letter-spacing:-.04em}
+.lock-brand span{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.lock-badge{display:inline-flex;align-items:center;gap:.28rem;background:rgba(255,159,10,.12);border:1px solid rgba(255,159,10,.28);border-radius:var(--r-pill);padding:.17rem .52rem;font-size:.6rem;font-weight:800;color:var(--gold);letter-spacing:.07em;text-transform:uppercase}
+.lock-sub{font-size:.8rem;color:var(--text2);margin-bottom:1.3rem;line-height:1.6;position:relative;z-index:1}
+.lock-field{margin-bottom:.85rem;text-align:left;position:relative;z-index:1}
+.lock-field-label{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:.35rem;display:block}
+.lock-inp-wrap{position:relative;display:flex;align-items:center}
+.lock-inp{width:100%;background:var(--glass);border:1.5px solid var(--glass-border2);border-radius:.9rem;padding:.62rem 2.6rem .62rem .9rem;font-size:.84rem;color:var(--text);outline:none;transition:border-color .18s,box-shadow .18s;-webkit-appearance:none;font-family:var(--font)}
 .lock-inp:focus{border-color:rgba(var(--accent-rgb),.5);box-shadow:0 0 0 3px rgba(var(--accent-rgb),.1)}
 .lock-inp::placeholder{color:var(--text3)}
 .lock-inp.sp-shake{animation:lockShake .35s ease}
 @keyframes lockShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(5px)}60%{transform:translateX(-4px)}80%{transform:translateX(3px)}}
-.lock-eye{position:absolute;right:.7rem;background:none;border:none;color:var(--text3);padding:.2rem;display:flex;align-items:center;transition:color .15s}
+.lock-eye{position:absolute;right:.65rem;background:none;border:none;color:var(--text3);padding:.25rem;display:flex;align-items:center;transition:color .15s;cursor:pointer}
 .lock-eye:hover{color:var(--accent)}
-.lock-inp-wrap{position:relative;flex:1;display:flex;align-items:center}
-.lock-inp-wrap .lock-inp{padding-right:2.3rem;width:100%}
-.lock-submit{padding:.5rem 1.1rem;border-radius:var(--r-pill);background:var(--accent);color:#fff;border:none;font-size:.82rem;font-weight:700;transition:background .18s,transform .2s cubic-bezier(.34,1.56,.64,1);flex-shrink:0}
-.lock-submit:hover{background:#2b78ff;transform:scale(1.04)}
-.lock-submit:disabled{opacity:.5;cursor:not-allowed;transform:none}
-.lock-status{font-size:.74rem;font-weight:600;margin-top:.6rem;min-height:1rem;transition:color .2s}
+.lock-submit{width:100%;padding:.7rem;border-radius:.9rem;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;font-size:.88rem;font-weight:800;font-family:var(--font);cursor:pointer;transition:opacity .18s,transform .2s cubic-bezier(.34,1.56,.64,1);letter-spacing:.01em;box-shadow:0 4px 16px rgba(61,136,255,.35);position:relative;z-index:1}
+.lock-submit:hover:not(:disabled){opacity:.9;transform:translateY(-1px);box-shadow:0 6px 22px rgba(61,136,255,.45)}
+.lock-submit:active:not(:disabled){transform:scale(.98)}
+.lock-submit:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.lock-status{font-size:.75rem;font-weight:600;margin-top:.65rem;min-height:1.1rem;transition:color .2s;display:flex;align-items:center;justify-content:center;gap:.32rem;position:relative;z-index:1}
 .lock-status.checking{color:var(--accent2)}
 .lock-status.err{color:var(--red)}
+.lock-status.ok{color:var(--green)}
+.lock-hint{margin-top:1.1rem;padding-top:.9rem;border-top:1px solid var(--glass-border);font-size:.7rem;color:var(--text3);line-height:1.55}
+.lock-hint a{color:var(--accent);text-decoration:none}
+.lock-hint a:hover{text-decoration:underline}
+.lock-progress{position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--grad);transform:scaleX(0);transform-origin:left;transition:transform .4s ease;border-radius:0 0 2rem 2rem}
+.lock-card.lock-loading .lock-progress{transform:scaleX(.7)}
 
 #sp-app{display:none;flex-direction:column;min-height:100vh}
 .adm-sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--glass2);border-right:1px solid var(--glass-border2);display:flex;flex-direction:column;z-index:100;transition:transform .28s cubic-bezier(.16,1,.3,1)}
@@ -181,17 +194,26 @@ code{background:var(--accent-soft);color:var(--accent);padding:.1rem .35rem;bord
 </style></head>
 <body>
 <div id="sp-lock">
-  <div class="lock-card">
-    <div class="lock-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="lock-title">SnapPerf Admin</div>
-    <div class="lock-sub">Masukkan GitHub token untuk mengakses panel admin.</div>
-    <div class="lock-form">
-      <div class="lock-inp-wrap">
-        <input class="lock-inp" id="lock-inp" type="password" placeholder="ghp_xxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"/>
-        <button class="lock-eye" id="lock-eye" type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg></button>
+  <div class="lock-card" id="lock-card">
+    <div class="lock-header">
+      <div class="lock-logo"><img src="assets/aether.webp" alt="SnapPerf"/></div>
+      <div class="lock-brand">Snap<span>Perf</span></div>
+      <div class="lock-badge">
+        <svg width="9" height="9" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2.2"/></svg>
+        Admin Panel
       </div>
-      <button class="lock-submit" id="lock-submit">Masuk</button>
     </div>
+    <p class="lock-sub">Masukkan GitHub Personal Access Token untuk mengakses panel admin.</p>
+    <div class="lock-field">
+      <label class="lock-field-label" for="lock-inp">GitHub Token</label>
+      <div class="lock-inp-wrap">
+        <input class="lock-inp" id="lock-inp" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"/>
+        <button class="lock-eye" id="lock-eye" type="button">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>
+        </button>
+      </div>
+    </div>
+    <button class="lock-submit" id="lock-submit">Masuk ke Admin Panel</button>
     <div class="lock-status" id="lock-status"></div>
   </div>
 </div>
@@ -322,14 +344,27 @@ async function renderStats(){
     +'<div class="adm-stat-card"><div class="adm-stat-num">'+ghForks+'</div><div class="adm-stat-lbl">GitHub Forks</div></div>'
     +'</div>'
     +'<div class="adm-card"><div class="adm-card-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2"/></svg>Komentar Terbaru</div><div id="adm-recent-list"><div class="adm-loading"><div class="adm-spin"></div></div></div></div>';
-  try{
-    var rr=await spSb.from('sp_comments').select('*').order('created_at',{ascending:false}).limit(10);
+  // Real-time subscription for stats
+  if(spSb){
+    try{
+      var ch=spSb.channel('stats_realtime').on('postgres_changes',{event:'*',schema:'public',table:'sp_comments'},function(){
+        var rl=document.getElementById('adm-recent-list');
+        if(rl&&document.getElementById('page-stats')&&document.getElementById('page-stats').classList.contains('active'))loadRecentComments();
+      }).subscribe();
+    }catch(e){}
+  }
+  async function loadRecentComments(){
     var rl=document.getElementById('adm-recent-list');if(!rl)return;
-    if(!rr.data||!rr.data.length){rl.innerHTML='<div class="adm-empty">Belum ada komentar.</div>';return;}
-    var tbl='<table class="adm-table"><thead><tr><th>Nama</th><th>Rilis</th><th>Komentar</th><th>Waktu</th><th></th></tr></thead><tbody>';
-    rr.data.forEach(function(d){tbl+='<tr><td class="adm-td-name">'+(d.is_anonymous?'👤 Anonim':esc(d.display_name||'User'))+'</td><td><span class="adm-td-tag">'+esc(d.release_tag||'')+'</span></td><td class="adm-td-text" title="'+esc(d.text)+'">'+esc(d.text)+'</td><td class="adm-td-time">'+relTime(d.created_at)+'</td><td><button class="adm-btn adm-btn-danger adm-btn-sm adm-del-cmt" data-id="'+esc(d.id)+'">Hapus</button></td></tr>';});
-    tbl+='</tbody></table>';rl.innerHTML=tbl;
-  }catch(e){document.getElementById('adm-recent-list').innerHTML='<div class="adm-err">Gagal memuat.</div>';}
+    rl.innerHTML='<div class="adm-loading" style="padding:.6rem 0"><div class="adm-spin"></div></div>';
+    try{
+      var rr=await spSb.from('sp_comments').select('*').order('created_at',{ascending:false}).limit(10);
+      if(!rr.data||!rr.data.length){rl.innerHTML='<div class="adm-empty">Belum ada komentar.</div>';return;}
+      var tbl='<table class="adm-table"><thead><tr><th>Nama</th><th>Rilis</th><th>Komentar</th><th>Waktu</th><th></th></tr></thead><tbody>';
+      rr.data.forEach(function(d){tbl+='<tr><td class="adm-td-name">'+(d.is_anonymous?'👤 Anonim':esc(d.display_name||'User'))+'</td><td><span class="adm-td-tag">'+esc(d.release_tag||'')+'</span></td><td class="adm-td-text" title="'+esc(d.text)+'">'+esc(d.text)+'</td><td class="adm-td-time" title="'+fullDate(d.created_at)+'">'+relTime(d.created_at)+'</td><td><button class="adm-btn adm-btn-danger adm-btn-sm adm-del-cmt" data-id="'+esc(d.id)+'">Hapus</button></td></tr>';});
+      tbl+='</tbody></table>';rl.innerHTML=tbl;
+    }catch(e){if(rl)rl.innerHTML='<div class="adm-err">Gagal memuat.</div>';}
+  }
+  loadRecentComments();
 }
 
 async function renderMod(){
@@ -365,15 +400,16 @@ async function renderMod(){
 async function renderNotif(){
   var pg=document.getElementById('page-notif');
   pg.innerHTML='<div class="adm-loading"><div class="adm-spin"></div>Memuat data notifikasi...</div>';
-  var curMsg='',curType='info',curActive=false;
+  var curMsg='',curTitle='',curType='info',curActive=false;
   try{
     var r=await fetch(SP_GH_NOTIF,{headers:ghHeaders()});
-    if(r.ok){var d=await r.json();var content=JSON.parse(atob(d.content.replace(/\n/g,'')));curMsg=content.message||'';curType=content.type||'info';curActive=!!content.active;}
+    if(r.ok){var d=await r.json();var content=JSON.parse(atob(d.content.replace(/\n/g,'')));curMsg=content.message||'';curTitle=content.title||'';curType=content.type||'info';curActive=!!content.active;}
   }catch(e){}
   var typeOpts=['info','success','warning','alert'].map(function(t){return'<option value="'+t+'"'+(t===curType?' selected':'')+'>'+t.charAt(0).toUpperCase()+t.slice(1)+'</option>';}).join('');
   pg.innerHTML='<div class="adm-card"><div class="adm-card-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Pengumuman Sitewide</div>'
     +'<p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem">Pesan ini akan muncul sebagai banner di semua halaman website pengunjung.</p>'
     +'<div class="adm-form">'
+    +'<div><div class="adm-label" style="margin-bottom:.35rem">Judul <span style="font-size:.65rem;color:var(--text3);font-weight:400">(opsional)</span></div><input class="adm-input" id="notif-title" type="text" placeholder="Contoh: Update Tersedia!" value="'+esc(curTitle)+'"/></div>'
     +'<div><div class="adm-label" style="margin-bottom:.35rem">Pesan</div><textarea class="adm-textarea" id="notif-msg" placeholder="Tulis pesan pengumuman...">'+esc(curMsg)+'</textarea></div>'
     +'<div><div class="adm-label" style="margin-bottom:.35rem">Tipe</div><select class="adm-select" id="notif-type">'+typeOpts+'</select></div>'
     +'<div class="adm-toggle-row"><span>Status Aktif</span><label class="adm-toggle"><input type="checkbox" id="notif-active"'+(curActive?' checked':'')+'><span class="adm-toggle-sl"></span></label></div>'
@@ -390,7 +426,7 @@ async function renderNotif(){
     try{
       var getR=await fetch(SP_GH_NOTIF,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file ('+getR.status+')');
       var gd=await getR.json();var sha=gd.sha;
-      var payload={active:active,id:active?'notif_'+Date.now():'notif_default',type:type||'info',message:msg,timestamp:Date.now()};
+      var title=document.getElementById('notif-title')?document.getElementById('notif-title').value.trim():'';var payload={active:active,id:active?'notif_'+Date.now():'notif_default',type:type||'info',title:title,message:msg,timestamp:Date.now()};
       var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
       var putR=await fetch(SP_GH_NOTIF,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:active?'chore: push notification [skip ci]':'chore: clear notification [skip ci]',content:encoded,sha:sha})});
       if(!putR.ok)throw new Error('Gagal update ('+putR.status+')');
@@ -531,14 +567,18 @@ document.getElementById('adm-theme-btn').addEventListener('click',function(){var
   var saved=loadToken();
   if(saved){
     inp.value=saved;
-    st.className='lock-status checking';st.textContent='Memverifikasi token tersimpan...';sub.disabled=true;
+    st.className='lock-status checking';
+    st.innerHTML='<div class="adm-spin" style="width:13px;height:13px;border-width:1.5px"></div> Memverifikasi token tersimpan...';
+    sub.disabled=true;
+    var card=document.getElementById('lock-card');if(card)card.classList.add('lock-loading');
     verifyToken(saved).then(function(d){
+      if(card)card.classList.remove('lock-loading');
       if(d){initApp(saved,d);}
-      else{clearToken();inp.value='';st.className='lock-status err';st.textContent='Token kadaluarsa. Masukkan ulang.';sub.disabled=false;}
+      else{clearToken();inp.value='';st.className='lock-status err';st.innerHTML='&#x2717; Token kadaluarsa. Masukkan ulang.';sub.disabled=false;}
     });
   }
   eye.addEventListener('click',function(){var s=inp.type==='password';inp.type=s?'text':'password';eye.innerHTML=s?'<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24M1 1l22 22" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>':'<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" stroke="currentColor" stroke-width="2"/><circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="2"/></svg>';});
-  async function doLogin(){var t=inp.value.trim();if(!t){inp.classList.add('sp-shake');setTimeout(function(){inp.classList.remove('sp-shake');},400);return;}sub.disabled=true;st.className='lock-status checking';st.textContent='Menghubungi GitHub API...';var d=await verifyToken(t);if(d){saveToken(t);saveOwner(d);initApp(t,d);}else{st.className='lock-status err';st.textContent='\u2717 Token tidak valid atau bukan akun @'+SP_OWN_GH+'.';sub.disabled=false;}}
+  async function doLogin(){var t=inp.value.trim();if(!t){inp.classList.add('sp-shake');setTimeout(function(){inp.classList.remove('sp-shake');},400);return;}sub.disabled=true;var card=document.getElementById('lock-card');if(card)card.classList.add('lock-loading');st.className='lock-status checking';st.innerHTML='<div class="adm-spin" style="width:13px;height:13px;border-width:1.5px"></div> Memverifikasi...';var d=await verifyToken(t);if(d){if(card)card.classList.remove('lock-loading');saveToken(t);saveOwner(d);initApp(t,d);}else{if(card)card.classList.remove('lock-loading');st.className='lock-status err';st.textContent='\u2717 Token tidak valid atau bukan akun @'+SP_OWN_GH+'.';sub.disabled=false;}}
   sub.addEventListener('click',doLogin);
   inp.addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();doLogin();}});
 })();

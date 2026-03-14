@@ -150,30 +150,43 @@ async function loadNotification(){
     if(!d||!d.active||!d.message)return;
     var dismissed=localStorage.getItem('sp-notif-dismissed');
     if(dismissed&&dismissed===String(d.id))return;
-    showNotifBanner(d);
+    showNotifDialog(d);
   }catch(e){}
 }
 
-function showNotifBanner(d){
-  var existing=document.getElementById('sp-notif-banner');
-  if(existing)existing.remove();
-  var icons={info:'ℹ️',success:'✅',warning:'⚠️',alert:'🚨'};
-  var type=(d.type&&['info','success','warning','alert'].indexOf(d.type)!==-1)?d.type:'info';
-  var banner=document.createElement('div');
-  banner.id='sp-notif-banner';
-  banner.className='sp-notif-banner sp-notif-'+type;
-  banner.innerHTML='<div class="sp-notif-inner"><span class="sp-notif-ico">'+(icons[type]||'ℹ️')+'</span><span class="sp-notif-msg">'+escHTML(d.message)+'</span><button class="sp-notif-close" id="sp-notif-x" aria-label="Tutup">&times;</button></div>';
-  document.body.insertBefore(banner,document.body.firstChild);
-  requestAnimationFrame(function(){requestAnimationFrame(function(){
-    banner.classList.add('sp-notif-show');
-    var nb=document.getElementById('navbar');
-    if(nb){var h=banner.offsetHeight;nb.style.transition='top .3s cubic-bezier(.16,1,.3,1)';nb.style.top='calc(.8rem + '+h+'px)';}
-  });});
-  document.getElementById('sp-notif-x').addEventListener('click',function(){
-    banner.classList.remove('sp-notif-show');
-    var nb=document.getElementById('navbar');
-    if(nb){nb.style.top='';}
-    banner.addEventListener('transitionend',function(){if(banner.parentNode)banner.remove();},{once:true});
+function showNotifDialog(d){
+  if(document.getElementById('sp-notif-dialog'))return;
+  var TYPE_META={
+    info:{color:'#3d88ff',bg:'rgba(61,136,255,.1)',border:'rgba(61,136,255,.25)',label:'Informasi'},
+    success:{color:'#00e5b8',bg:'rgba(0,229,184,.1)',border:'rgba(0,229,184,.25)',label:'Berhasil!'},
+    warning:{color:'#ff9f0a',bg:'rgba(255,159,10,.1)',border:'rgba(255,159,10,.28)',label:'Perhatian'},
+    alert:{color:'#ff375f',bg:'rgba(255,55,95,.1)',border:'rgba(255,55,95,.28)',label:'Peringatan'}
+  };
+  var type=(d.type&&TYPE_META[d.type])?d.type:'info';
+  var meta=TYPE_META[type];
+  var title=d.title||(type==='info'?'Informasi':type==='success'?'Berhasil!':type==='warning'?'Perhatian':'Peringatan Penting');
+  var ICONS={info:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="'+meta.color+'" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="'+meta.color+'" stroke-width="2.2" stroke-linecap="round"/></svg>',success:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="'+meta.color+'" stroke-width="2"/><path d="M8 12l3 3 5-5" stroke="'+meta.color+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>',warning:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="'+meta.color+'" stroke-width="2"/><path d="M12 9v4M12 17h.01" stroke="'+meta.color+'" stroke-width="2.2" stroke-linecap="round"/></svg>',alert:'<svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="'+meta.color+'" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="'+meta.color+'" stroke-width="2.2" stroke-linecap="round"/></svg>'};
+  var overlay=document.createElement('div');overlay.id='sp-notif-dialog';overlay.className='sp-nd-overlay';
+  overlay.innerHTML='<div class="sp-nd-card sp-nd-'+type+'">'
+    +'<div class="sp-nd-top">'
+    +'<div class="sp-nd-logo-wrap"><img class="sp-nd-logo" src="assets/aether.webp" alt="SnapPerf"/></div>'
+    +'<div class="sp-nd-icon-wrap" style="background:'+meta.bg+';border-color:'+meta.border+'">'+ICONS[type]+'</div>'
+    +'</div>'
+    +'<div class="sp-nd-body">'
+    +'<div class="sp-nd-title">'+escHTML(title)+'</div>'
+    +'<div class="sp-nd-msg">'+escHTML(d.message)+'</div>'
+    +'</div>'
+    +'<div class="sp-nd-footer">'
+    +'<button class="sp-nd-close" id="sp-nd-btn" style="background:'+meta.color+'">Mengerti</button>'
+    +'</div>'
+    +'</div>';
+  document.body.appendChild(overlay);
+  requestAnimationFrame(function(){requestAnimationFrame(function(){overlay.classList.add('sp-nd-show');});});
+  function closeDialog(){
+    overlay.classList.add('sp-nd-hide');
+    overlay.addEventListener('animationend',function(){if(overlay.parentNode)overlay.remove();},{once:true});
     if(d.id)localStorage.setItem('sp-notif-dismissed',String(d.id));
-  });
+  }
+  document.getElementById('sp-nd-btn').addEventListener('click',closeDialog);
+  overlay.addEventListener('click',function(e){if(e.target===overlay)closeDialog();});
 }
