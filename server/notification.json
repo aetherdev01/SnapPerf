@@ -1,7 +1,8 @@
 {
-  "active": true,
-  "id": "notif_1773497281455",
-  "type": "alert",
-  "message": "Asu Lekas",
-  "timestamp": 1773497281455
+  "active": false,
+  "id": "notif_default",
+  "type": "info",
+  "title": "",
+  "message": "",
+  "timestamp": 1773504631304
 }
