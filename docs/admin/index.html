@@ -591,41 +591,184 @@ async function renderNotif(){
 
 async function renderReleases(){
   var pg=document.getElementById('page-releases');
-  pg.innerHTML='<div class="adm-loading"><div class="adm-spin"></div>Memuat rilis dari GitHub...</div>';
+  pg.innerHTML='<div class="adm-loading"><div class="adm-spin"></div>Memuat rilis...</div>';
   try{
     var r=await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/releases?per_page=20',{headers:ghHeaders()});
     if(!r.ok)throw new Error('GitHub API error '+r.status);
     var releases=await r.json();
-    if(!releases.length){pg.innerHTML='<div class="adm-empty">Belum ada rilis.</div>';return;}
-    var html='<div class="adm-card"><div class="adm-card-title">Semua Rilis ('+releases.length+')</div><table class="adm-table"><thead><tr><th>Tag</th><th>Nama</th><th>Status</th><th>Download</th><th>Dibuat</th><th></th></tr></thead><tbody>';
-    releases.forEach(function(rel){
-      var dlCount=(rel.assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);
-      var badge=rel.prerelease?'<span style="background:rgba(255,159,10,.15);color:var(--gold);padding:.1rem .38rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700">Beta</span>':'<span style="background:rgba(0,229,184,.12);color:var(--green);padding:.1rem .38rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700">Stable</span>';
-      html+='<tr><td class="adm-td-name">'+esc(rel.tag_name)+'</td><td class="adm-td-text">'+esc(rel.name||'')+'</td><td>'+badge+'</td><td class="adm-td-time">'+dlCount+' \u2193</td><td class="adm-td-time">'+relTime(rel.published_at)+'</td><td><a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm">GitHub</a></td></tr>';
-    });
-    html+='</tbody></table></div>';
+
+    // Load current update.json
     var updateJsonUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
     var curVer='',curDirect='',curMirror='',curCl='';
-    try{var ujr=await fetch(updateJsonUrl,{headers:ghHeaders()});if(ujr.ok){var ujd=await ujr.json();var ujc=JSON.parse(atob(ujd.content.replace(/\n/g,'')));curVer=ujc.version||'';curDirect=ujc.urlZip||ujc.zipUrl||'';curMirror=ujc.link||'';curCl=ujc.changelog||'';}}catch(e){}
-    html+='<div class="adm-card"><div class="adm-card-title">Edit update.json</div><p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem">Update versi &amp; link download yang ditampilkan di website.</p><div class="adm-form"><div><div class="adm-label" style="margin-bottom:.3rem">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.3 (Stable)" value="'+esc(curVer)+'"/></div><div><div class="adm-label" style="margin-bottom:.3rem">Direct Link</div><input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/.../SnapPerf.zip" value="'+esc(curDirect)+'"/></div><div><div class="adm-label" style="margin-bottom:.3rem">Mirror Link</div><input class="adm-input" id="rel-mirror" type="text" placeholder="https://safefileku.com/..." value="'+esc(curMirror)+'"/></div><div><div class="adm-label" style="margin-bottom:.3rem">URL Changelog</div><input class="adm-input" id="rel-cl" type="text" placeholder="https://raw.githubusercontent.com/.../CHANGELOG.md" value="'+esc(curCl)+'"/></div><div class="adm-actions"><button class="adm-btn adm-btn-primary" id="rel-save">Simpan update.json</button></div><div class="adm-status" id="rel-st"></div></div></div>';
+    try{
+      var ujr=await fetch(updateJsonUrl,{headers:ghHeaders()});
+      if(ujr.ok){
+        var ujd=await ujr.json();
+        var ujc=JSON.parse(atob(ujd.content.replace(/\n/g,'')));
+        curVer=ujc.version||'';curDirect=ujc.urlZip||ujc.zipUrl||'';curMirror=ujc.link||'';curCl=ujc.changelog||'';
+      }
+    }catch(e){}
+
+    var html='';
+
+    // === UPLOAD NEW RELEASE CARD ===
+    html+='<div class="adm-card" style="margin-bottom:1rem">';
+    html+='<div class="adm-card-title" style="display:flex;align-items:center;gap:.45rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="var(--accent)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg> Upload Rilis Baru</div>';
+    html+='<p style="font-size:.77rem;color:var(--text3);margin-bottom:1rem">Isi form di bawah untuk membuat GitHub Release baru sekaligus mengupdate <code>update.json</code> otomatis.</p>';
+    html+='<div class="adm-form">';
+    html+='<div class="adm-form-row">';
+    html+='<div><div class="adm-label">Nama Rilis</div><input class="adm-input" id="nr-name" type="text" placeholder="SnapPerf v1.5.4 Stable"/></div>';
+    html+='<div><div class="adm-label">Versi Tag</div><input class="adm-input" id="nr-tag" type="text" placeholder="snapperfv1.5.4(Stable)"/></div>';
+    html+='</div>';
+    html+='<div><div class="adm-label">Deskripsi / Changelog</div><textarea class="adm-textarea" id="nr-desc" rows="5" placeholder="- Perbaikan bug X&#10;- Optimasi Y&#10;- Update Z"></textarea></div>';
+    html+='<div class="adm-form-row">';
+    html+='<div><div class="adm-label">Link Download Langsung (urlZip)</div><input class="adm-input" id="nr-direct" type="text" placeholder="https://github.com/.../SnapPerf.zip"/></div>';
+    html+='<div><div class="adm-label">Link Mirror</div><input class="adm-input" id="nr-mirror" type="text" placeholder="https://safefileku.com/..."/></div>';
+    html+='</div>';
+    html+='<div class="adm-form-row">';
+    html+='<div><div class="adm-label">URL Changelog Raw</div><input class="adm-input" id="nr-cl" type="text" placeholder="https://raw.githubusercontent.com/.../CHANGELOG.md" value="'+esc(curCl)+'"/></div>';
+    html+='<div style="display:flex;align-items:flex-end;gap:.5rem"><label style="display:flex;align-items:center;gap:.4rem;font-size:.78rem;color:var(--text2);cursor:pointer;padding-bottom:.15rem"><input type="checkbox" id="nr-prerelease" style="accent-color:var(--accent);width:14px;height:14px"/> Beta / Pre-release</label></div>';
+    html+='</div>';
+    html+='<div class="adm-actions">';
+    html+='<button class="adm-btn adm-btn-primary" id="nr-submit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Buat Rilis &amp; Update JSON</button>';
+    html+='<button class="adm-btn adm-btn-ghost" id="nr-only-json">Update JSON Saja</button>';
+    html+='</div>';
+    html+='<div class="adm-status" id="nr-st"></div>';
+    html+='</div></div>';
+
+    // === EXISTING RELEASES TABLE ===
+    if(releases.length){
+      html+='<div class="adm-card"><div class="adm-card-title">Rilis GitHub ('+releases.length+')</div>';
+      html+='<div style="overflow-x:auto"><table class="adm-table"><thead><tr><th>Tag</th><th>Nama</th><th>Status</th><th>Download</th><th>Dibuat</th><th></th></tr></thead><tbody>';
+      releases.forEach(function(rel){
+        var dlCount=(rel.assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);
+        var badge=rel.prerelease
+          ?'<span style="background:rgba(255,159,10,.15);color:var(--gold);padding:.1rem .38rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700">Beta</span>'
+          :'<span style="background:rgba(0,229,184,.12);color:var(--green);padding:.1rem .38rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:700">Stable</span>';
+        var fillBtn='<button class="adm-btn adm-btn-ghost adm-btn-sm adm-fill-release" data-tag="'+esc(rel.tag_name)+'" data-name="'+esc(rel.name||'')+'" data-pre="'+rel.prerelease+'" title="Isi ke form">↑ Form</button>';
+        html+='<tr><td class="adm-td-name">'+esc(rel.tag_name)+'</td><td class="adm-td-text" style="max-width:160px">'+esc(rel.name||'')+'</td><td>'+badge+'</td><td class="adm-td-time">'+dlCount+' ↓</td><td class="adm-td-time">'+relTime(rel.published_at)+'</td><td style="display:flex;gap:.3rem"><a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm">GitHub</a>'+fillBtn+'</td></tr>';
+      });
+      html+='</tbody></table></div></div>';
+    } else {
+      html+='<div class="adm-empty">Belum ada rilis di GitHub.</div>';
+    }
+
+    // === EDIT update.json CARD ===
+    html+='<div class="adm-card"><div class="adm-card-title">Edit update.json Manual</div>';
+    html+='<p style="font-size:.78rem;color:var(--text3);margin-bottom:.9rem">Update versi &amp; link download yang ditampilkan di website.</p>';
+    html+='<div class="adm-form">';
+    html+='<div class="adm-form-row">';
+    html+='<div><div class="adm-label">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.4 (Stable)" value="'+esc(curVer)+'"/></div>';
+    html+='<div><div class="adm-label">Direct Link</div><input class="adm-input" id="rel-direct" type="text" placeholder="https://..." value="'+esc(curDirect)+'"/></div>';
+    html+='</div>';
+    html+='<div class="adm-form-row">';
+    html+='<div><div class="adm-label">Mirror Link</div><input class="adm-input" id="rel-mirror" type="text" placeholder="https://..." value="'+esc(curMirror)+'"/></div>';
+    html+='<div><div class="adm-label">URL Changelog</div><input class="adm-input" id="rel-cl2" type="text" placeholder="https://raw.githubusercontent.com/..." value="'+esc(curCl)+'"/></div>';
+    html+='</div>';
+    html+='<div class="adm-actions"><button class="adm-btn adm-btn-primary" id="rel-save">Simpan update.json</button></div>';
+    html+='<div class="adm-status" id="rel-st"></div>';
+    html+='</div></div>';
+
     pg.innerHTML=html;
-    document.getElementById('rel-save').addEventListener('click',async function(){
-      var ver=document.getElementById('rel-ver').value.trim();var direct=document.getElementById('rel-direct').value.trim();var mirror=document.getElementById('rel-mirror').value.trim();var cl=document.getElementById('rel-cl').value.trim();
-      var st=document.getElementById('rel-st');if(!ver||(!direct&&!mirror)){toast('Versi dan minimal satu URL wajib diisi',false);return;}
-      if(st){st.className='adm-status checking';st.textContent='Mengupdate...';}
+
+    // ---- Save update.json ----
+    async function saveUpdateJson(ver, direct, mirror, cl, statusEl){
+      if(!ver||(!direct&&!mirror)){toast('Versi dan minimal satu URL wajib diisi',false);return false;}
+      if(statusEl){statusEl.className='adm-status checking';statusEl.textContent='Mengupdate...';}
       try{
         var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
         var getR=await fetch(apiUrl,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file ('+getR.status+')');
         var gd=await getR.json();var sha=gd.sha;
         var cur={};try{cur=JSON.parse(atob(gd.content.replace(/\n/g,'')));}catch(e){}
-        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,5),urlZip:direct||(cur.urlZip||cur.zipUrl||''),link:mirror||(cur.link||''),changelog:cl||cur.changelog||''};
+        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,5),urlZip:direct||(cur.urlZip||''),link:mirror||(cur.link||''),changelog:cl||cur.changelog||''};
         var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
         var putR=await fetch(apiUrl,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),body:JSON.stringify({message:'chore: update version to '+ver+' [skip ci]',content:encoded,sha:sha})});
         if(!putR.ok)throw new Error('Gagal update ('+putR.status+')');
-        if(st){st.className='adm-status ok';st.textContent='\u2713 update.json berhasil diupdate!';}toast('\u2713 Versi diupdate ke '+ver,true);
-      }catch(e){if(st){st.className='adm-status err';st.textContent='\u2717 '+e.message;}toast('\u2717 Gagal: '+e.message,false);}
+        if(statusEl){statusEl.className='adm-status ok';statusEl.textContent='✓ update.json berhasil diupdate!';}
+        toast('✓ Versi diupdate ke '+ver,true);
+        return true;
+      }catch(e){
+        if(statusEl){statusEl.className='adm-status err';statusEl.textContent='✗ '+e.message;}
+        toast('✗ '+e.message,false);
+        return false;
+      }
+    }
+
+    // ---- Manual save ----
+    document.getElementById('rel-save').addEventListener('click',async function(){
+      await saveUpdateJson(
+        document.getElementById('rel-ver').value.trim(),
+        document.getElementById('rel-direct').value.trim(),
+        document.getElementById('rel-mirror').value.trim(),
+        document.getElementById('rel-cl2').value.trim(),
+        document.getElementById('rel-st')
+      );
     });
-  }catch(e){pg.innerHTML='<div class="adm-err">Gagal memuat rilis: '+esc(e.message||'')+'</div>';}
+
+    // ---- New release submit ----
+    async function submitNewRelease(jsonOnly){
+      var name=document.getElementById('nr-name').value.trim();
+      var tag=document.getElementById('nr-tag').value.trim();
+      var desc=document.getElementById('nr-desc').value.trim();
+      var direct=document.getElementById('nr-direct').value.trim();
+      var mirror=document.getElementById('nr-mirror').value.trim();
+      var cl=document.getElementById('nr-cl').value.trim();
+      var isPre=document.getElementById('nr-prerelease').checked;
+      var st=document.getElementById('nr-st');
+
+      if(!tag){toast('Versi Tag wajib diisi',false);return;}
+      if(!jsonOnly && !name){toast('Nama Rilis wajib diisi',false);return;}
+      if(!direct && !mirror){toast('Minimal satu link download wajib diisi',false);return;}
+
+      if(st){st.className='adm-status checking';st.textContent='Memproses...';}
+
+      // 1. Create GitHub Release (unless jsonOnly)
+      if(!jsonOnly){
+        try{
+          var relRes=await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/releases',{
+            method:'POST',
+            headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
+            body:JSON.stringify({tag_name:tag,name:name,body:desc,prerelease:isPre,draft:false})
+          });
+          if(!relRes.ok){
+            var errData=await relRes.json().catch(function(){return{};});
+            throw new Error('Gagal buat release: '+(errData.message||relRes.status));
+          }
+          if(st){st.textContent='✓ GitHub Release dibuat. Mengupdate JSON...';}
+        }catch(e){
+          if(st){st.className='adm-status err';st.textContent='✗ '+e.message;}
+          toast('✗ '+e.message,false);
+          return;
+        }
+      }
+
+      // 2. Update update.json
+      var ver=name||tag;
+      var ok=await saveUpdateJson(ver, direct, mirror, cl, null);
+      if(ok){
+        if(st){st.className='adm-status ok';st.textContent=jsonOnly?'✓ update.json diupdate!':'✓ Release dibuat & update.json diupdate!';}
+        // Refresh list
+        setTimeout(function(){renderReleases();},1200);
+      }
+    }
+
+    document.getElementById('nr-submit').addEventListener('click',function(){submitNewRelease(false);});
+    document.getElementById('nr-only-json').addEventListener('click',function(){submitNewRelease(true);});
+
+    // ---- Fill form from existing release ----
+    pg.querySelectorAll('.adm-fill-release').forEach(function(btn){
+      btn.addEventListener('click',function(){
+        document.getElementById('nr-tag').value=btn.dataset.tag||'';
+        document.getElementById('nr-name').value=btn.dataset.name||'';
+        document.getElementById('nr-prerelease').checked=btn.dataset.pre==='true';
+        document.getElementById('nr-name').scrollIntoView({behavior:'smooth',block:'center'});
+        toast('Form diisi dari rilis: '+btn.dataset.tag,true);
+      });
+    });
+
+  }catch(e){
+    pg.innerHTML='<div class="adm-err">Gagal memuat: '+esc(e.message||'')+'</div>';
+  }
 }
 
 async function renderLicense(){
