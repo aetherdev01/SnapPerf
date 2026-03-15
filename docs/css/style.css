@@ -418,3 +418,105 @@
 
 /* Sort toggle in mod toolbar */
 #sp-mod-sort-btn{white-space:nowrap}
+
+/* ===== HERO LAYOUT FIX – consistent with navbar on desktop ===== */
+.hero{padding-top:calc(5rem + 56px);} /* offset = navbar height */
+.hero-inner{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:3rem;
+  width:100%;
+  max-width:1080px;
+  margin:0 auto;
+}
+.hero-content{
+  flex:1 1 0;
+  min-width:0;
+  max-width:520px;
+}
+.hero-image{
+  flex:0 0 auto;
+  width:clamp(280px,38vw,420px);
+  max-width:100%;
+}
+@media(max-width:960px){
+  .hero-image{width:clamp(220px,42vw,340px);}
+  .hero-inner{gap:2rem;}
+}
+@media(max-width:768px){
+  .hero{padding-top:calc(4rem + 56px);min-height:auto;}
+  .hero-inner{flex-direction:column;gap:1.75rem;align-items:flex-start;}
+  .hero-content{max-width:100%;}
+  .hero-image{width:100%;max-width:420px;align-self:center;}
+}
+
+/* ===== PERFORMANCE CSS – reduce CLS / paint ===== */
+.banner-img{
+  aspect-ratio:400/280;
+  object-fit:cover;
+  width:100%;
+  height:auto;
+  display:block;
+}
+img{max-width:100%;height:auto;}
+
+/* ===== SEO – ensure text is readable / no contrast issues ===== */
+body{color:var(--text);}
+h1,h2,h3{color:var(--text);}
+
+/* ===== Admin form-row two column ===== */
+.adm-form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:.7rem;
+}
+@media(max-width:640px){
+  .adm-form-row{grid-template-columns:1fr;}
+}
+
+/* ===== Admin Upload Drop Zone ===== */
+.adm-dropzone{
+  border:2px dashed var(--glass-border2);
+  border-radius:var(--r-lg);
+  padding:2rem 1rem;
+  text-align:center;
+  cursor:pointer;
+  transition:border-color .2s,background .2s;
+  background:var(--glass);
+  position:relative;
+}
+.adm-dropzone:hover,.adm-dropzone.drag-over{
+  border-color:rgba(var(--accent-rgb),.55);
+  background:var(--accent-soft);
+}
+.adm-dropzone input[type=file]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
+}
+.adm-dropzone-icon{color:var(--accent);margin-bottom:.5rem;}
+.adm-dropzone-text{font-size:.8rem;color:var(--text2);font-weight:600;}
+.adm-dropzone-sub{font-size:.7rem;color:var(--text3);margin-top:.2rem;}
+.adm-file-chosen{font-size:.77rem;color:var(--green);font-weight:700;margin-top:.5rem;display:none;}
+.adm-file-chosen.visible{display:block;}
+
+/* ===== Upload progress bar ===== */
+.adm-upload-bar-wrap{
+  height:6px;background:var(--glass);border-radius:3px;overflow:hidden;margin-top:.5rem;display:none;
+}
+.adm-upload-bar-wrap.visible{display:block;}
+.adm-upload-bar{
+  height:100%;background:var(--grad);border-radius:3px;width:0;
+  transition:width .3s ease;
+}
+
+/* ===== Releases page upload card ===== */
+.adm-upload-steps{
+  display:flex;gap:.35rem;margin-bottom:.7rem;flex-wrap:wrap;
+}
+.adm-step{
+  display:flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;
+  color:var(--text3);padding:.18rem .52rem;border-radius:var(--r-pill);
+  border:1px solid var(--glass-border2);background:var(--glass);
+}
+.adm-step.done{color:var(--green);border-color:rgba(0,229,184,.3);background:rgba(0,229,184,.08);}
+.adm-step.active{color:var(--accent);border-color:rgba(var(--accent-rgb),.3);background:var(--accent-soft);}
