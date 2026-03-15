@@ -1,4 +1,5 @@
 'use strict';
+
 var SP_SB_URL='https://mdielsfkmchwtdfrlidz.supabase.co';
 var SP_SB_ANON='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1kaWVsc2ZrbWNod3RkZnJsaWR6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM0ODMxNjUsImV4cCI6MjA4OTA1OTE2NX0.hjIv88F5pJMfeyM18-WdUeNYjL2mocl7KEQona9w1uY';
 var SP_EJS_PK='r6IpGiVo5FCdjbdFA';
@@ -7,20 +8,25 @@ var SP_EJS_TPL='template_wznau9x';
 var SP_OWN_EMAIL='aldigeming41@gmail.com';
 var SP_OWN_GH='aetherdev01';
 var SP_GH_NOTIF_PATH='https://api.github.com/repos/aetherdev01/SnapPerf/contents/server/notification.json';
+
 var SP_TOKEN_SAVED_KEY='sp-token-saved-at';
 var SP_TOKEN_META_KEY='sp-token-meta';
 var SP_FIRST_LOGIN_KEY='sp-first-login';
+
 var spSb=null,spUser=null,spOwner=null,spAnonId=null;
 var spChannels={},spAdminTab='stats';
 var spRTConnected=false;
 var spAdminLiveCh=null;
 var spAdminStatsTick=null;
 var spNewCommentCount=0;
+
+/* ── Utils ─────────────────────────────────────── */
 function spEsc(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 function spGetAnonId(){if(spAnonId)return spAnonId;var id=localStorage.getItem('sp-anon-id');if(!id){id='a'+Math.random().toString(36).slice(2,10)+Date.now().toString(36);localStorage.setItem('sp-anon-id',id);}spAnonId=id;return id;}
 function spLoadUser(){try{var u=localStorage.getItem('sp-user');return u?JSON.parse(u):null;}catch(e){return null;}}
 function spSaveUser(u){try{localStorage.setItem('sp-user',JSON.stringify(u));}catch(e){}}
 function spClearUser(){localStorage.removeItem('sp-user');}
+
 function spSaveToken(t){
   localStorage.setItem('sp-owner-token',t);
   if(!localStorage.getItem(SP_FIRST_LOGIN_KEY))localStorage.setItem(SP_FIRST_LOGIN_KEY,Date.now().toString());
@@ -32,16 +38,21 @@ function spSaveOwnerData(d){localStorage.setItem('sp-owner-data',JSON.stringify(
 function spLoadOwnerData(){try{var d=localStorage.getItem('sp-owner-data');return d?JSON.parse(d):null;}catch(e){return null;}}
 function spSaveTokenMeta(m){try{localStorage.setItem(SP_TOKEN_META_KEY,JSON.stringify(m));}catch(e){}}
 function spLoadTokenMeta(){try{var m=localStorage.getItem(SP_TOKEN_META_KEY);return m?JSON.parse(m):null;}catch(e){return null;}}
+
 function spDecodeJWT(token){
   try{var p=token.split('.');if(p.length!==3)return null;return JSON.parse(atob(p[1].replace(/-/g,'+').replace(/_/g,'/')));}
   catch(e){return null;}
 }
+
 function spRelTime(ts){if(!ts)return'baru saja';var d=new Date(ts);if(isNaN(d.getTime()))return'baru saja';var s=(Date.now()-d.getTime())/1000;if(s<2)return'baru saja';if(s<60)return Math.floor(s)+' detik lalu';if(s<3600)return Math.floor(s/60)+' menit lalu';if(s<86400)return Math.floor(s/3600)+' jam lalu';if(s<604800)return Math.floor(s/86400)+' hari lalu';return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'});}
 function spFullDate(ts){if(!ts)return'';var d=new Date(ts);if(isNaN(d.getTime()))return'';return d.toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric',hour:'2-digit',minute:'2-digit'});}
 function spFmtDuration(ms){if(!ms||ms<0)return'—';var s=Math.floor(ms/1000);if(s<60)return s+' detik';var m=Math.floor(s/60);if(m<60)return m+' menit';var h=Math.floor(m/60);if(h<24)return h+' jam '+Math.floor(m%60)+'m';var day=Math.floor(h/24);if(day<30)return day+' hari '+Math.floor(h%24)+'j';var mo=Math.floor(day/30);return mo+' bulan '+Math.floor(day%30)+' hari';}
 function spTickTimes(){document.querySelectorAll('.sp-cmt-time[data-ts]').forEach(function(el){el.textContent=spRelTime(el.dataset.ts);});}
+
 function spShowToast(msg,ok){document.querySelectorAll('.sp-toast').forEach(function(t){t.remove();});var t=document.createElement('div');t.className='sp-toast '+(ok?'sp-toast-ok':'sp-toast-err');t.textContent=msg;document.body.appendChild(t);requestAnimationFrame(function(){t.classList.add('sp-toast-show');});setTimeout(function(){t.classList.remove('sp-toast-show');t.addEventListener('transitionend',function(){if(t.parentNode)t.remove();},{once:true});},2800);}
 function spCloseModal(id){var m=document.getElementById(id);if(!m)return;m.classList.remove('sp-auth-open','sp-panel-open');setTimeout(function(){if(m.parentNode)m.remove();},300);}
+
+/* ── GitHub Auth ─────────────────────────────────── */
 async function spVerifyToken(token){
   try{
     var r=await fetch('https://api.github.com/user',{headers:{'Authorization':'Bearer '+token,'Accept':'application/vnd.github.v3+json'}});
@@ -57,6 +68,8 @@ async function spVerifyToken(token){
     return{name:d.name||d.login,login:d.login,avatar:d.avatar_url||'',bio:d.bio||'',followers:d.followers||0,following:d.following||0,publicRepos:d.public_repos||0,ghCreatedAt:d.created_at||null,meta:meta};
   }catch(e){return null;}
 }
+
+/* ── Admin Nav ─────────────────────────────────── */
 function spInjectAdminNav(data){
   var navLinks=document.querySelector('.nav-links');
   if(navLinks&&!document.getElementById('sp-admin-navbtn')){
@@ -85,6 +98,8 @@ async function spInitOwner(){
   if(data){spOwner=data;spOwner.token=token;spSaveOwnerData(data);spInjectAdminNav(data);spUpdateAllBars();}
   else{spClearToken();}
 }
+
+/* ── User Bar ─────────────────────────────────── */
 function spApplyUserToBar(bar){
   var active=spOwner||spUser;
   var nm=bar.querySelector('.sp-auth-name');var lo=bar.querySelector('.sp-logout-btn');var li=bar.querySelector('.sp-login-hint');
@@ -96,6 +111,8 @@ function spApplyUserToBar(bar){
 }
 function spUpdateAllBars(){document.querySelectorAll('.sp-engage-bar').forEach(function(bar){spApplyUserToBar(bar);var tag=bar.dataset.tag;if(tag)spRefreshEngagement(tag,bar);});}
 window.spUpdateAllBars=spUpdateAllBars;
+
+/* ── RT Dot ─────────────────────────────────── */
 function spSetRTDot(on){
   spRTConnected=on;
   var dot=document.getElementById('sp-rt-dot');
@@ -103,6 +120,8 @@ function spSetRTDot(on){
   var lbl=document.getElementById('sp-rt-lbl');
   if(lbl)lbl.textContent=on?'Live':'Offline';
 }
+
+/* ── Login Modal ─────────────────────────────── */
 function spShowLoginModal(onDone){
   if(document.getElementById('sp-login-modal'))return;
   var m=document.createElement('div');m.id='sp-login-modal';m.className='sp-auth-overlay';
@@ -117,8 +136,10 @@ function spShowLoginModal(onDone){
   document.getElementById('sp-modal-x').addEventListener('click',function(){spCloseModal('sp-login-modal');});
   m.addEventListener('click',function(e){if(e.target===m)spCloseModal('sp-login-modal');});
 }
+
 function spOpenAdminPanel(){if(document.getElementById('sp-admin-panel'))return;if(!spOwner){spOpenTokenInput();return;}spBuildFullPanel();}
 window.spShowOwnerPanel=spOpenAdminPanel;
+
 function spOpenTokenInput(){
   if(document.getElementById('sp-token-modal'))return;
   var m=document.createElement('div');m.id='sp-token-modal';m.className='sp-auth-overlay';
@@ -134,6 +155,8 @@ function spOpenTokenInput(){
   document.getElementById('sp-tok-x').addEventListener('click',function(){spCloseModal('sp-token-modal');});
   m.addEventListener('click',function(e){if(e.target===m)spCloseModal('sp-token-modal');});
 }
+
+/* ── Build Full Admin Panel ──────────────────── */
 function spBuildFullPanel(){
   if(document.getElementById('sp-admin-panel'))return;
   var panel=document.createElement('div');panel.id='sp-admin-panel';panel.className='sp-admin-panel';
@@ -169,6 +192,8 @@ function spBuildFullPanel(){
     });
   });
   spAdminTab='stats';spRenderAdminTab('stats');
+
+  // Realtime admin channel
   if(spSb){
     try{
       spAdminLiveCh=spSb.channel('sp_admin_live')
@@ -194,6 +219,8 @@ function spBuildFullPanel(){
     }catch(e){}
   }
 }
+
+/* ── Render Tab ──────────────────────────────── */
 async function spRenderAdminTab(tab){
   var body=document.getElementById('sp-ap-body');if(!body)return;
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
@@ -203,6 +230,8 @@ async function spRenderAdminTab(tab){
   else if(tab==='license')await spTabLicense(body);
   else if(tab==='settings')spTabSettings(body);
 }
+
+/* ── Tab: Statistik ──────────────────────────── */
 async function spTabStats(body){
   var totalCmt=0,totalLikes=0,todayCmt=0,uniqueUsers=0;
   var topReleases=[],anonCount=0,namedCount=0,weekData=[];
@@ -214,15 +243,23 @@ async function spTabStats(body){
     var today=new Date();today.setHours(0,0,0,0);
     var tr=await spSb.from('sp_comments').select('id',{count:'exact',head:true}).gte('created_at',today.toISOString());
     todayCmt=tr.count||0;
+
+    // Unique users
     var ur=await spSb.from('sp_comments').select('user_id');
     if(ur.data){var uids=new Set(ur.data.map(function(d){return d.user_id;}));uniqueUsers=uids.size;}
+
+    // Anon vs named
     var anon=await spSb.from('sp_comments').select('id',{count:'exact',head:true}).eq('is_anonymous',true);
     anonCount=anon.count||0;namedCount=Math.max(0,totalCmt-anonCount);
+
+    // Top releases by comment count
     var allCmt=await spSb.from('sp_comments').select('release_tag').limit(500);
     if(allCmt.data){
       var tagMap={};allCmt.data.forEach(function(d){if(d.release_tag){tagMap[d.release_tag]=(tagMap[d.release_tag]||0)+1;}});
       topReleases=Object.keys(tagMap).map(function(k){return{tag:k,count:tagMap[k]};}).sort(function(a,b){return b.count-a.count;}).slice(0,5);
     }
+
+    // Last 7 days activity
     var sevenDaysAgo=new Date(Date.now()-6*86400000);sevenDaysAgo.setHours(0,0,0,0);
     var weekCmt=await spSb.from('sp_comments').select('created_at').gte('created_at',sevenDaysAgo.toISOString());
     if(weekCmt.data){
@@ -232,17 +269,21 @@ async function spTabStats(body){
       weekData=Object.keys(dayMap).map(function(k){return{date:k,count:dayMap[k]};});
     }
   }catch(e){}
+
   var maxWeek=Math.max.apply(null,[1].concat(weekData.map(function(d){return d.count;})));
   var maxRelease=topReleases.length?topReleases[0].count:1;
   var anonPct=totalCmt?Math.round(anonCount/totalCmt*100):0;
   var namedPct=100-anonPct;
   var days=['Min','Sen','Sel','Rab','Kam','Jum','Sab'];
+
   var html='<div class="sp-ap-stats-grid4">'
     +'<div class="sp-ap-stat sp-stat-blue"><div class="sp-ap-stat-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sp-ap-stat-num">'+totalCmt+'</div><div class="sp-ap-stat-lbl">Komentar</div></div>'
     +'<div class="sp-ap-stat sp-stat-red"><div class="sp-ap-stat-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div class="sp-ap-stat-num">'+totalLikes+'</div><div class="sp-ap-stat-lbl">Likes</div></div>'
     +'<div class="sp-ap-stat sp-stat-green"><div class="sp-ap-stat-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sp-ap-stat-num">'+todayCmt+'</div><div class="sp-ap-stat-lbl">Hari Ini</div></div>'
     +'<div class="sp-ap-stat sp-stat-purple"><div class="sp-ap-stat-ico"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="9" cy="7" r="4" stroke="currentColor" stroke-width="2"/><path d="M3 21v-2a4 4 0 014-4h4a4 4 0 014 4v2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M16 3.13a4 4 0 010 7.75M21 21v-2a4 4 0 00-3-3.87" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></div><div class="sp-ap-stat-num">'+uniqueUsers+'</div><div class="sp-ap-stat-lbl">Pengguna Unik</div></div>'
     +'</div>';
+
+  // 7-day sparkline
   if(weekData.length){
     html+='<div class="sp-ap-section-title" style="margin-top:.9rem;margin-bottom:.5rem">Aktivitas 7 Hari</div>';
     html+='<div class="sp-ap-sparkline">';
@@ -253,6 +294,8 @@ async function spTabStats(body){
     });
     html+='</div>';
   }
+
+  // Anon vs Named ratio
   if(totalCmt>0){
     html+='<div class="sp-ap-section-title" style="margin-top:.9rem;margin-bottom:.5rem">Anonim vs Bernama</div>';
     html+='<div class="sp-ap-ratio-wrap">'
@@ -260,6 +303,8 @@ async function spTabStats(body){
       +'<div class="sp-ap-ratio-legend"><span class="sp-ratio-dot sp-ratio-anon-dot"></span><span>Anonim '+anonCount+' ('+anonPct+'%)</span><span class="sp-ratio-dot sp-ratio-named-dot" style="margin-left:.6rem"></span><span>Bernama '+namedCount+' ('+namedPct+'%)</span></div>'
       +'</div>';
   }
+
+  // Top releases
   if(topReleases.length){
     html+='<div class="sp-ap-section-title" style="margin-top:.9rem;margin-bottom:.5rem">Top Rilis</div><div class="sp-ap-bar-list">';
     topReleases.forEach(function(r){
@@ -268,11 +313,16 @@ async function spTabStats(body){
     });
     html+='</div>';
   }
+
+  // Recent comments
   html+='<div class="sp-ap-section-title" style="margin-top:.9rem;display:flex;align-items:center;justify-content:space-between"><span>Komentar Terbaru</span>'
     +'<button class="sp-ap-btn-ghost sp-ap-btn-xs ripple-btn" id="sp-stats-export-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Export CSV</button>'
     +'</div><div class="sp-ap-recent-list" id="sp-ap-recent"></div>';
+
   body.innerHTML=html;
+
   document.getElementById('sp-stats-export-btn').addEventListener('click',function(){spExportCSV(null);});
+
   try{
     var rr=await spSb.from('sp_comments').select('*').order('created_at',{ascending:false}).limit(8);
     var list=document.getElementById('sp-ap-recent');if(!list)return;
@@ -286,6 +336,8 @@ async function spTabStats(body){
     });
   }catch(e){var l=document.getElementById('sp-ap-recent');if(l)l.innerHTML='<p class="sp-no-cmt sp-cmt-err">Gagal memuat.</p>';}
 }
+
+/* ── Tab: Moderasi ───────────────────────────── */
 async function spTabMod(body){
   var sortAsc=false;
   body.innerHTML='<div class="sp-ap-mod-toolbar">'
@@ -294,9 +346,12 @@ async function spTabMod(body){
     +'<button class="sp-ap-bulk-del ripple-btn" id="sp-mod-bulkdel" style="display:none"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Hapus (<span id="sp-sel-count">0</span>)</button>'
     +'<button class="sp-ap-btn-ghost sp-ap-btn-xs ripple-btn" id="sp-mod-export-btn"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M7 10l5 5 5-5M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> CSV</button>'
     +'</div><div class="sp-ap-mod-list" id="sp-mod-list"><div class="sp-ap-loading"><div class="sp-spin-sm"></div></div></div>';
+
   await spLoadModList('',false);
+
   var searchEl=document.getElementById('sp-mod-search');
   if(searchEl){var dbt;searchEl.addEventListener('input',function(){clearTimeout(dbt);dbt=setTimeout(function(){spLoadModList(searchEl.value.trim(),sortAsc);},300);});}
+
   var sortBtn=document.getElementById('sp-mod-sort-btn');
   if(sortBtn)sortBtn.addEventListener('click',function(){
     sortAsc=!sortAsc;
@@ -304,9 +359,11 @@ async function spTabMod(body){
     var q=searchEl?searchEl.value.trim():'';
     spLoadModList(q,sortAsc);
   });
+
   var expBtn=document.getElementById('sp-mod-export-btn');
   if(expBtn)expBtn.addEventListener('click',function(){spExportCSV(null);});
 }
+
 async function spLoadModList(q,asc){
   var list=document.getElementById('sp-mod-list');if(!list)return;
   list.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
@@ -330,10 +387,13 @@ async function spLoadModList(q,asc){
         +'</div>';
       list.appendChild(item);
     });
+
+    // Reply handler
     list.addEventListener('click',function(e){
       var rb=e.target.closest('.sp-ap-reply-btn');
       if(rb){spShowReplyModal(rb.dataset.tag,rb.dataset.ref);return;}
     });
+
     list.addEventListener('change',function(e){
       var chk=e.target.closest('.sp-ap-chk');if(!chk)return;
       var id=chk.dataset.id;
@@ -350,6 +410,7 @@ async function spLoadModList(q,asc){
     });
   }catch(e){list.innerHTML='<p class="sp-no-cmt sp-cmt-err">Gagal memuat.</p>';}
 }
+
 function spShowReplyModal(tag,refText){
   if(document.getElementById('sp-reply-modal'))return;
   var m=document.createElement('div');m.id='sp-reply-modal';m.className='sp-auth-overlay';
@@ -376,6 +437,8 @@ function spShowReplyModal(tag,refText){
     }catch(e){if(st){st.className='sp-owner-status sp-own-err';st.textContent='\u2717 Gagal: '+(e.message||'');}}
   });
 }
+
+/* ── CSV Export ──────────────────────────────── */
 async function spExportCSV(tag){
   if(!spSb){spShowToast('\u2717 Supabase tidak tersambung',false);return;}
   try{
@@ -399,6 +462,8 @@ async function spExportCSV(tag){
     spShowToast('\u2713 CSV diekspor ('+r.data.length+' baris)',true);
   }catch(e){spShowToast('\u2717 Export gagal: '+(e.message||''),false);}
 }
+
+/* ── Tab: Notifikasi ─────────────────────────── */
 async function spTabNotif(body){
   var curMsg='',curType='info',curActive=false;
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div></div>';
@@ -421,6 +486,7 @@ async function spTabNotif(body){
     +'</div>'
     +'<div class="sp-owner-status" id="sp-notif-st"></div>'
     +'</div>';
+
   async function pushNotif(msg,type,active){
     var st=document.getElementById('sp-notif-st');if(st){st.className='sp-owner-status sp-own-checking';st.textContent='Mengirim...';}
     try{
@@ -442,6 +508,8 @@ async function spTabNotif(body){
   });
   document.getElementById('sp-notif-clear').addEventListener('click',function(){pushNotif('',null,false);});
 }
+
+/* ── Tab: Lisensi ────────────────────────────── */
 async function spTabLicense(body){
   body.innerHTML='<div class="sp-ap-loading"><div class="sp-spin-sm"></div><span>Memuat info lisensi...</span></div>';
   var now=Date.now();
@@ -451,6 +519,8 @@ async function spTabLicense(body){
   var sbJwt=spDecodeJWT(SP_SB_ANON);
   var sbExpMs=sbJwt&&sbJwt.exp?(sbJwt.exp*1000):null;
   var sbIatMs=sbJwt&&sbJwt.iat?(sbJwt.iat*1000):null;
+
+  // Refresh GitHub rate limit info
   var freshMeta=null;
   try{
     var chkR=await fetch('https://api.github.com/rate_limit',{headers:{'Authorization':'Bearer '+spOwner.token,'Accept':'application/vnd.github.v3+json'}});
@@ -463,14 +533,18 @@ async function spTabLicense(body){
       }
     }
   }catch(e){}
+
+  // Supabase row counts
   var sbCmtCount=0,sbLikeCount=0,sbConnected=false;
   try{
     var sc=await spSb.from('sp_comments').select('id',{count:'exact',head:true});
     var sl=await spSb.from('sp_likes').select('user_id',{count:'exact',head:true});
     sbCmtCount=sc.count||0;sbLikeCount=sl.count||0;sbConnected=true;
   }catch(e){}
+
   function statusBadge(ok,yes,no){return'<span class="sp-ap-status-badge '+(ok?'sp-badge-ok':'sp-badge-err')+'">'+(ok?yes:no)+'</span>';}
   function infoRow(label,val,extra){return'<div class="sp-ap-info-row"><span class="sp-ap-info-lbl">'+label+'</span><span class="sp-ap-info-val">'+(val||'—')+(extra?'<span class="sp-ap-info-extra">'+extra+'</span>':'')+'</span></div>';}
+
   var tokenExpiryHtml='—';
   if(meta&&meta.expiry){
     var exMs=new Date(meta.expiry).getTime();var exLeft=exMs-now;
@@ -481,18 +555,24 @@ async function spTabLicense(body){
   } else {
     tokenExpiryHtml='<span style="color:var(--text3)">Tidak ada batas (no expiry)</span>';
   }
+
   var ratePct=meta?(Math.round(meta.rateRemain/meta.rateLimit*100)):100;
   var rateColor=ratePct>50?'#00c787':ratePct>20?'#ff9f0a':'#ff375f';
   var rateResetStr=meta&&meta.rateReset?new Date(meta.rateReset).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):null;
+
   var sbExpStr=sbExpMs?new Date(sbExpMs).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}):null;
   var sbExpLeft=sbExpMs?(sbExpMs-now):null;
   var sbExpHtml=sbExpStr?('<span style="color:'+(sbExpLeft>30*86400000?'#00c787':sbExpLeft>0?'#ff9f0a':'#ff375f')+'">'+sbExpStr+' ('+(sbExpLeft>0?Math.ceil(sbExpLeft/86400000)+' hari lagi':'Kadaluarsa!')+')</span>'):'—';
+
   var ghAccAge='';
   if(spOwner.ghCreatedAt){
     var ghMs=new Date(spOwner.ghCreatedAt).getTime();
     ghAccAge=spFmtDuration(now-ghMs);
   }
+
   var html='';
+
+  // Token section
   html+='<div class="sp-ap-section-title">GitHub Token</div>'
     +'<div class="sp-ap-license-card">'
     +infoRow('Status',statusBadge(true,'Aktif','Tidak Aktif'))
@@ -502,6 +582,8 @@ async function spTabLicense(body){
     +'<div class="sp-ap-info-row"><span class="sp-ap-info-lbl">Rate Limit API</span><span class="sp-ap-info-val">'+(meta?meta.rateRemain+' / '+meta.rateLimit:'—')+(rateResetStr?'<span class="sp-ap-info-extra">Reset '+rateResetStr+'</span>':'')+'</span></div>'
     +(meta?'<div class="sp-ap-progress-wrap"><div class="sp-ap-progress-bar" style="width:'+ratePct+'%;background:'+rateColor+'"></div></div>':'')
     +'</div>';
+
+  // GitHub account
   html+='<div class="sp-ap-section-title" style="margin-top:1rem">GitHub Account</div>'
     +'<div class="sp-ap-license-card">'
     +(spOwner.avatar?'<div style="display:flex;align-items:center;gap:.7rem;margin-bottom:.7rem"><img src="'+spEsc(spOwner.avatar)+'" style="width:44px;height:44px;border-radius:50%;border:2px solid rgba(255,159,10,.35)" alt=""/><div><div style="font-weight:800;font-size:.9rem">'+spEsc(spOwner.name)+'</div>'+(spOwner.bio?'<div style="font-size:.74rem;color:var(--text3)">'+spEsc(spOwner.bio)+'</div>':'')+'</div></div>':'')
@@ -510,6 +592,8 @@ async function spTabLicense(body){
     +infoRow('Public Repos',spOwner.publicRepos!==undefined?spOwner.publicRepos.toLocaleString():'—')
     +infoRow('Umur Akun',ghAccAge||'—')
     +'</div>';
+
+  // Supabase
   html+='<div class="sp-ap-section-title" style="margin-top:1rem">Supabase</div>'
     +'<div class="sp-ap-license-card">'
     +infoRow('Koneksi',statusBadge(sbConnected,'Terhubung','Terputus'))
@@ -520,6 +604,8 @@ async function spTabLicense(body){
     +infoRow('Total Rows Likes',sbLikeCount.toLocaleString())
     +'<div class="sp-ap-hint" style="margin-top:.4rem;font-size:.69rem">Free tier Supabase: 500MB DB, 2 juta row reads/bulan, 50K row inserts/bulan.</div>'
     +'</div>';
+
+  // Session
   html+='<div class="sp-ap-section-title" style="margin-top:1rem">Sesi Ini</div>'
     +'<div class="sp-ap-license-card">'
     +infoRow('Realtime',statusBadge(spRTConnected,'Terhubung','Terputus'))
@@ -529,9 +615,13 @@ async function spTabLicense(body){
     +'<button class="sp-ap-btn-ghost ripple-btn" id="sp-lic-refresh"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Refresh Info</button>'
     +'</div>'
     +'</div>';
+
   body.innerHTML=html;
+
   document.getElementById('sp-lic-refresh').addEventListener('click',function(){spRenderAdminTab('license');});
 }
+
+/* ── Tab: Pengaturan ─────────────────────────── */
 function spTabSettings(body){
   var token=spLoadToken();
   body.innerHTML='<div class="sp-ap-section-title">Pengaturan Owner</div>'
@@ -558,6 +648,7 @@ function spTabSettings(body){
     +'<button class="sp-ap-btn-ghost ripple-btn" id="sp-clear-anon">Hapus ID Anonim Saya</button>'
     +'</div>'
     +'</div>';
+
   var eye=document.getElementById('sp-set-eye');var inp=document.getElementById('sp-set-token');
   if(eye&&inp)eye.addEventListener('click',function(){var show=inp.type==='password';inp.type=show?'text':'password';});
   document.getElementById('sp-set-save').addEventListener('click',async function(){
@@ -589,6 +680,8 @@ function spTabSettings(body){
     localStorage.removeItem('sp-anon-id');spAnonId=null;spShowToast('\u2713 ID anonim dihapus',true);
   });
 }
+
+/* ── Delete Comment ──────────────────────────── */
 async function spDeleteComment(id,el){
   if(!spSb||!id)return;if(!confirm('Hapus komentar ini?'))return;
   try{
@@ -599,6 +692,8 @@ async function spDeleteComment(id,el){
     spShowToast('\u2713 Komentar dihapus',true);
   }catch(e){spShowToast('\u2717 Gagal: '+(e.message||''),false);}
 }
+
+/* ── Comment Element ─────────────────────────── */
 function spMakeCmtEl(d,isOpt){
   var ts=d.created_at||new Date().toISOString();var rel=spRelTime(ts);var full=spFullDate(ts);
   var isAnon=!!d.is_anonymous;var name=isAnon?'Anonim':spEsc(d.display_name||'User');
@@ -612,6 +707,8 @@ function spMakeCmtEl(d,isOpt){
   el.innerHTML=av+'<div class="sp-cmt-body"><div class="sp-cmt-meta"><span class="sp-cmt-name'+(isAnon?' sp-cmt-anon-name':'')+(isOwnerReply?' sp-cmt-owner-name':'')+'">'+name+(isOwnerReply?' 👑':'')+'</span><span class="sp-cmt-time" data-ts="'+spEsc(ts)+'" title="'+full+'">'+rel+'</span>'+delBtn+'</div><span class="sp-cmt-text">'+spEsc(d.text)+'</span></div>';
   return el;
 }
+
+/* ── Engagement ──────────────────────────────── */
 async function spRefreshEngagement(tag,bar){
   if(!tag||!bar||!spSb)return;
   var uid=spUser?spUser.uid:spGetAnonId();
@@ -619,6 +716,7 @@ async function spRefreshEngagement(tag,bar){
   try{var cr=await spSb.from('sp_comments').select('id',{count:'exact',head:true}).eq('release_tag',tag);if(!cr.error){var cc=bar.querySelector('.sp-comment-count');if(cc)cc.textContent=cr.count||0;}}catch(e){}
 }
 window.spLoadEngagement=spRefreshEngagement;
+
 function spSubscribeComments(tag,section){
   if(!spSb||!tag||spChannels[tag])return;
   var list=section.querySelector('.sp-cmt-list');
@@ -643,6 +741,7 @@ function spSubscribeComments(tag,section){
   }catch(e){}
 }
 function spUnsubscribeComments(tag){if(!spSb||!spChannels[tag])return;try{spSb.removeChannel(spChannels[tag]);}catch(e){}delete spChannels[tag];}
+
 async function spFetchComments(tag,section){
   if(!spSb||!section||!tag)return;
   var list=section.querySelector('.sp-cmt-list');if(!list)return;
@@ -650,6 +749,7 @@ async function spFetchComments(tag,section){
   try{var r=await spSb.from('sp_comments').select('*').eq('release_tag',tag).order('created_at',{ascending:true}).limit(60);if(r.error)throw r.error;list.innerHTML='';if(!r.data||!r.data.length){list.innerHTML='<p class="sp-no-cmt">Belum ada komentar. Jadilah yang pertama!</p>';return;}r.data.forEach(function(d){list.appendChild(spMakeCmtEl(d));});list.scrollTop=list.scrollHeight;}
   catch(e){list.innerHTML='<p class="sp-no-cmt sp-cmt-err">Gagal memuat. Cek koneksi.</p>';}
 }
+
 async function spSendComment(tag,text,isAnon,section,bar){
   var trimmed=text.trim();if(!trimmed)return;
   var inp=section.querySelector('.sp-cmt-input');var btn=section.querySelector('.sp-cmt-send');var list=section.querySelector('.sp-cmt-list');
@@ -681,6 +781,7 @@ async function spSendComment(tag,text,isAnon,section,bar){
     if(list&&!list.querySelector('.sp-cmt-item'))list.innerHTML='<p class="sp-no-cmt">Belum ada komentar. Jadilah yang pertama!</p>';
   }
 }
+
 async function spToggleLike(tag,bar){
   if(!tag||!bar)return;
   var uid=spUser?spUser.uid:spGetAnonId();
@@ -691,7 +792,9 @@ async function spToggleLike(tag,bar){
   try{var ex=await spSb.from('sp_likes').select('user_id').eq('release_tag',tag).eq('user_id',uid);if(ex.error)throw ex.error;if(ex.data&&ex.data.length>0){var d=await spSb.from('sp_likes').delete().eq('release_tag',tag).eq('user_id',uid);if(d.error)throw d.error;}else{var i=await spSb.from('sp_likes').insert({release_tag:tag,user_id:uid});if(i.error)throw i.error;}await spRefreshEngagement(tag,bar);}
   catch(e){if(lb)lb.classList.toggle('sp-liked',wasLiked);if(lc)lc.textContent=cur||'';}
 }
+
 function spSendEmail(tag,name,text){if(typeof emailjs==='undefined')return;try{emailjs.init(SP_EJS_PK);emailjs.send(SP_EJS_SVC,SP_EJS_TPL,{to_email:SP_OWN_EMAIL,commenter_name:name,release_tag:tag,comment_text:text,site_url:'https://aetherdev01.github.io/SnapPerf/updates'});}catch(e){}}
+
 function spBuildEngage(tag){
   var s=spEsc(tag);var active=spOwner||spUser;
   var anonD=active?'none':'flex';var loginD=active?'none':'inline-flex';var logoutD=active?'inline-flex':'none';
@@ -707,14 +810,19 @@ function spBuildEngage(tag){
     +'<button class="sp-cmt-send ripple-btn">Kirim</button></div></div></div>';
 }
 window.spBuildEngage=spBuildEngage;
+
+/* ── DOMContentLoaded ────────────────────────── */
 document.addEventListener('DOMContentLoaded',function(){
   if(typeof window.supabase!=='undefined'){try{spSb=window.supabase.createClient(SP_SB_URL,SP_SB_ANON);}catch(e){}}
   spUser=spLoadUser();spInitOwner();setInterval(spTickTimes,10000);
+
   document.addEventListener('click',function(e){
     var lb=e.target.closest('.sp-like-btn');
     if(lb){var bar=lb.closest('.sp-engage-bar');if(bar)spToggleLike(bar.dataset.tag,bar);return;}
+
     var db=e.target.closest('.sp-cmt-delete,.sp-ap-del-btn');
     if(db){var id=db.dataset.id;var el=db.closest('.sp-cmt-item,.sp-ap-mitem,.sp-ap-rcmt');if(id)spDeleteComment(id,el);return;}
+
     var ct=e.target.closest('.sp-cmt-toggle');
     if(ct){
       var bar=ct.closest('.sp-engage-bar');if(!bar)return;
@@ -732,13 +840,17 @@ document.addEventListener('DOMContentLoaded',function(){
       }
       return;
     }
+
     var sb=e.target.closest('.sp-cmt-send');
     if(sb){var sec=sb.closest('.sp-cmt-section');if(!sec)return;var tag=sec.dataset.tag;var inp=sec.querySelector('.sp-cmt-input');if(!inp||!inp.value.trim())return;var chk=sec.querySelector('.sp-anon-chk');var active=spOwner||spUser;var isAnon=!active||(chk?chk.checked:false);if(!active&&!isAnon){spShowLoginModal(null);return;}var wrap=sec.closest('.sp-engage-bar-wrap');var bar=wrap?wrap.querySelector('.sp-engage-bar'):null;spSendComment(tag,inp.value,isAnon,sec,bar);return;}
+
     var lo=e.target.closest('.sp-logout-btn');
     if(lo){if(spOwner){spClearToken();spOwner=null;spRemoveAdminNav();}else{spClearUser();spUser=null;}spUpdateAllBars();spShowToast('Berhasil logout',true);return;}
+
     var lh=e.target.closest('.sp-login-hint');
     if(lh){spShowLoginModal(function(){spUpdateAllBars();});return;}
   });
+
   document.addEventListener('keydown',function(e){
     if(e.key!=='Enter'||!e.target.classList.contains('sp-cmt-input'))return;
     e.preventDefault();var sec=e.target.closest('.sp-cmt-section');if(!sec||!e.target.value.trim())return;
@@ -747,5 +859,6 @@ document.addEventListener('DOMContentLoaded',function(){
     var tag=sec.dataset.tag;var wrap=sec.closest('.sp-engage-bar-wrap');var bar=wrap?wrap.querySelector('.sp-engage-bar'):null;
     spSendComment(tag,e.target.value,isAnon,sec,bar);
   });
+
   document.addEventListener('change',function(e){var chk=e.target.closest('.sp-anon-chk');if(!chk)return;var row=chk.closest('.sp-cmt-row');var inp=row?row.querySelector('.sp-cmt-input'):null;if(inp)inp.placeholder=chk.checked?'Komentar sebagai Anonim...':'Tulis komentar...';});
 });
