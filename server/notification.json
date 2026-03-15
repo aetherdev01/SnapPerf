@@ -2,7 +2,6 @@
   "active": false,
   "id": "notif_default",
   "type": "info",
-  "title": "",
   "message": "",
-  "timestamp": 1773504631304
+  "timestamp": 0
 }
