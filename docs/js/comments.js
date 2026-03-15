@@ -709,7 +709,7 @@ function spBuildEngage(tag){
 window.spBuildEngage=spBuildEngage;
 document.addEventListener('DOMContentLoaded',function(){
   if(typeof window.supabase!=='undefined'){try{spSb=window.supabase.createClient(SP_SB_URL,SP_SB_ANON);}catch(e){}}
-  spUser=spLoadUser();spInitOwner();setInterval(spTickTimes,10000);
+  spUser=spLoadUser();spInitOwner();setInterval(spTickTimes,1000);
   document.addEventListener('click',function(e){
     var lb=e.target.closest('.sp-like-btn');
     if(lb){var bar=lb.closest('.sp-engage-bar');if(bar)spToggleLike(bar.dataset.tag,bar);return;}
