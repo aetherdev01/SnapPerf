@@ -1,8 +1,8 @@
 {
-  "active": true,
-  "id": "notif_1773569392298",
+  "active": false,
+  "id": "notif_default",
   "type": "info",
   "title": "asu",
-  "message": "bawok",
-  "timestamp": 1773569392298
+  "message": "",
+  "timestamp": 1773569883788
 }
