@@ -170,5 +170,4 @@ function showNotifDialog(d){
   }
   document.getElementById('sp-nd-btn').addEventListener('click',closeDialog);
   overlay.addEventListener('click',function(e){if(e.target===overlay)closeDialog();});
-  }catch(e){}
 }
