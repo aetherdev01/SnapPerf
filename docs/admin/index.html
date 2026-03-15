@@ -70,7 +70,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .adm-rt-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--text3)}
 .adm-rt-on{background:var(--green);box-shadow:0 0 5px var(--green)}
 .adm-rt-off{background:var(--red)}
-.adm-main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0;width:calc(100% - 220px)}
+.adm-main{margin-left:220px;flex:1;display:flex;flex-direction:column;min-height:100vh;min-width:0}
 .adm-topbar{display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.4rem;border-bottom:1px solid var(--glass-border2);background:var(--glass);position:sticky;top:0;z-index:50;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px)}
 .adm-page-title{font-size:.95rem;font-weight:800;color:var(--text);letter-spacing:-.02em;display:flex;align-items:center;gap:.45rem}
 .adm-topbar-right{display:flex;align-items:center;gap:.5rem}
@@ -78,7 +78,7 @@ body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;bac
 .adm-theme-btn:hover{background:var(--accent-soft);color:var(--accent)}
 .adm-back-btn{display:inline-flex;align-items:center;gap:.35rem;padding:.32rem .75rem;border-radius:var(--r-pill);background:var(--glass);border:1px solid var(--glass-border2);color:var(--text2);font-size:.74rem;font-weight:600;transition:background .15s,color .15s}
 .adm-back-btn:hover{color:var(--accent);background:var(--accent-soft)}
-.adm-content{padding:1.4rem 1.6rem;flex:1;min-width:0;max-width:960px}
+.adm-content{padding:1.4rem;flex:1;min-width:0;max-width:900px}
 .adm-page{display:none}
 .adm-page.active{display:block}
 .adm-stats-grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.2rem}
@@ -633,28 +633,25 @@ async function renderLicense(){
   pg.innerHTML='<div class="adm-loading"><div class="adm-spin"></div>Memuat info sesi...</div>';
   var now=Date.now();
   var tokenSaved=parseInt(localStorage.getItem(SP_TOKEN_SAVED_KEY)||'0',10);
-  var firstLogin=parseInt(localStorage.getItem(SP_FIRST_LOGIN_KEY)||tokenSaved||'0',10);
+  var firstLogin=parseInt(localStorage.getItem(SP_FIRST_LOGIN_KEY)||String(tokenSaved)||'0',10);
   var meta=loadTokenMeta();
   var sbJwt=decodeJWT(SP_SB_ANON);
   var sbExpMs=sbJwt&&sbJwt.exp?(sbJwt.exp*1000):null;
 
-  // Fetch fresh rate limit & token expiry from GitHub API
-  var tokenExpiry=meta?meta.expiry:null;
+  // Refresh rate limit data from GitHub
   try{
-    var chkR=await fetch('https://api.github.com/rate_limit',{headers:ghHeaders()});
-    if(chkR.ok){
-      // Try to read token expiry from response headers (more accurate than stored value)
-      var headerExpiry=chkR.headers.get('github-authentication-token-expiration');
-      if(headerExpiry)tokenExpiry=headerExpiry;
-      var chkD=await chkR.json();
-      var core=chkD.resources&&chkD.resources.core;
+    var rlRes=await fetch('https://api.github.com/rate_limit',{headers:ghHeaders()});
+    if(rlRes.ok){
+      var headerExp=rlRes.headers.get('github-authentication-token-expiration');
+      var rlData=await rlRes.json();
+      var core=rlData.resources&&rlData.resources.core;
       if(core){
         meta={
           rateRemain:core.remaining,
           rateLimit:core.limit,
           rateReset:core.reset*1000,
           verifiedAt:now,
-          expiry:tokenExpiry||null
+          expiry:headerExp||((meta&&meta.expiry)||null)
         };
         saveTokenMeta(meta);
       }
@@ -668,135 +665,144 @@ async function renderLicense(){
     sbCmtCount=sc.count||0;sbLikeCount=sl.count||0;sbConnected=true;
   }catch(e){}
 
-  var ghStars=0,ghForks=0,ghOpenIssues=0,ghRepoDesc='',ghDefaultBranch='';
+  var ghStars=0,ghForks=0,ghIssues=0,ghDesc='',ghBranch='main';
   try{
     var gr=await fetch('https://api.github.com/repos/'+SP_GH_REPO,{headers:ghHeaders()});
     if(gr.ok){
       var gd=await gr.json();
-      ghStars=gd.stargazers_count||0;
-      ghForks=gd.forks_count||0;
-      ghOpenIssues=gd.open_issues_count||0;
-      ghRepoDesc=gd.description||'';
-      ghDefaultBranch=gd.default_branch||'main';
+      ghStars=gd.stargazers_count||0;ghForks=gd.forks_count||0;
+      ghIssues=gd.open_issues_count||0;ghDesc=gd.description||'';
+      ghBranch=gd.default_branch||'main';
     }
   }catch(e){}
 
-  function row(lbl,val,extra){
-    return'<div class="adm-info-row"><span class="adm-info-lbl">'+lbl+'</span><span class="adm-info-val">'+val+(extra?'<span class="adm-info-extra">'+extra+'</span>':'')+'</span></div>';
+  function row(lbl,val){
+    return '<div class="adm-info-row"><span class="adm-info-lbl">'+lbl+'</span><span class="adm-info-val">'+val+'</span></div>';
   }
-  function badge(ok,yes,no){return ok?'<span class="adm-badge-ok">\u2713 '+yes+'</span>':'<span class="adm-badge-err">\u2717 '+no+'</span>';}
+  function badge(ok,yes,no){
+    return ok?'<span class="adm-badge-ok">\u2713 '+yes+'</span>':'<span class="adm-badge-err">\u2717 '+no+'</span>';
+  }
 
-  // Token expiry: parse properly
-  var expiryHtml;
-  var expiryDetail='';
+  // Token expiry — display time remaining (accurate)
+  var expiryHtml='<span style="color:var(--text3)">No expiry</span>';
   if(meta&&meta.expiry){
-    var exMs=0;
-    // GitHub returns expiry as "2026-03-15 10:00:00 UTC" or ISO format
-    try{
-      var exDate=new Date(meta.expiry);
-      if(!isNaN(exDate.getTime()))exMs=exDate.getTime();
-    }catch(e){}
-    if(exMs>0){
+    var exDate=new Date(meta.expiry);
+    var exMs=exDate.getTime();
+    if(!isNaN(exMs)){
       var exLeft=exMs-now;
-      var exStr=new Date(exMs).toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
-      expiryDetail=exStr;
+      var exStr=exDate.toLocaleDateString('id-ID',{day:'2-digit',month:'short',year:'numeric'});
       if(exLeft<0){
-        expiryHtml='<span style="color:var(--red)">\u2717 Kadaluarsa</span>';
-        expiryDetail='Kadaluarsa: '+exStr;
+        expiryHtml='<span style="color:var(--red)">\u2717 Kadaluarsa ('+exStr+')</span>';
       } else if(exLeft<3*86400000){
-        expiryHtml='<span style="color:var(--red)">\u26a0 '+fmtDur(exLeft)+' lagi</span>';
+        expiryHtml='<span style="color:var(--red)">\u26a0 '+fmtDur(exLeft)+' lagi ('+exStr+')</span>';
       } else if(exLeft<14*86400000){
-        expiryHtml='<span style="color:var(--gold)">\u26a0 '+fmtDur(exLeft)+' lagi</span>';
+        expiryHtml='<span style="color:var(--gold)">\u26a0 '+fmtDur(exLeft)+' lagi ('+exStr+')</span>';
       } else {
-        expiryHtml='<span style="color:var(--green)">\u2713 '+fmtDur(exLeft)+' lagi</span>';
+        expiryHtml='<span style="color:var(--green)">\u2713 '+fmtDur(exLeft)+' lagi ('+exStr+')</span>';
       }
-    } else {
-      expiryHtml='<span style="color:var(--text3)">Format tidak dikenal</span>';
     }
-  } else {
-    expiryHtml='<span style="color:var(--text3)">No expiry (classic token)</span>';
-    expiryDetail='Token klasik tidak memiliki tanggal kedaluwarsa';
   }
 
-  var ratePct=meta?(Math.round(meta.rateRemain/meta.rateLimit*100)):100;
+  var ratePct=meta?Math.round(meta.rateRemain/meta.rateLimit*100):100;
   var rateColor=ratePct>60?'var(--green)':ratePct>25?'var(--gold)':'var(--red)';
-  var rateResetStr=meta&&meta.rateReset?new Date(meta.rateReset).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'—';
-  var ghAccAge='';
-  if(spOwner.created_at){var ghMs=new Date(spOwner.created_at).getTime();ghAccAge=fmtDur(now-ghMs);}
+  var rateReset=meta&&meta.rateReset?new Date(meta.rateReset).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'—';
+  var ghAccAge=spOwner.created_at?fmtDur(now-new Date(spOwner.created_at).getTime()):'—';
   var sessionDur=tokenSaved?fmtDur(now-tokenSaved):'—';
-
-  // Supabase JWT info
-  var sbExpStr=sbExpMs?new Date(sbExpMs).toLocaleDateString('id-ID',{day:'2-digit',month:'long',year:'numeric'}):'—';
-  var sbExpLeft=sbExpMs?fmtDur(sbExpMs-now):'—';
-  var sbExpHtml=sbExpMs?(sbExpMs>now?'<span style="color:var(--green)">\u2713 '+sbExpLeft+' lagi</span>':'<span style="color:var(--red)">\u2717 Kadaluarsa</span>'):'<span style="color:var(--text3)">—</span>';
+  var sbExpHtml=sbExpMs
+    ?(sbExpMs>now?'<span style="color:var(--green)">\u2713 '+new Date(sbExpMs).getFullYear()+'</span>':'<span style="color:var(--red)">\u2717 Kadaluarsa</span>')
+    :'<span style="color:var(--text3)">—</span>';
 
   var html='';
 
-  // === Repo stats ===
+  // Repo stats bar
   html+='<div class="adm-stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:1.1rem">';
   html+='<div class="adm-stat-card"><div class="adm-stat-num">'+ghStars+'</div><div class="adm-stat-lbl">Stars</div></div>';
   html+='<div class="adm-stat-card"><div class="adm-stat-num">'+ghForks+'</div><div class="adm-stat-lbl">Forks</div></div>';
-  html+='<div class="adm-stat-card"><div class="adm-stat-num">'+ghOpenIssues+'</div><div class="adm-stat-lbl">Issues</div></div>';
+  html+='<div class="adm-stat-card"><div class="adm-stat-num">'+ghIssues+'</div><div class="adm-stat-lbl">Issues</div></div>';
   html+='<div class="adm-stat-card"><div class="adm-stat-num">'+(sbConnected?sbCmtCount:'—')+'</div><div class="adm-stat-lbl">Komentar</div></div>';
   html+='</div>';
 
-  // === GitHub Token Section ===
-  html+='<div class="adm-card-title" style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/></svg>GitHub Token &amp; Sesi</div>';
+  // GitHub Token card
+  html+='<div class="adm-card-title"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" stroke="currentColor" stroke-width="2"/></svg> Token &amp; Sesi</div>';
   html+='<div class="adm-lic-card">';
   html+=row('Status Token',badge(true,'Aktif','—'));
   html+=row('Mulai Sesi',firstLogin?fullDate(firstLogin):'—');
   html+=row('Durasi Sesi',sessionDur);
-  html+=row('Token Tersimpan',tokenSaved?fullDate(tokenSaved):'—');
-  html+=row('Token Kadaluarsa',expiryHtml,expiryDetail?'('+expiryDetail+')':'');
-  html+=row('Rate Limit',(meta?'<span style="color:'+rateColor+'">'+meta.rateRemain+' / '+meta.rateLimit+' request</span>':'—'),meta?' (reset '+rateResetStr+')':'');
+  html+=row('Token Tersimpan',tokenSaved?relTime(tokenSaved):'—');
+  html+=row('Token Kadaluarsa',expiryHtml);
+  html+=row('Rate Limit','<span style="color:'+rateColor+'">'+(meta?meta.rateRemain+' / '+meta.rateLimit+' req':'—')+'</span>'+' <small style="color:var(--text3)">(reset '+rateReset+')</small>');
   if(meta){html+='<div class="adm-prog-wrap"><div class="adm-prog-bar" style="width:'+ratePct+'%;background:'+rateColor+'"></div></div>';}
   html+='</div>';
 
-  // === GitHub Account Section ===
-  html+='<div class="adm-card-title" style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:.9rem 0 .5rem;display:flex;align-items:center;gap:.35rem"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>Akun GitHub</div>';
+  // GitHub Account card
+  html+='<div class="adm-card-title" style="margin-top:.9rem"><svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> Akun GitHub</div>';
   html+='<div class="adm-lic-card">';
   if(spOwner.avatar){
     html+='<div style="display:flex;align-items:center;gap:.8rem;padding:.7rem 1rem;border-bottom:1px solid var(--glass-border)">';
-    html+='<img src="'+esc(spOwner.avatar)+'" style="width:46px;height:46px;border-radius:50%;border:2.5px solid rgba(162,89,255,.45);flex-shrink:0" alt=""/>';
-    html+='<div><div style="font-weight:800;font-size:.9rem;letter-spacing:-.02em">'+esc(spOwner.name||spOwner.login)+'</div>';
-    html+='<div style="font-size:.72rem;color:var(--accent);font-weight:700;margin-top:.1rem">@'+esc(spOwner.login)+'</div>';
-    if(spOwner.bio)html+='<div style="font-size:.72rem;color:var(--text3);margin-top:.2rem;line-height:1.4">'+esc(spOwner.bio)+'</div>';
+    html+='<img src="'+esc(spOwner.avatar)+'" style="width:44px;height:44px;border-radius:50%;border:2px solid rgba(162,89,255,.4)" alt=""/>';
+    html+='<div><div style="font-weight:800;font-size:.88rem">'+esc(spOwner.name||spOwner.login)+'</div>';
+    html+='<div style="font-size:.72rem;color:var(--accent);font-weight:700">@'+esc(spOwner.login)+'</div>';
+    if(spOwner.bio)html+='<div style="font-size:.71rem;color:var(--text3);margin-top:.15rem">'+esc(spOwner.bio)+'</div>';
     html+='</div></div>';
   }
-  html+=row('Repo',SP_GH_REPO,ghDefaultBranch?'(branch: '+ghDefaultBranch+')':'');
-  if(ghRepoDesc)html+=row('Deskripsi','<span style="font-size:.72rem;color:var(--text3)">'+esc(ghRepoDesc)+'</span>');
-  html+=row('Followers',spOwner.followers!==undefined?spOwner.followers.toLocaleString()+'<span style="font-size:.65rem;color:var(--text3);margin-left:.3rem">followers</span>':'—');
-  html+=row('Public Repos',spOwner.public_repos!==undefined?spOwner.public_repos+' repo':'—');
-  html+=row('Umur Akun',ghAccAge||'—',spOwner.created_at?'(sejak '+new Date(spOwner.created_at).getFullYear()+')':'');
+  html+=row('Repo','<code>'+esc(SP_GH_REPO)+'</code>');
+  if(ghDesc)html+=row('Deskripsi','<span style="font-size:.73rem;color:var(--text3)">'+esc(ghDesc)+'</span>');
+  html+=row('Branch Default','<code>'+esc(ghBranch)+'</code>');
+  html+=row('Followers',spOwner.followers!==undefined?spOwner.followers.toLocaleString():'—');
+  html+=row('Repos Publik',spOwner.public_repos!==undefined?spOwner.public_repos+' repo':'—');
+  html+=row('Umur Akun',ghAccAge+(spOwner.created_at?' <small style="color:var(--text3)">(sejak '+new Date(spOwner.created_at).getFullYear()+')</small>':''));
   html+='</div>';
 
-  // === Supabase Section ===
-  html+='<div class="adm-card-title" style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:.9rem 0 .5rem;display:flex;align-items:center;gap:.35rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Supabase Database</div>';
+  // Supabase card
+  html+='<div class="adm-card-title" style="margin-top:.9rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><ellipse cx="12" cy="12" rx="10" ry="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4l3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Supabase</div>';
   html+='<div class="adm-lic-card">';
   html+=row('Koneksi',badge(sbConnected,'Terhubung','Terputus'));
-  html+=row('Project',esc(SP_SB_URL.replace('https://','').split('.')[0]));
+  html+=row('Project','<code>'+esc(SP_SB_URL.replace('https://','').split('.')[0])+'</code>');
   html+=row('Komentar',sbCmtCount.toLocaleString()+' entri');
   html+=row('Likes',sbLikeCount.toLocaleString()+' entri');
-  html+=row('Realtime Channel',badge(spRTConnected,'Live (SUBSCRIBED)','Offline'));
-  html+=row('Anon Key Expires',sbExpHtml,sbExpMs?'('+sbExpStr+')':'');
-  html+='<div style="padding:.5rem .9rem .7rem;display:flex;gap:.5rem;flex-wrap:wrap">';
-  html+='<button class="adm-btn adm-btn-ghost adm-btn-sm" id="lic-refresh"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg> Refresh Data</button>';
-  html+='<button class="adm-btn adm-btn-ghost adm-btn-sm" onclick="window.open(\'https://supabase.com/dashboard/project/'+SP_SB_URL.replace(\"https://\",\"\").split(\".\")[0]+\"/editor\",\"_blank\")">Buka Supabase ↗</button>';
+  html+=row('Realtime',badge(spRTConnected,'Live','Offline'));
+  html+=row('Anon Key',sbExpHtml);
+  html+='<div style="padding:.5rem .9rem .7rem;display:flex;gap:.45rem;flex-wrap:wrap">';
+  html+='<button class="adm-btn adm-btn-ghost adm-btn-sm" id="lic-sb-dash">Buka Dashboard \u2197</button>';
   html+='</div></div>';
 
-  // === Session Actions ===
-  html+='<div class="adm-card-title" style="font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.07em;color:var(--text3);margin:.9rem 0 .5rem">Aksi Sesi</div>';
-  html+='<div class="adm-lic-card"><div style="padding:.6rem .9rem"><div style="font-size:.77rem;color:var(--text3);margin-bottom:.6rem">Token tersimpan di localStorage browser lokal. Tidak dikirim ke server manapun selain GitHub API.</div>';
+  // Session actions
+  html+='<div class="adm-card-title" style="margin-top:.9rem">Aksi Sesi</div>';
+  html+='<div class="adm-lic-card"><div style="padding:.6rem .9rem">';
+  html+='<p style="font-size:.77rem;color:var(--text3);margin-bottom:.7rem">Token tersimpan di localStorage browser lokal. Tidak dikirim ke server manapun selain GitHub API.</p>';
   html+='<div style="display:flex;gap:.45rem;flex-wrap:wrap">';
-  html+='<button class="adm-btn adm-btn-warn adm-btn-sm" id="lic-clear-cache" onclick="localStorage.removeItem(SP_TOKEN_META_KEY);toast('\u2713 Cache token dihapus',true);renderLicense();">Clear Cache</button>';
-  html+='<button class="adm-btn adm-btn-danger adm-btn-sm" id="lic-logout-btn">Logout Sesi</button>';
+  html+='<button class="adm-btn adm-btn-ghost adm-btn-sm" id="lic-refresh">';
+  html+='<svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Refresh</button>';
+  html+='<button class="adm-btn adm-btn-warn adm-btn-sm" id="lic-clear-meta">Clear Cache</button>';
+  html+='<button class="adm-btn adm-btn-danger adm-btn-sm" id="lic-do-logout">Logout</button>';
   html+='</div></div></div>';
 
   pg.innerHTML=html;
+
+  // Wire up buttons via addEventListener (no inline onclick)
   var refreshBtn=document.getElementById('lic-refresh');
   if(refreshBtn)refreshBtn.addEventListener('click',function(){renderLicense();});
-  var logoutBtn=document.getElementById('lic-logout-btn');
-  if(logoutBtn)logoutBtn.addEventListener('click',function(){if(!confirm('Logout dan hapus token?'))return;clearToken();window.location.href='../updates';});
+
+  var sbDashBtn=document.getElementById('lic-sb-dash');
+  if(sbDashBtn)sbDashBtn.addEventListener('click',function(){
+    var proj=SP_SB_URL.replace('https://','').split('.')[0];
+    window.open('https://supabase.com/dashboard/project/'+proj+'/editor','_blank');
+  });
+
+  var clearBtn=document.getElementById('lic-clear-meta');
+  if(clearBtn)clearBtn.addEventListener('click',function(){
+    localStorage.removeItem(SP_TOKEN_META_KEY);
+    toast('\u2713 Cache token dihapus',true);
+    renderLicense();
+  });
+
+  var logoutBtn=document.getElementById('lic-do-logout');
+  if(logoutBtn)logoutBtn.addEventListener('click',function(){
+    if(!confirm('Logout dan hapus token?'))return;
+    if(spRTCh&&spSb){try{spSb.removeChannel(spRTCh);}catch(e){}}
+    clearToken();
+    window.location.href='../updates';
+  });
 }
 
 function renderSettings(){
