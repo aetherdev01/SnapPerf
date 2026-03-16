@@ -1210,95 +1210,133 @@ async function renderReleases(){
     }
 
     // uploadZipAsset via XHR to GitHub Uploads API
-    async function uploadZipAsset(releaseId,file,releaseTag){
+    async function uploadZipAsset(releaseId,file){
       var barEl=document.getElementById('nr-bar');
       var barWrap=document.getElementById('nr-bar-wrap');
       if(barWrap) barWrap.classList.add('visible');
-      if(uploadStatus) uploadStatus.textContent='Membaca file...';
+      if(uploadStatus) uploadStatus.textContent='Mengupload...';
 
-      // Progress
+      function getMime(name){
+        var ext=(name.split('.').pop()||'').toLowerCase();
+        var map={zip:'application/zip',apk:'application/vnd.android.package-archive',
+          jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',
+          gif:'image/gif',pdf:'application/pdf'};
+        return map[ext]||'application/octet-stream';
+      }
+
+      // Progress simulasi
       var progVal=0,progTimer=null;
-      function startProg(label){
-        if(barEl) barEl.style.width='5%';
+      function startProg(){
         progTimer=setInterval(function(){
-          progVal=Math.min(progVal+4,88);
+          progVal=Math.min(progVal+5,88);
           if(barEl) barEl.style.width=progVal+'%';
-          if(uploadStatus) uploadStatus.textContent=(label||'Uploading')+': '+progVal+'%';
-        },200);
+          if(uploadStatus) uploadStatus.textContent='Uploading: '+progVal+'%';
+        },250);
       }
       function stopProg(){clearInterval(progTimer);if(barEl)barEl.style.width='100%';}
 
-      // Encode file ke base64
-      var buffer=await file.arrayBuffer();
-      var bytes=new Uint8Array(buffer);
-      // Chunk btoa untuk file besar
-      var binary='';
-      var chunkSize=8192;
-      for(var i=0;i<bytes.length;i+=chunkSize){
-        binary+=String.fromCharCode.apply(null,bytes.subarray(i,Math.min(i+chunkSize,bytes.length)));
+      // ── METODE 1: GitHub Releases Asset API (native asset, URL terbaik) ──
+      async function tryReleasesAPI(){
+        startProg();
+        var buffer=await file.arrayBuffer();
+        var uploadUrl='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
+        var res=await fetch(uploadUrl,{
+          method:'POST',
+          headers:{
+            'Authorization':'Bearer '+spToken,
+            'Content-Type':getMime(file.name),
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28'
+          },
+          body:buffer,
+          mode:'cors'
+        });
+        stopProg();
+        if(!res.ok){
+          var ed={};try{ed=await res.json();}catch(ex){}
+          throw new Error('HTTP '+res.status+': '+(ed.message||res.statusText));
+        }
+        return await res.json(); // {browser_download_url, ...}
       }
-      var base64=btoa(binary);
 
-      // Path di repo: releases/{tag}/{filename}
-      var safeTag=(releaseTag||'unknown').replace(/[^a-zA-Z0-9._-]/g,'_');
-      var safeFilename=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
-      var filePath='releases/'+safeTag+'/'+safeFilename;
-      var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/'+filePath;
+      // ── METODE 2: GitHub Contents API (fallback - upload ke folder di repo) ──
+      async function tryContentsAPI(){
+        if(uploadStatus) uploadStatus.textContent='Mencoba metode alternatif...';
+        progVal=0;startProg();
 
-      // Cek SHA kalau file sudah ada
-      var sha=null;
+        // Baca file sebagai base64
+        var buffer=await file.arrayBuffer();
+        var bytes=new Uint8Array(buffer);
+        var binary='';
+        for(var i=0;i<bytes.byteLength;i++) binary+=String.fromCharCode(bytes[i]);
+        var base64=btoa(binary);
+
+        // Upload ke folder server/releases-archive/ di repo
+        var timestamp=Date.now();
+        var safeFilename=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        var filePath='server/releases-archive/'+timestamp+'_'+safeFilename;
+        var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/'+filePath;
+
+        // Cek apakah file sudah ada (untuk dapat SHA)
+        var sha=null;
+        try{
+          var chk=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+spToken,'Accept':'application/vnd.github+json'}});
+          if(chk.ok){var cd=await chk.json();sha=cd.sha;}
+        }catch(ex){}
+
+        var body={
+          message:'chore: upload release asset '+safeFilename+' [skip ci]',
+          content:base64
+        };
+        if(sha) body.sha=sha;
+
+        var putRes=await fetch(apiUrl,{
+          method:'PUT',
+          headers:{
+            'Authorization':'Bearer '+spToken,
+            'Content-Type':'application/json',
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28'
+          },
+          body:JSON.stringify(body)
+        });
+
+        stopProg();
+        if(!putRes.ok){
+          var ed2={};try{ed2=await putRes.json();}catch(ex){}
+          throw new Error('Contents API HTTP '+putRes.status+': '+(ed2.message||putRes.statusText));
+        }
+
+        var putData=await putRes.json();
+        // Raw URL: https://raw.githubusercontent.com/{owner}/{repo}/main/{path}
+        var rawUrl='https://raw.githubusercontent.com/'+SP_GH_REPO+'/main/'+filePath;
+        // Atau pakai download_url dari response
+        var dlUrl=(putData.content&&putData.content.download_url)||rawUrl;
+
+        if(uploadStatus) uploadStatus.textContent='✓ Upload via Contents API';
+        // Return format mirip releases asset
+        return {browser_download_url:dlUrl,name:file.name,_via_contents:true};
+      }
+
       try{
-        var chk=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+spToken,'Accept':'application/vnd.github+json','X-GitHub-Api-Version':'2022-11-28'}});
-        if(chk.ok){var cd=await chk.json();sha=cd.sha;}
-      }catch(ex){}
-
-      if(uploadStatus) uploadStatus.textContent='Uploading ke GitHub...';
-      startProg('Upload');
-
-      var reqBody={
-        message:'release: add asset '+safeFilename+' for '+safeTag+' [skip ci]',
-        content:base64
-      };
-      if(sha) reqBody.sha=sha;
-
-      var putRes=await fetch(apiUrl,{
-        method:'PUT',
-        headers:{
-          'Authorization':'Bearer '+spToken,
-          'Content-Type':'application/json',
-          'Accept':'application/vnd.github+json',
-          'X-GitHub-Api-Version':'2022-11-28'
-        },
-        body:JSON.stringify(reqBody)
-      });
-
-      stopProg();
-
-      if(!putRes.ok){
-        var ed={};try{ed=await putRes.json();}catch(ex){}
-        var errMsg='Upload gagal HTTP '+putRes.status+': '+(ed.message||putRes.statusText);
-        if(uploadStatus) uploadStatus.textContent='✗ '+errMsg;
-        throw new Error(errMsg);
+        // Coba metode 1 dulu
+        var result=await tryReleasesAPI();
+        if(uploadStatus) uploadStatus.textContent='✓ Upload selesai: '+file.name;
+        return result;
+      }catch(err1){
+        console.warn('Releases API gagal:',err1.message,', fallback ke Contents API...');
+        if(uploadStatus) uploadStatus.textContent='⚠ Metode 1 gagal, mencoba metode 2...';
+        try{
+          var result2=await tryContentsAPI();
+          if(uploadStatus) uploadStatus.textContent='✓ Upload selesai (via fallback): '+file.name;
+          return result2;
+        }catch(err2){
+          if(barEl) barEl.style.width='0%';
+          var finalMsg='Upload gagal. Metode 1: '+err1.message+' | Metode 2: '+err2.message;
+          if(uploadStatus) uploadStatus.textContent='✗ '+finalMsg;
+          throw new Error(finalMsg);
+        }
       }
-
-      var putData=await putRes.json();
-
-      // URL download file: pakai github.com raw download (bukan raw.githubusercontent untuk binary)
-      // Format: https://github.com/{owner}/{repo}/raw/main/{path}
-      // Ini support redirect dan proper content-type untuk binary files
-      var dlUrl='https://github.com/'+SP_GH_REPO+'/raw/main/'+filePath;
-      // Alternatif canonical: https://raw.githubusercontent.com/{owner}/{repo}/main/{path}
-      var rawUrl=(putData.content&&putData.content.download_url)||'https://raw.githubusercontent.com/'+SP_GH_REPO+'/main/'+filePath;
-
-      if(uploadStatus) uploadStatus.textContent='✓ Upload selesai! '+safeFilename;
-
-      return {
-        browser_download_url: dlUrl,
-        raw_url: rawUrl,
-        name: file.name,
-        path: filePath,
-        _via_contents: true
-      };
     }
 
     // createRelease
@@ -1365,28 +1403,14 @@ async function renderReleases(){
           if(selectedFile){
             if(st) st.textContent='② Mengupload '+selectedFile.name+'...';
             try{
-              var asset=await uploadZipAsset(relData.id,selectedFile,createdTag);
+              var asset=await uploadZipAsset(relData.id,selectedFile);
               // browser_download_url = https://github.com/{owner}/{repo}/releases/download/{tag}/{filename}
               var uploadedUrl=asset.browser_download_url||'';
               if(uploadedUrl){
-                direct=uploadedUrl;
+                direct=uploadedUrl; // ← THIS is the correct URL
                 var diEl=document.getElementById('nr-direct');
                 if(diEl) diEl.value=direct;
                 if(st) st.textContent='✓ Upload selesai: '+uploadedUrl;
-
-                // Update release body dengan link download file
-                if(asset._via_contents){
-                  try{
-                    var relApiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/releases/'+relData.id;
-                    var curBody=relData.body||'';
-                    var fileLink='\n\n📦 **Download**: ['+esc(file.name)+']('+uploadedUrl+')';
-                    await fetch(relApiUrl,{
-                      method:'PATCH',
-                      headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
-                      body:JSON.stringify({body:curBody+fileLink})
-                    });
-                  }catch(ex){console.warn('Update release body gagal:',ex);}
-                }
               }else{
                 toast('⚠ File terupload tapi URL tidak ditemukan, cek GitHub.',false);
               }
