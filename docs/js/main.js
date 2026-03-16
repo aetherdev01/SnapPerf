@@ -353,7 +353,16 @@ document.addEventListener('DOMContentLoaded',function(){
   }
 
   var revealThreshold=isLow?0.01:0.06;
-  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:revealThreshold,rootMargin:'0px 0px -8px 0px'});
+  var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){
+    if(e.isIntersecting){
+      e.target.classList.add('visible');
+      obs.unobserve(e.target);
+      // Clear will-change after animation to free compositor layers
+      e.target.addEventListener('transitionend',function(){
+        e.target.style.willChange='auto';
+      },{once:true});
+    }
+  });},{threshold:revealThreshold,rootMargin:'0px 0px -8px 0px'});
   document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
 
   document.querySelectorAll('a.nav-link,a.mob-link,.footer-nav-link').forEach(function(link){
