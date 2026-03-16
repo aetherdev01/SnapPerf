@@ -51,9 +51,12 @@
     metaHTML+='</div>';
     var changeHTML='';
     if(changeItems.length){changeHTML='<ul class="post-changes">';var showMax=Math.min(changeItems.length,6);for(var i=0;i<showMax;i++)changeHTML+='<li><span class="cl-dot" style="background:'+changeItems[i].color+'"></span>'+changeItems[i].text+'</li>';if(changeItems.length>showMax)changeHTML+='<li class="post-changes-more">+'+(changeItems.length-showMax)+(getCurLang()==='id'?' perubahan lagi':' more changes')+'</li>';changeHTML+='</ul>';}
-    // Mirror per-release: parse [mirror]: URL dari body release ini
+    // Mirror per-release: parse dari body (support 2 format: HTML comment dan plaintext)
     var _bodyStr=release.body||'';
-    var _mirrorMatch=_bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
+    // Format 1: <!-- [mirror]: URL --> (HTML comment, tidak tampil di GitHub UI)
+    var _mirrorMatch=_bodyStr.match(/<!--\s*\[mirror\]:\s*(https?:\/\/[^\s>]+)\s*-->/i);
+    // Format 2: [mirror]: URL (plaintext legacy)
+    if(!_mirrorMatch) _mirrorMatch=_bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
     var mirrorUrl=_mirrorMatch?_mirrorMatch[1].trim():'';
     var dlBtnHTML='';
     if(dlUrl){

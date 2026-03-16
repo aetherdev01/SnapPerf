@@ -1069,7 +1069,9 @@ async function renderReleases(){
         // Parse mirror from release body [mirror]: URL
         var relMirror='';
         var bodyStr=rel.body||'';
-        var mirMatch=bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
+        // Support HTML comment format (tidak tampil di GitHub UI) dan plaintext
+        var mirMatch=bodyStr.match(/<!--\s*\[mirror\]:\s*(https?:\/\/[^\s>]+)\s*-->/i)
+          ||bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
         if(mirMatch)relMirror=mirMatch[1];
 
         var badge=rel.prerelease?'<span class="adm-badge-beta">Beta</span>':'<span class="adm-badge-stable">Stable</span>';
@@ -1208,55 +1210,72 @@ async function renderReleases(){
     }
 
     // uploadZipAsset via XHR to GitHub Uploads API
-    function uploadZipAsset(releaseId,file){
-      return new Promise(function(resolve,reject){
-        var barEl=document.getElementById('nr-bar');
-        var barWrap=document.getElementById('nr-bar-wrap');
-        if(barWrap) barWrap.classList.add('visible');
-        if(uploadStatus) uploadStatus.textContent='Mengupload...';
+    async function uploadZipAsset(releaseId,file){
+      var barEl=document.getElementById('nr-bar');
+      var barWrap=document.getElementById('nr-bar-wrap');
+      if(barWrap) barWrap.classList.add('visible');
+      if(uploadStatus) uploadStatus.textContent='Mengupload...';
 
-        var url='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
-        var xhr=new XMLHttpRequest();
-        xhr.open('POST',url,true);
-        xhr.setRequestHeader('Authorization','Bearer '+spToken);
-        xhr.setRequestHeader('Content-Type','application/zip');
-        xhr.setRequestHeader('Accept','application/vnd.github+json');
-        xhr.setRequestHeader('X-GitHub-Api-Version','2022-11-28');
+      // Deteksi MIME type dari ekstensi file
+      function getMime(name){
+        var ext=(name.split('.').pop()||'').toLowerCase();
+        var map={zip:'application/zip',apk:'application/vnd.android.package-archive',
+          jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',
+          gif:'image/gif',pdf:'application/pdf',json:'application/json',
+          txt:'text/plain',md:'text/plain',xml:'application/xml'};
+        return map[ext]||'application/octet-stream';
+      }
 
-        xhr.upload.onprogress=function(e){
-          if(e.lengthComputable){
-            var pct=Math.round(e.loaded/e.total*100);
-            if(barEl) barEl.style.width=pct+'%';
-            if(uploadStatus) uploadStatus.textContent='Upload: '+pct+'%';
-          }
-        };
+      var uploadUrl='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
+      var mime=getMime(file.name);
 
-        xhr.onload=function(){
-          if(xhr.status>=200&&xhr.status<300){
-            var data={};
-            try{data=JSON.parse(xhr.responseText);}catch(ex){}
-            if(uploadStatus) uploadStatus.textContent='✓ Upload selesai';
-            // browser_download_url = https://github.com/{owner}/{repo}/releases/download/{tag}/{filename}
-            resolve(data);
-          }else{
-            var errMsg='Upload gagal: HTTP '+xhr.status;
-            try{
-              var d=JSON.parse(xhr.responseText);
-              errMsg='Upload gagal: '+(d.message||'HTTP '+xhr.status);
-            }catch(ex){}
-            if(uploadStatus) uploadStatus.textContent='✗ '+errMsg;
-            reject(new Error(errMsg));
-          }
-        };
+      // Baca file sebagai ArrayBuffer untuk upload binary
+      var buffer=await file.arrayBuffer();
 
-        xhr.onerror=function(){
-          var msg='Network error saat upload';
-          if(uploadStatus) uploadStatus.textContent='✗ '+msg;
-          reject(new Error(msg));
-        };
+      // Progress simulasi (fetch tidak support upload progress natively)
+      var progTimer=null;var progVal=0;
+      if(barEl){
+        barEl.style.width='0%';
+        progTimer=setInterval(function(){
+          progVal=Math.min(progVal+8,85);
+          barEl.style.width=progVal+'%';
+          if(uploadStatus) uploadStatus.textContent='Upload: '+progVal+'%';
+        },200);
+      }
 
-        xhr.send(file);
-      });
+      try{
+        var res=await fetch(uploadUrl,{
+          method:'POST',
+          headers:{
+            'Authorization':'Bearer '+spToken,
+            'Content-Type':mime,
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28'
+          },
+          body:buffer
+        });
+
+        clearInterval(progTimer);
+        if(barEl) barEl.style.width='100%';
+
+        if(!res.ok){
+          var errData={};
+          try{errData=await res.json();}catch(ex){}
+          var errMsg='Upload gagal HTTP '+res.status+': '+(errData.message||errData.errors||res.statusText||'Unknown error');
+          if(uploadStatus) uploadStatus.textContent='✗ '+errMsg;
+          throw new Error(errMsg);
+        }
+
+        var data=await res.json();
+        if(uploadStatus) uploadStatus.textContent='✓ Upload selesai: '+file.name;
+        return data;
+
+      }catch(err){
+        clearInterval(progTimer);
+        if(barEl) barEl.style.width='0%';
+        if(uploadStatus) uploadStatus.textContent='✗ '+err.message;
+        throw err;
+      }
     }
 
     // createRelease
@@ -1309,7 +1328,9 @@ async function renderReleases(){
         try{
           // Build description (include mirror for per-release tracking)
           var fullDesc=desc;
-          if(mirror) fullDesc=(desc?desc+'\n\n':'')+'[mirror]: '+mirror;
+          // Mirror disimpan sebagai HTML comment di body release → tidak tampil di GitHub UI
+          // tapi tetap bisa di-parse oleh website
+          if(mirror) fullDesc=desc+((desc&&desc.trim())?'\n\n':'')+'<!-- [mirror]: '+mirror+' -->';
 
           if(st) st.textContent='① Membuat GitHub Release...';
           var relData=await createRelease(name,tag,fullDesc,isPre);
