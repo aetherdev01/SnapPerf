@@ -802,9 +802,14 @@ function spBuildEngage(tag){
   return '<div class="sp-engage-bar-wrap"><div class="sp-engage-bar" data-tag="'+s+'">'
     +'<button class="sp-like-btn ripple-btn" aria-label="Like"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sp-like-count"></span></button>'
     +'<button class="sp-cmt-toggle ripple-btn"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="sp-comment-count">0</span></button>'
-    +'<div class="sp-user-row"><span class="sp-auth-name">'+nameT+'</span><button class="sp-logout-btn ripple-btn" style="display:'+logoutD+'">Logout</button><button class="sp-login-hint ripple-btn" style="display:'+loginD+'"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Login</button></div>'
+    +'<div class="sp-user-row"><span class="sp-auth-name">'+nameT+'</span><button class="sp-logout-btn ripple-btn" style="display:'+logoutD+'">Logout</button><button class="sp-login-hint ripple-btn" style="display:none"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Login</button></div>'
     +'</div>'
     +'<div class="sp-cmt-section" data-tag="'+s+'"><div class="sp-cmt-list"></div>'
+    +'<div class="sp-cmt-login-row" style="display:'+loginD+';align-items:center;gap:.6rem;padding:.5rem .85rem .3rem;flex-wrap:wrap">'
+    +'<span style="font-size:.76rem;color:var(--text3)">Masuk untuk komentar:</span>'
+    +'<button class="sp-login-hint ripple-btn sp-login-from-cmt"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Login / Buat Nama</button>'
+    +'<button class="sp-anon-direct ripple-btn sp-anon-quick">Lanjut Anonim</button>'
+    +'</div>'
     +'<div class="sp-cmt-row"><input class="sp-cmt-input" type="text" placeholder="Tulis komentar..." maxlength="280" autocomplete="off" spellcheck="false"/>'
     +'<div class="sp-anon-wrap" style="display:'+anonD+';flex-shrink:0;align-items:center"><label class="sp-anon-label"><input type="checkbox" class="sp-anon-chk"><span>Anonim</span></label></div>'
     +'<button class="sp-cmt-send ripple-btn">Kirim</button></div></div></div>';
@@ -848,7 +853,28 @@ document.addEventListener('DOMContentLoaded',function(){
     if(lo){if(spOwner){spClearToken();spOwner=null;spRemoveAdminNav();}else{spClearUser();spUser=null;}spUpdateAllBars();spShowToast('Berhasil logout',true);return;}
 
     var lh=e.target.closest('.sp-login-hint');
-    if(lh){spShowLoginModal(function(){spUpdateAllBars();});return;}
+    if(lh){
+      // Find related comment section for context
+      var relSec=lh.closest('.sp-cmt-section');
+      spShowLoginModal(function(){
+        spUpdateAllBars();
+        // Re-show login row updated state
+        if(relSec){var lr=relSec.querySelector('.sp-cmt-login-row');if(lr)lr.style.display='none';}
+      });
+      return;
+    }
+    var aq=e.target.closest('.sp-anon-quick');
+    if(aq){
+      // Quick anon: set anon checkbox and focus input
+      var aqSec=aq.closest('.sp-cmt-section');
+      if(aqSec){
+        var lr2=aqSec.querySelector('.sp-cmt-login-row');if(lr2)lr2.style.display='none';
+        var aw=aqSec.querySelector('.sp-anon-wrap');if(aw)aw.style.display='flex';
+        var chk=aqSec.querySelector('.sp-anon-chk');if(chk)chk.checked=true;
+        var inp=aqSec.querySelector('.sp-cmt-input');if(inp){inp.focus();}
+      }
+      return;
+    }
   });
 
   document.addEventListener('keydown',function(e){
