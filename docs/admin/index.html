@@ -985,12 +985,12 @@ async function renderReleases(){
     // Row 3: Direct Link (auto-fill) + Mirror Link
     html+='<div class="adm-form-row" style="margin-bottom:.75rem">';
     html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Direct Link <span style="font-size:.63rem;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">auto-fill</span></div>';
-    html+='<input class="adm-input" id="nr-direct" type="text" placeholder="Terisi otomatis…" style="color:var(--text3)"/>';
+    html+='<div class="adm-label" style="margin-bottom:.32rem">Direct Link <span style="font-size:.63rem;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">auto-fill dari upload</span></div>';
+    html+='<input class="adm-input" id="nr-direct" type="text" placeholder="Terisi otomatis setelah upload .zip…" readonly style="cursor:default;opacity:.8"/>';
     html+='</div>';
     html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Mirror Link <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">opsional</span></div>';
-    html+='<input class="adm-input" id="nr-mirror" type="text" placeholder="https://safefileku.com/…"/>';
+    html+='<div class="adm-label" style="margin-bottom:.32rem">Mirror Link <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">per-rilis, opsional</span></div>';
+    html+='<input class="adm-input" id="nr-mirror" type="text" placeholder="https://safefileku.com/download/…"/>';
     html+='</div>';
     html+='</div>';
 
@@ -1038,7 +1038,21 @@ async function renderReleases(){
         html+='<td class="adm-td-time">'+relTime(rel.published_at)+'</td>';
         html+='<td><div style="display:flex;gap:.3rem">';
         html+='<a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm" title="Buka di GitHub">↗</a>';
-        html+='<button class="adm-btn adm-btn-ghost adm-btn-sm adm-fill-release" data-tag="'+esc(rel.tag_name)+'" data-name="'+esc(rel.name||'')+'" data-pre="'+rel.prerelease+'" title="Isi ke form">↑</button>';
+        // Get first zip asset download URL
+        var relDlUrl='';
+        if(rel.assets&&rel.assets.length){
+          for(var ai=0;ai<rel.assets.length;ai++){
+            if(rel.assets[ai].browser_download_url&&rel.assets[ai].name&&rel.assets[ai].name.endsWith('.zip')){
+              relDlUrl=rel.assets[ai].browser_download_url;break;
+            }
+          }
+        }
+        // Parse mirror from release body
+        var relMirror='';
+        var bodyStr=rel.body||'';
+        var mirMatch=bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
+        if(mirMatch)relMirror=mirMatch[1];
+        html+='<button class="adm-btn adm-btn-ghost adm-btn-sm adm-fill-release" data-tag="'+esc(rel.tag_name)+'" data-name="'+esc(rel.name||'')+'" data-pre="'+rel.prerelease+'" data-dlurl="'+esc(relDlUrl)+'" data-mirror="'+esc(relMirror)+'" title="Isi ke form">↑</button>';
         html+='<button class="adm-btn adm-btn-danger adm-btn-sm adm-del-release" data-id="'+rel.id+'" data-tag="'+esc(rel.tag_name)+'" title="Hapus release">🗑</button>';
         html+='</div></td>';
         html+='</tr>';
@@ -1114,7 +1128,7 @@ async function renderReleases(){
         var getR=await fetch(apiUrl,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file ('+getR.status+')');
         var gd=await getR.json();var sha=gd.sha;
         var cur={};try{cur=JSON.parse(atob(gd.content.replace(/\n/g,'')));}catch(e){}
-        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,8)||'10000',urlZip:direct||(cur.urlZip||''),link:mirror||(cur.link||''),changelog:cl||cur.changelog||''};
+        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,8)||'10000',urlZip:direct||'',link:mirror||'',changelog:cl||cur.changelog||''};
         var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
         var putR=await fetch(apiUrl,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
           body:JSON.stringify({message:'chore: update version to '+ver+' [skip ci]',content:encoded,sha:sha})});
@@ -1194,16 +1208,25 @@ async function renderReleases(){
       if(!jsonOnly){
         try{
           if(st)st.textContent='Membuat GitHub Release...';
-          var relData=await createRelease(name,tag,desc,isPre);
+          // Include mirror in release body for per-release tracking
+          var fullDesc=desc;
+          if(mirror) fullDesc=(desc?desc+'\n\n':'')+'[mirror]: '+mirror;
+          var relData=await createRelease(name,tag,fullDesc,isPre);
           if(st)st.textContent='✓ Release dibuat.';
           // Upload ZIP if selected
           if(selectedFile){
             if(st)st.textContent='Mengupload file .zip...';
             try{
               var asset=await uploadZipAsset(relData.id,selectedFile,barEl,barWrap);
-              if(asset.browser_download_url&&!direct){
+              if(asset.browser_download_url){
                 direct=asset.browser_download_url;
-                var diEl=document.getElementById('nr-direct');if(diEl)diEl.value=direct;
+                var diEl=document.getElementById('nr-direct');
+                if(diEl){
+                  diEl.value=direct;
+                  diEl.removeAttribute('readonly');
+                  diEl.style.opacity='1';
+                  diEl.style.cursor='text';
+                }
               }
               if(st)st.textContent='✓ ZIP diupload!';
             }catch(upErr){
@@ -1256,8 +1279,17 @@ async function renderReleases(){
         document.getElementById('nr-tag').value=btn.dataset.tag||'';
         document.getElementById('nr-name').value=btn.dataset.name||'';
         document.getElementById('nr-prerelease').checked=btn.dataset.pre==='true';
+        // Fill direct link from first ZIP asset URL
+        var dlUrl=btn.dataset.dlurl||'';
+        if(dlUrl){
+          var diEl=document.getElementById('nr-direct');
+          if(diEl){diEl.value=dlUrl;diEl.removeAttribute('readonly');diEl.style.opacity='1';diEl.style.cursor='text';}
+        }
+        // Fill mirror from release body [mirror]: URL
+        var mirrorUrl=btn.dataset.mirror||'';
+        if(mirrorUrl){var mirEl=document.getElementById('nr-mirror');if(mirEl)mirEl.value=mirrorUrl;}
         document.getElementById('nr-tag').scrollIntoView({behavior:'smooth',block:'center'});
-        toast('Form diisi: '+btn.dataset.tag,true);
+        toast('Form diisi dari: '+btn.dataset.tag,true);
       });
     });
     pg.querySelectorAll('.adm-del-release').forEach(function(btn){
