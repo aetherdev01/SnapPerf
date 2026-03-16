@@ -929,95 +929,115 @@ document.getElementById('adm-theme-btn').addEventListener('click',function(){var
 })();
 
 
-// ============ FIXED renderReleases: Upload ZIP, Delete Release, Validation Fixed ============
+
+// ============ renderReleases: Upload ZIP as Asset, per-release mirror ============
 async function renderReleases(){
   var pg=document.getElementById('page-releases');
   pg.innerHTML='<div class="adm-loading"><div class="adm-spin"></div>Memuat rilis...</div>';
   try{
+    // Load current releases from GitHub
     var r=await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/releases?per_page=20',{headers:ghHeaders()});
     if(!r.ok)throw new Error('GitHub API error '+r.status);
     var releases=await r.json();
+
+    // Load current update.json
     var updateJsonUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
     var curVer='',curDirect='',curMirror='',curCl='';
     try{
       var ujr=await fetch(updateJsonUrl,{headers:ghHeaders()});
-      if(ujr.ok){var ujd=await ujr.json();var ujc=JSON.parse(atob(ujd.content.replace(/\n/g,'')));curVer=ujc.version||'';curDirect=ujc.urlZip||ujc.zipUrl||'';curMirror=ujc.link||'';curCl=ujc.changelog||'';}
+      if(ujr.ok){
+        var ujd=await ujr.json();
+        var ujc=JSON.parse(atob(ujd.content.replace(/\n/g,'')));
+        curVer=ujc.version||'';
+        curDirect=ujc.urlZip||ujc.zipUrl||'';
+        curMirror=ujc.link||'';
+        curCl=ujc.changelog||'';
+      }
     }catch(e){}
+
     var html='';
-    // === UPLOAD FORM ===
+
+    // ═══ UPLOAD FORM ═══════════════════════════════════════════════
     html+='<div class="adm-card" style="margin-bottom:1.2rem">';
-    html+='<div class="adm-card-title" style="margin-bottom:1.2rem"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg> Buat Rilis Baru</div>';
+    html+='<div class="adm-card-title" style="margin-bottom:1rem">';
+    html+='<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>';
+    html+=' Buat Rilis Baru</div>';
 
-    // Step indicator
-    html+='<div class="adm-step-row"><div class="adm-step active" id="step1">① Info</div><div class="adm-step" id="step2">② Links</div><div class="adm-step" id="step3">③ Publish</div></div>';
-
-    // Upload zone
-    html+='<div style="margin-bottom:.9rem">';
-    html+='<div class="adm-label" style="margin-bottom:.45rem">Upload File .ZIP <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">akan jadi release asset → direct link otomatis</span></div>';
-    html+='<div class="adm-dropzone" id="nr-dropzone">';
-    html+='<input type="file" id="nr-file" accept=".zip,application/zip" style="user-select:text!important;-webkit-user-select:text!important"/>';
-    html+='<div class="adm-dropzone-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
-    html+='<div class="adm-dropzone-text">Drag & drop .zip ke sini, atau klik untuk pilih</div>';
-    html+='<div class="adm-dropzone-sub">.zip · maks 2 GB · upload ke release asset</div>';
-    html+='<div class="adm-file-chosen" id="nr-file-name">✓ File dipilih</div>';
-    html+='</div>';
-    html+='<div class="adm-upload-bar-wrap" id="nr-bar-wrap"><div class="adm-upload-bar" id="nr-bar"></div></div>';
+    // Steps
+    html+='<div class="adm-step-row">';
+    html+='<div class="adm-step active" id="step1">① Info Rilis</div>';
+    html+='<div class="adm-step" id="step2">② Pilih File</div>';
+    html+='<div class="adm-step" id="step3">③ Publishing</div>';
     html+='</div>';
 
-    // Row 1: Nama + Tag
-    html+='<div class="adm-form-row" style="margin-bottom:.75rem">';
+    // Row: Nama + Tag
+    html+='<div class="adm-form-row" style="margin-bottom:.8rem">';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">Nama Rilis <span style="color:var(--red)">*</span></div>';
+    html+='<input class="adm-input" id="nr-name" type="text" placeholder="SnapPerf v1.5.4 Stable" autocomplete="off"/></div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">Tag <span style="color:var(--red)">*</span>';
+    html+='<span style="font-size:.62rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0"> huruf/angka/. - _</span></div>';
+    html+='<input class="adm-input" id="nr-tag" type="text" placeholder="v1.5.4-stable" autocomplete="off"/></div>';
+    html+='</div>';
+
+    // Changelog
+    html+='<div style="margin-bottom:.8rem">';
+    html+='<div class="adm-label" style="margin-bottom:.3rem">Changelog</div>';
+    html+='<textarea class="adm-textarea" id="nr-desc" rows="3" placeholder="- Fix X&#10;- Update Y"></textarea>';
+    html+='</div>';
+
+    // File Upload - simple button approach (reliable across all browsers)
+    html+='<div style="margin-bottom:.8rem">';
+    html+='<div class="adm-label" style="margin-bottom:.3rem">';
+    html+='Upload File .ZIP <span style="font-size:.62rem;color:var(--accent2);font-weight:600;text-transform:none;letter-spacing:0">→ URL otomatis /releases/download/{tag}/{file}</span>';
+    html+='</div>';
+    html+='<div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">';
+    html+='<label id="nr-filelabel" style="display:inline-flex;align-items:center;gap:.4rem;padding:.5rem 1rem;background:var(--glass);border:1.5px dashed var(--glass-border2);border-radius:var(--r-lg);cursor:pointer;font-size:.8rem;font-weight:700;color:var(--text2);transition:border-color .2s,background .2s;user-select:none">';
+    html+='<svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+    html+='<span id="nr-filelabel-text">Pilih File .zip…</span>';
+    html+='<input type="file" id="nr-file" accept=".zip,application/zip" style="display:none"/>';
+    html+='</label>';
+    html+='<div style="flex:1;min-width:0">';
+    html+='<div class="adm-upload-bar-wrap" id="nr-bar-wrap" style="margin-top:0;height:6px"><div class="adm-upload-bar" id="nr-bar"></div></div>';
+    html+='<div id="nr-upload-status" style="font-size:.72rem;color:var(--text3);margin-top:.3rem"></div>';
+    html+='</div>';
+    html+='</div>';
+    html+='</div>';
+
+    // Direct Link + Mirror
+    html+='<div class="adm-form-row" style="margin-bottom:.8rem">';
     html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Nama Rilis <span style="color:var(--red)">*</span></div>';
-    html+='<input class="adm-input" id="nr-name" type="text" placeholder="SnapPerf v1.5.4 Stable" autocomplete="off"/>';
+    html+='<div class="adm-label" style="margin-bottom:.3rem">Direct Link';
+    html+='<span style="font-size:.62rem;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0"> auto-fill setelah upload</span>';
+    html+='</div>';
+    html+='<input class="adm-input" id="nr-direct" type="text" placeholder="Terisi otomatis setelah upload file .zip"/>';
     html+='</div>';
     html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Tag <span style="color:var(--red)">*</span> <span style="font-size:.65rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">huruf/angka/. - _</span></div>';
-    html+='<input class="adm-input" id="nr-tag" type="text" placeholder="snapperfv1.5.4(Stable)" autocomplete="off"/>';
+    html+='<div class="adm-label" style="margin-bottom:.3rem">Mirror Link <span style="font-size:.62rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">per-rilis, opsional</span></div>';
+    html+='<input class="adm-input" id="nr-mirror" type="text" placeholder="https://safefileku.com/…"/>';
     html+='</div>';
     html+='</div>';
 
-    // Row 2: Changelog textarea
-    html+='<div style="margin-bottom:.75rem">';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Changelog / Deskripsi</div>';
-    html+='<textarea class="adm-textarea" id="nr-desc" rows="4" placeholder="- Perbaikan performa CPU\n- Update profil baterai\n- Fix bug refresh rate" style="font-size:.8rem;line-height:1.6"></textarea>';
-    html+='</div>';
-
-    // Row 3: Direct Link (auto-fill) + Mirror Link
-    html+='<div class="adm-form-row" style="margin-bottom:.75rem">';
-    html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Direct Link <span style="font-size:.63rem;color:var(--green);font-weight:600;text-transform:none;letter-spacing:0">auto-fill dari upload</span></div>';
-    html+='<input class="adm-input" id="nr-direct" type="text" placeholder="Terisi otomatis setelah upload .zip…" readonly style="cursor:default;opacity:.8"/>';
-    html+='</div>';
-    html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">Mirror Link <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">per-rilis, opsional</span></div>';
-    html+='<input class="adm-input" id="nr-mirror" type="text" placeholder="https://safefileku.com/download/…"/>';
-    html+='</div>';
-    html+='</div>';
-
-    // Row 4: Changelog URL + Beta checkbox
+    // Changelog URL + Beta
     html+='<div class="adm-form-row" style="margin-bottom:1rem">';
-    html+='<div>';
-    html+='<div class="adm-label" style="margin-bottom:.32rem">URL Changelog <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">opsional</span></div>';
-    html+='<input class="adm-input" id="nr-cl" type="text" value="'+esc(curCl)+'" placeholder="https://raw.githubusercontent.com/…"/>';
-    html+='</div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">URL Changelog <span style="font-size:.62rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">opsional</span></div>';
+    html+='<input class="adm-input" id="nr-cl" type="text" value="'+esc(curCl)+'" placeholder="https://raw.githubusercontent.com/…"/></div>';
     html+='<div style="display:flex;align-items:flex-end;padding-bottom:.2rem">';
-    html+='<label style="display:flex;align-items:center;gap:.45rem;cursor:pointer;font-size:.8rem;color:var(--text2);user-select:none">';
+    html+='<label style="display:flex;align-items:center;gap:.45rem;cursor:pointer;font-size:.82rem;color:var(--text2);user-select:none">';
     html+='<input type="checkbox" id="nr-prerelease" style="accent-color:var(--accent);width:15px;height:15px;flex-shrink:0">';
     html+='<span>Beta / Pre-release</span>';
-    html+='</label>';
-    html+='</div>';
+    html+='</label></div>';
     html+='</div>';
 
-    // Action buttons
-    html+='<div class="adm-actions" style="gap:.5rem">';
-    html+='<button class="adm-btn adm-btn-primary" id="nr-submit" style="gap:.45rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Publish Release</button>';
+    // Actions
+    html+='<div class="adm-actions">';
+    html+='<button class="adm-btn adm-btn-primary" id="nr-submit"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7-7 7 7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Publish Release</button>';
     html+='<button class="adm-btn adm-btn-ghost" id="nr-only-json"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> JSON Saja</button>';
-    html+='<button class="adm-btn adm-btn-ghost" id="nr-reset" style="color:var(--text3)">↺</button>';
+    html+='<button class="adm-btn adm-btn-ghost" id="nr-reset" style="color:var(--text3)">↺ Reset</button>';
     html+='</div>';
-    html+='<div class="adm-status" id="nr-st" style="margin-top:.6rem"></div>';
-    html+='</div></div>';
+    html+='<div class="adm-status" id="nr-st" style="margin-top:.65rem"></div>';
+    html+='</div>';
 
-    // === RELEASES TABLE ===
+    // ═══ RELEASES TABLE ════════════════════════════════════════════
     if(releases.length){
       html+='<div class="adm-card" style="margin-bottom:1.2rem">';
       html+='<div class="adm-card-title" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">';
@@ -1025,146 +1045,223 @@ async function renderReleases(){
       html+='<a href="https://github.com/'+SP_GH_REPO+'/releases" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm">Buka GitHub ↗</a>';
       html+='</div>';
       html+='<div style="overflow-x:auto">';
-      html+='<table class="adm-table"><thead><tr><th>Tag</th><th>Nama</th><th>Status</th><th style="text-align:center">↓</th><th>Tanggal</th><th>Aksi</th></tr></thead><tbody>';
+      html+='<table class="adm-table"><thead><tr>';
+      html+='<th>Tag</th><th>Nama</th><th>Status</th><th>Assets</th><th>↓</th><th>Tanggal</th><th>Aksi</th>';
+      html+='</tr></thead><tbody>';
+
       releases.forEach(function(rel){
         var dlCount=(rel.assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);
-        var dlStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount):'—';
-        var badge=rel.prerelease?'<span class="adm-badge-beta">Beta</span>':'<span class="adm-badge-stable">Stable</span>';
-        html+='<tr>';
-        html+='<td><code style="font-size:.72rem;background:var(--accent-soft);color:var(--accent);padding:.1rem .38rem;border-radius:.35rem">'+esc(rel.tag_name)+'</code></td>';
-        html+='<td class="adm-td-text" style="max-width:150px">'+esc(rel.name||'—')+'</td>';
-        html+='<td>'+badge+'</td>';
-        html+='<td class="adm-td-time" style="text-align:center;color:var(--accent3);font-weight:700">'+dlStr+'</td>';
-        html+='<td class="adm-td-time">'+relTime(rel.published_at)+'</td>';
-        html+='<td><div style="display:flex;gap:.3rem">';
-        html+='<a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm" title="Buka di GitHub">↗</a>';
-        // Get first zip asset download URL
-        var relDlUrl='';
-        if(rel.assets&&rel.assets.length){
-          for(var ai=0;ai<rel.assets.length;ai++){
-            if(rel.assets[ai].browser_download_url&&rel.assets[ai].name&&rel.assets[ai].name.endsWith('.zip')){
-              relDlUrl=rel.assets[ai].browser_download_url;break;
-            }
+        var dlStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':String(dlCount)):'—';
+
+        // Get ZIP asset download URL (browser_download_url)
+        var assetUrl='';
+        var assetName='';
+        var assetCount=(rel.assets||[]).length;
+        for(var ai=0;ai<(rel.assets||[]).length;ai++){
+          var a=rel.assets[ai];
+          if(a.browser_download_url&&a.name&&a.name.toLowerCase().endsWith('.zip')){
+            assetUrl=a.browser_download_url;
+            assetName=a.name;
+            break;
           }
         }
-        // Parse mirror from release body
+
+        // Parse mirror from release body [mirror]: URL
         var relMirror='';
         var bodyStr=rel.body||'';
         var mirMatch=bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
         if(mirMatch)relMirror=mirMatch[1];
-        html+='<button class="adm-btn adm-btn-ghost adm-btn-sm adm-fill-release" data-tag="'+esc(rel.tag_name)+'" data-name="'+esc(rel.name||'')+'" data-pre="'+rel.prerelease+'" data-dlurl="'+esc(relDlUrl)+'" data-mirror="'+esc(relMirror)+'" title="Isi ke form">↑</button>';
-        html+='<button class="adm-btn adm-btn-danger adm-btn-sm adm-del-release" data-id="'+rel.id+'" data-tag="'+esc(rel.tag_name)+'" title="Hapus release">🗑</button>';
+
+        var badge=rel.prerelease?'<span class="adm-badge-beta">Beta</span>':'<span class="adm-badge-stable">Stable</span>';
+        var assetBadge=assetCount>0?('<span style="font-size:.7rem;color:var(--accent3);font-weight:700">'+assetCount+' file</span>'):'<span style="font-size:.7rem;color:var(--text3)">—</span>';
+        if(assetUrl) assetBadge='<span title="'+esc(assetName)+'" style="font-size:.7rem;color:var(--accent3);font-weight:700;cursor:help">'+assetCount+' ✓</span>';
+
+        html+='<tr>';
+        html+='<td><code style="font-size:.72rem;background:var(--accent-soft);color:var(--accent);padding:.1rem .38rem;border-radius:.35rem">'+esc(rel.tag_name)+'</code></td>';
+        html+='<td class="adm-td-text" style="max-width:140px">'+esc(rel.name||'—')+'</td>';
+        html+='<td>'+badge+'</td>';
+        html+='<td>'+assetBadge+'</td>';
+        html+='<td class="adm-td-time" style="color:var(--accent3);font-weight:700;text-align:center">'+dlStr+'</td>';
+        html+='<td class="adm-td-time">'+relTime(rel.published_at)+'</td>';
+        html+='<td><div style="display:flex;gap:.3rem">';
+        html+='<a href="'+esc(rel.html_url)+'" target="_blank" class="adm-btn adm-btn-ghost adm-btn-sm" title="Buka di GitHub">↗</a>';
+        html+='<button class="adm-btn adm-btn-ghost adm-btn-sm adm-fill-release"';
+        html+=' data-tag="'+esc(rel.tag_name)+'"';
+        html+=' data-name="'+esc(rel.name||'')+'"';
+        html+=' data-pre="'+rel.prerelease+'"';
+        html+=' data-dlurl="'+esc(assetUrl)+'"';
+        html+=' data-mirror="'+esc(relMirror)+'"';
+        html+=' title="'+(assetUrl?'Direct: '+assetUrl:'Belum ada asset .zip')+'">↑ Form</button>';
+        html+='<button class="adm-btn adm-btn-danger adm-btn-sm adm-del-release" data-id="'+rel.id+'" data-tag="'+esc(rel.tag_name)+'" title="Hapus release ini">🗑</button>';
         html+='</div></td>';
         html+='</tr>';
       });
-      html+='</tbody></table>';
-      html+='</div></div>';
+      html+='</tbody></table></div></div>';
     }
 
-    // === EDIT update.json ===
+    // ═══ EDIT update.json ══════════════════════════════════════════
     html+='<div class="adm-card">';
-    html+='<div class="adm-card-title" style="margin-bottom:1rem"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Edit update.json</div>';
-    html+='<p style="font-size:.77rem;color:var(--text3);margin-bottom:.9rem;line-height:1.55">Update versi &amp; link download yang tampil di website, tanpa buat release baru. <code>urlZip</code> = archive URL, <code>link</code> = mirror eksternal.</p>';
+    html+='<div class="adm-card-title" style="margin-bottom:1rem">✏️ Edit update.json Manual</div>';
+    html+='<p style="font-size:.77rem;color:var(--text3);margin-bottom:.9rem;line-height:1.55">';
+    html+='Update versi & link yang tampil di website tanpa buat release baru. <code>urlZip</code> = direct download, <code>link</code> = mirror.';
+    html+='</p>';
     html+='<div class="adm-form">';
-    html+='<div class="adm-form-row" style="margin-bottom:.75rem">';
-    html+='<div><div class="adm-label" style="margin-bottom:.32rem">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.4 (Stable)" value="'+esc(curVer)+'"/></div>';
-    html+='<div><div class="adm-label" style="margin-bottom:.32rem">urlZip (Direct)</div><input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/aetherdev01/SnapPerf/releases/download/{tag}/{file.zip}" value="'+esc(curDirect)+'"/></div>';
+    html+='<div class="adm-form-row" style="margin-bottom:.8rem">';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">Versi</div>';
+    html+='<input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.4 (Stable)" value="'+esc(curVer)+'"/></div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">urlZip (Direct Download)</div>';
+    html+='<input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/.../releases/download/…/….zip" value="'+esc(curDirect)+'"/></div>';
     html+='</div>';
     html+='<div class="adm-form-row" style="margin-bottom:.9rem">';
-    html+='<div><div class="adm-label" style="margin-bottom:.32rem">link (Mirror)</div><input class="adm-input" id="rel-mirror" type="text" placeholder="https://safefileku.com/…" value="'+esc(curMirror)+'"/></div>';
-    html+='<div><div class="adm-label" style="margin-bottom:.32rem">URL Changelog</div><input class="adm-input" id="rel-cl2" type="text" placeholder="https://raw.githubusercontent.com/…" value="'+esc(curCl)+'"/></div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">link (Mirror)</div>';
+    html+='<input class="adm-input" id="rel-mirror" type="text" placeholder="https://safefileku.com/…" value="'+esc(curMirror)+'"/></div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.3rem">URL Changelog</div>';
+    html+='<input class="adm-input" id="rel-cl2" type="text" placeholder="https://raw.githubusercontent.com/…" value="'+esc(curCl)+'"/></div>';
     html+='</div>';
-    html+='<div class="adm-actions"><button class="adm-btn adm-btn-primary" id="rel-save"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z" stroke="currentColor" stroke-width="2"/><polyline points="17 21 17 13 7 13 7 21" stroke="currentColor" stroke-width="2"/><polyline points="7 3 7 8 15 8" stroke="currentColor" stroke-width="2"/></svg> Simpan update.json</button></div>';
-    html+='<div class="adm-status" id="rel-st" style="margin-top:.6rem"></div>';
+    html+='<div class="adm-actions">';
+    html+='<button class="adm-btn adm-btn-primary" id="rel-save">💾 Simpan update.json</button>';
+    html+='</div>';
+    html+='<div class="adm-status" id="rel-st" style="margin-top:.65rem"></div>';
     html+='</div></div>';
+
     pg.innerHTML=html;
 
-    // ── Dropzone wiring ───────────────────────────────────────────
+    // ═══ LOGIC ══════════════════════════════════════════════════════
     var selectedFile=null;
-    var dropzoneEl=document.getElementById('nr-dropzone');
-    var fileInputEl=document.getElementById('nr-file');
-    var fileNameEl=document.getElementById('nr-file-name');
 
-    function setFileDisplay(file){
-      selectedFile=file;
-      fileNameEl.textContent='✓ '+file.name+' ('+(file.size/1048576).toFixed(2)+' MB)';
-      fileNameEl.classList.add('visible');
-      // Auto-suggest tag from filename
-      var tagEl=document.getElementById('nr-tag');
-      if(tagEl&&!tagEl.value){
-        var suggested=file.name.replace(/\.zip$/i,'');
-        tagEl.value=suggested;
+    function setStep(n){
+      for(var i=1;i<=3;i++){
+        var s=document.getElementById('step'+i);
+        if(s) s.className='adm-step'+(i<n?' done':i===n?' active':'');
       }
-      setStep(2);
     }
 
-    if(dropzoneEl){
-      dropzoneEl.addEventListener('dragover',function(e){e.preventDefault();dropzoneEl.classList.add('drag-over');});
-      dropzoneEl.addEventListener('dragleave',function(e){if(!dropzoneEl.contains(e.relatedTarget))dropzoneEl.classList.remove('drag-over');});
-      dropzoneEl.addEventListener('drop',function(e){
-        e.preventDefault();dropzoneEl.classList.remove('drag-over');
-        var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
-        if(f){
-          if(!f.name.toLowerCase().endsWith('.zip')){toast('Harus file berformat .zip',false);return;}
-          setFileDisplay(f);
+    // File picker via label
+    var fileInput=document.getElementById('nr-file');
+    var fileLabelText=document.getElementById('nr-filelabel-text');
+    var uploadStatus=document.getElementById('nr-upload-status');
+    var fileLabel=document.getElementById('nr-filelabel');
+
+    if(fileInput){
+      fileInput.addEventListener('change',function(){
+        var f=fileInput.files&&fileInput.files[0];
+        if(!f) return;
+        if(!f.name.toLowerCase().endsWith('.zip')){
+          toast('Harus file berformat .zip',false);
+          fileInput.value='';
+          return;
+        }
+        selectedFile=f;
+        fileLabelText.textContent='📎 '+f.name+' ('+(f.size/1048576).toFixed(2)+' MB)';
+        fileLabel.style.borderColor='var(--accent)';
+        fileLabel.style.color='var(--accent)';
+        if(uploadStatus) uploadStatus.textContent='';
+        setStep(2);
+        // Auto-suggest tag from filename
+        var tagEl=document.getElementById('nr-tag');
+        if(tagEl&&!tagEl.value.trim()){
+          tagEl.value=f.name.replace(/\.zip$/i,'');
         }
       });
     }
-    if(fileInputEl){
-      fileInputEl.addEventListener('change',function(){
-        var f=fileInputEl.files&&fileInputEl.files[0];
-        if(f) setFileDisplay(f);
-      });
-    }
 
-    function setStep(n){for(var i=1;i<=3;i++){var s=document.getElementById('step'+i);if(!s)continue;s.className='adm-step'+(i<n?' done':i===n?' active':'');}}
-
+    // saveUpdateJson
     async function saveUpdateJson(ver,direct,mirror,cl,statusEl){
       if(!ver){toast('Versi wajib diisi',false);return false;}
-      if(!direct&&!mirror){toast('Minimal satu URL wajib diisi',false);return false;}
-      if(statusEl){statusEl.className='adm-status checking';statusEl.textContent='Mengupdate...';}
+      if(!direct&&!mirror){toast('Minimal satu URL download wajib diisi',false);return false;}
+      if(statusEl){statusEl.className='adm-status checking';statusEl.textContent='Menyimpan ke GitHub...';}
       try{
         var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/server/update.json';
-        var getR=await fetch(apiUrl,{headers:ghHeaders()});if(!getR.ok)throw new Error('Gagal ambil file ('+getR.status+')');
-        var gd=await getR.json();var sha=gd.sha;
-        var cur={};try{cur=JSON.parse(atob(gd.content.replace(/\n/g,'')));}catch(e){}
-        var payload={version:ver,versionCode:ver.replace(/\D/g,'').slice(0,8)||'10000',urlZip:direct||'',link:mirror||'',changelog:cl||cur.changelog||''};
+        var getR=await fetch(apiUrl,{headers:ghHeaders()});
+        if(!getR.ok)throw new Error('Gagal baca update.json ('+getR.status+')');
+        var gd=await getR.json();
+        var sha=gd.sha;
+        var cur={};
+        try{cur=JSON.parse(atob(gd.content.replace(/\n/g,'')));}catch(e){}
+        var payload={
+          version:ver,
+          versionCode:ver.replace(/\D/g,'').slice(0,8)||'10000',
+          urlZip:direct||'',
+          zipUrl:direct||'',
+          link:mirror||'',
+          changelog:cl||cur.changelog||''
+        };
         var encoded=btoa(unescape(encodeURIComponent(JSON.stringify(payload,null,2))));
-        var putR=await fetch(apiUrl,{method:'PUT',headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
-          body:JSON.stringify({message:'chore: update version to '+ver+' [skip ci]',content:encoded,sha:sha})});
-        if(!putR.ok)throw new Error('Gagal update ('+putR.status+')');
-        if(statusEl){statusEl.className='adm-status ok';statusEl.textContent='✓ update.json diupdate! Aktif ~30 detik.';}
-        toast('✓ Diupdate ke '+ver,true);return true;
-      }catch(e){if(statusEl){statusEl.className='adm-status err';statusEl.textContent='✗ '+e.message;}toast('✗ '+e.message,false);return false;}
+        var putR=await fetch(apiUrl,{
+          method:'PUT',
+          headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
+          body:JSON.stringify({
+            message:'chore: update version to '+ver+' [skip ci]',
+            content:encoded,
+            sha:sha
+          })
+        });
+        if(!putR.ok)throw new Error('Gagal simpan ('+putR.status+')');
+        if(statusEl){statusEl.className='adm-status ok';statusEl.textContent='✓ update.json disimpan! Aktif ~30 detik.';}
+        toast('✓ '+ver+' diupdate',true);
+        return true;
+      }catch(e){
+        if(statusEl){statusEl.className='adm-status err';statusEl.textContent='✗ '+e.message;}
+        toast('✗ '+e.message,false);
+        return false;
+      }
     }
 
-
-    // Upload via GitHub Release Assets API (browser_download_url)
-
-
-    async function uploadZipAsset(releaseId,file,barEl,barWrap){
-      barWrap.classList.add('visible');
-      var url='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
+    // uploadZipAsset via XHR to GitHub Uploads API
+    function uploadZipAsset(releaseId,file){
       return new Promise(function(resolve,reject){
+        var barEl=document.getElementById('nr-bar');
+        var barWrap=document.getElementById('nr-bar-wrap');
+        if(barWrap) barWrap.classList.add('visible');
+        if(uploadStatus) uploadStatus.textContent='Mengupload...';
+
+        var url='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
         var xhr=new XMLHttpRequest();
         xhr.open('POST',url,true);
         xhr.setRequestHeader('Authorization','Bearer '+spToken);
         xhr.setRequestHeader('Content-Type','application/zip');
         xhr.setRequestHeader('Accept','application/vnd.github+json');
-        xhr.upload.onprogress=function(e){if(e.lengthComputable&&barEl)barEl.style.width=Math.round(e.loaded/e.total*100)+'%';};
-        xhr.onload=function(){
-          if(xhr.status>=200&&xhr.status<300){try{resolve(JSON.parse(xhr.responseText));}catch(ex){resolve({});}}
-          else{var m='Upload gagal: HTTP '+xhr.status;try{var d=JSON.parse(xhr.responseText);m='Upload gagal: '+(d.message||xhr.status);}catch(ex){}reject(new Error(m));}
+
+        xhr.upload.onprogress=function(e){
+          if(e.lengthComputable){
+            var pct=Math.round(e.loaded/e.total*100);
+            if(barEl) barEl.style.width=pct+'%';
+            if(uploadStatus) uploadStatus.textContent='Upload: '+pct+'%';
+          }
         };
-        xhr.onerror=function(){reject(new Error('Network error saat upload ZIP'));};
+
+        xhr.onload=function(){
+          if(xhr.status>=200&&xhr.status<300){
+            var data={};
+            try{data=JSON.parse(xhr.responseText);}catch(ex){}
+            if(uploadStatus) uploadStatus.textContent='✓ Upload selesai';
+            // browser_download_url = https://github.com/{owner}/{repo}/releases/download/{tag}/{filename}
+            resolve(data);
+          }else{
+            var errMsg='Upload gagal: HTTP '+xhr.status;
+            try{
+              var d=JSON.parse(xhr.responseText);
+              errMsg='Upload gagal: '+(d.message||'HTTP '+xhr.status);
+            }catch(ex){}
+            if(uploadStatus) uploadStatus.textContent='✗ '+errMsg;
+            reject(new Error(errMsg));
+          }
+        };
+
+        xhr.onerror=function(){
+          var msg='Network error saat upload';
+          if(uploadStatus) uploadStatus.textContent='✗ '+msg;
+          reject(new Error(msg));
+        };
+
         xhr.send(file);
       });
     }
 
+    // createRelease
     async function createRelease(name,tag,body,isPre){
-      // Sanitize tag: only alphanumeric, dots, dashes, underscores, forward slashes
       var cleanTag=tag.trim().replace(/[^\w\-\.\/]/g,'-').replace(/-{2,}/g,'-').replace(/^[-\.]+|[-\.]+$/g,'');
-      if(!cleanTag)throw new Error('Tag tidak valid. Gunakan hanya huruf/angka/titik/dash, contoh: v1.5.4-stable');
+      if(!cleanTag) throw new Error('Tag tidak valid, contoh: v1.5.4-stable');
       var res=await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/releases',{
         method:'POST',
         headers:Object.assign({'Content-Type':'application/json'},ghHeaders()),
@@ -1181,14 +1278,16 @@ async function renderReleases(){
       return await res.json();
     }
 
+    // deleteRelease
     async function deleteRelease(releaseId,tag){
       var res=await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId,{method:'DELETE',headers:ghHeaders()});
-      if(!res.ok&&res.status!==404)throw new Error('Gagal hapus release: HTTP '+res.status);
+      if(!res.ok&&res.status!==404) throw new Error('Gagal hapus release: HTTP '+res.status);
       try{
         await fetch('https://api.github.com/repos/'+SP_GH_REPO+'/git/refs/tags/'+encodeURIComponent(tag),{method:'DELETE',headers:ghHeaders()});
       }catch(e){}
     }
 
+    // submitNewRelease
     async function submitNewRelease(jsonOnly){
       var name=(document.getElementById('nr-name').value||'').trim();
       var tag=(document.getElementById('nr-tag').value||'').trim();
@@ -1198,112 +1297,140 @@ async function renderReleases(){
       var cl=(document.getElementById('nr-cl').value||'').trim();
       var isPre=document.getElementById('nr-prerelease').checked;
       var st=document.getElementById('nr-st');
-      var barEl=document.getElementById('nr-bar');
-      var barWrap=document.getElementById('nr-bar-wrap');
-      if(!tag){toast('Tag wajib diisi',false);return;}
+
+      if(!tag){toast('Tag versi wajib diisi',false);return;}
       if(!jsonOnly&&!name){toast('Nama Rilis wajib diisi',false);return;}
-      // file upload is optional if direct link is already provided
+
       if(st){st.className='adm-status checking';st.textContent='Memproses...';}
       setStep(3);
+
       if(!jsonOnly){
         try{
-          if(st)st.textContent='Membuat GitHub Release...';
-          // Include mirror in release body for per-release tracking
+          // Build description (include mirror for per-release tracking)
           var fullDesc=desc;
           if(mirror) fullDesc=(desc?desc+'\n\n':'')+'[mirror]: '+mirror;
+
+          if(st) st.textContent='① Membuat GitHub Release...';
           var relData=await createRelease(name,tag,fullDesc,isPre);
-          if(st)st.textContent='✓ Release dibuat.';
-          // Upload ZIP if selected
+          var createdTag=relData.tag_name||tag; // use actual tag from GitHub response
+
+          if(st) st.textContent='✓ Release dibuat (tag: '+createdTag+')';
+
+          // Upload ZIP file
           if(selectedFile){
-            if(st)st.textContent='Mengupload file .zip...';
+            if(st) st.textContent='② Mengupload '+selectedFile.name+'...';
             try{
-              var asset=await uploadZipAsset(relData.id,selectedFile,barEl,barWrap);
-              if(asset.browser_download_url){
-                direct=asset.browser_download_url;
+              var asset=await uploadZipAsset(relData.id,selectedFile);
+              // browser_download_url = https://github.com/{owner}/{repo}/releases/download/{tag}/{filename}
+              var uploadedUrl=asset.browser_download_url||'';
+              if(uploadedUrl){
+                direct=uploadedUrl; // ← THIS is the correct URL
                 var diEl=document.getElementById('nr-direct');
-                if(diEl){
-                  diEl.value=direct;
-                  diEl.removeAttribute('readonly');
-                  diEl.style.opacity='1';
-                  diEl.style.cursor='text';
-                }
+                if(diEl) diEl.value=direct;
+                if(st) st.textContent='✓ Upload selesai: '+uploadedUrl;
+              }else{
+                toast('⚠ File terupload tapi URL tidak ditemukan, cek GitHub.',false);
               }
-              if(st)st.textContent='✓ ZIP diupload!';
             }catch(upErr){
-              toast('⚠ Upload ZIP gagal: '+upErr.message+'. Menggunakan archive URL.',false);
+              toast('⚠ Upload gagal: '+upErr.message,false);
+              if(st){st.className='adm-status err';st.textContent='✗ Upload gagal: '+upErr.message;}
+              return; // Stop — don't save wrong URL
             }
           }
-          // No automatic fallback - direct link must come from file upload or manual input
-          // If still no direct link after upload, warn user
+
           if(!direct){
-            toast('⚠ Tidak ada direct link. Isi manual atau upload file .zip.',false);
+            toast('⚠ Direct link kosong. Upload file .zip atau isi manual.',false);
+            if(st){st.className='adm-status err';st.textContent='✗ Tidak ada direct link';}
+            return;
           }
+
         }catch(e){
           if(st){st.className='adm-status err';st.textContent='✗ '+e.message;}
-          toast('✗ '+e.message,false);setStep(1);return;
+          toast('✗ '+e.message,false);
+          setStep(1);
+          return;
         }
       }
+
+      // Save to update.json
       var ver=name||tag;
+      if(st) st.textContent='③ Menyimpan update.json...';
       var ok=await saveUpdateJson(ver,direct,mirror,cl,jsonOnly?st:null);
       if(ok||jsonOnly){
-        if(st){st.className='adm-status ok';st.textContent=jsonOnly?'✓ JSON diupdate!':'✓ Release dipublish & JSON terupdate!';}
-        selectedFile=null;setStep(1);
-        var fn=document.getElementById('nr-file-name');if(fn)fn.classList.remove('visible');
-        var bw=document.getElementById('nr-bar-wrap');if(bw){bw.classList.remove('visible');var bb=bw.querySelector('.adm-upload-bar');if(bb)bb.style.width='0';}
+        if(st){st.className='adm-status ok';st.textContent=jsonOnly?'✓ update.json diupdate!':'✓ Release dipublish! Direct: '+direct;}
+        selectedFile=null;
+        setStep(1);
+        if(fileLabelText) fileLabelText.textContent='Pilih File .zip…';
+        if(fileLabel){fileLabel.style.borderColor='';fileLabel.style.color='';}
+        if(fileInput) fileInput.value='';
+        var bw=document.getElementById('nr-bar-wrap');if(bw) bw.classList.remove('visible');
+        var bb=document.getElementById('nr-bar');if(bb) bb.style.width='0';
+        if(uploadStatus) uploadStatus.textContent='';
         setTimeout(function(){renderReleases();},1500);
       }
     }
 
+    // Wire buttons
     document.getElementById('nr-submit').addEventListener('click',function(){submitNewRelease(false);});
     document.getElementById('nr-only-json').addEventListener('click',function(){submitNewRelease(true);});
     document.getElementById('nr-reset').addEventListener('click',function(){
-      ['nr-name','nr-tag','nr-desc','nr-direct','nr-mirror'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+      ['nr-name','nr-tag','nr-desc','nr-direct','nr-mirror','nr-cl'].forEach(function(id){
+        var el=document.getElementById(id);if(el) el.value='';
+      });
       selectedFile=null;
-      if(fileNameEl)fileNameEl.classList.remove('visible');
-      if(fileInputEl)fileInputEl.value='';
-      var bw=document.getElementById('nr-bar-wrap');if(bw)bw.classList.remove('visible');
-      var bb=document.getElementById('nr-bar');if(bb)bb.style.width='0';
+      if(fileLabelText) fileLabelText.textContent='Pilih File .zip…';
+      if(fileLabel){fileLabel.style.borderColor='';fileLabel.style.color='';}
+      if(fileInput) fileInput.value='';
+      var bw=document.getElementById('nr-bar-wrap');if(bw) bw.classList.remove('visible');
+      var bb=document.getElementById('nr-bar');if(bb) bb.style.width='0';
+      if(uploadStatus) uploadStatus.textContent='';
       var st=document.getElementById('nr-st');if(st){st.className='adm-status';st.textContent='';}
       setStep(1);
     });
+
     document.getElementById('rel-save').addEventListener('click',async function(){
       await saveUpdateJson(
         document.getElementById('rel-ver').value.trim(),
         document.getElementById('rel-direct').value.trim(),
         document.getElementById('rel-mirror').value.trim(),
         document.getElementById('rel-cl2').value.trim(),
-        document.getElementById('rel-st'));
+        document.getElementById('rel-st')
+      );
     });
+
+    // Fill form from existing release
     pg.querySelectorAll('.adm-fill-release').forEach(function(btn){
       btn.addEventListener('click',function(){
         document.getElementById('nr-tag').value=btn.dataset.tag||'';
         document.getElementById('nr-name').value=btn.dataset.name||'';
         document.getElementById('nr-prerelease').checked=btn.dataset.pre==='true';
-        // Fill direct link from first ZIP asset URL
         var dlUrl=btn.dataset.dlurl||'';
-        if(dlUrl){
-          var diEl=document.getElementById('nr-direct');
-          if(diEl){diEl.value=dlUrl;diEl.removeAttribute('readonly');diEl.style.opacity='1';diEl.style.cursor='text';}
-        }
-        // Fill mirror from release body [mirror]: URL
-        var mirrorUrl=btn.dataset.mirror||'';
-        if(mirrorUrl){var mirEl=document.getElementById('nr-mirror');if(mirEl)mirEl.value=mirrorUrl;}
-        document.getElementById('nr-tag').scrollIntoView({behavior:'smooth',block:'center'});
-        toast('Form diisi dari: '+btn.dataset.tag,true);
+        var diEl=document.getElementById('nr-direct');
+        if(diEl) diEl.value=dlUrl;
+        var mirEl=document.getElementById('nr-mirror');
+        if(mirEl) mirEl.value=btn.dataset.mirror||'';
+        document.getElementById('nr-name').scrollIntoView({behavior:'smooth',block:'center'});
+        toast('Form diisi dari: '+btn.dataset.tag+(dlUrl?' | Direct: '+dlUrl.split('/').pop():''),true);
       });
     });
+
+    // Delete release
     pg.querySelectorAll('.adm-del-release').forEach(function(btn){
       btn.addEventListener('click',async function(){
         var relId=btn.dataset.id,relTag=btn.dataset.tag;
-        if(!confirm('Hapus release "'+relTag+'"?\nIni menghapus release + tag dari GitHub. Tidak bisa dibatalkan!')){return;}
+        if(!confirm('Hapus release "'+relTag+'"?\nTidak bisa dibatalkan!')){return;}
         btn.disabled=true;btn.textContent='...';
         try{
           await deleteRelease(relId,relTag);
           toast('✓ Release '+relTag+' dihapus',true);
           setTimeout(function(){renderReleases();},600);
-        }catch(e){btn.disabled=false;btn.textContent='Hapus';toast('✗ '+e.message,false);}
+        }catch(e){
+          btn.disabled=false;btn.textContent='🗑';
+          toast('✗ '+e.message,false);
+        }
       });
     });
+
   }catch(e){
     pg.innerHTML='<div class="adm-err">Gagal memuat rilis: '+esc(e.message||'')+'</div>';
   }
