@@ -34,19 +34,25 @@
 
   function buildCard(release,idx){
     var ver=parseVersion(release.tag_name||''),types=getReleaseTypes(release),badges=getBadges(types),tagsAttr=types.join(' ');
-    var date=formatDate(release.published_at),title=esc(release.name||('SnapPerf '+ver));
+    var title=esc(release.name||('SnapPerf '+ver));
     var dlUrl=getDownloadUrl(release),ghUrl=esc(release.html_url||'https://github.com/aetherdev01/SnapPerf/releases');
     var changeItems=parseChangelog(release.body),delay=(idx*0.045).toFixed(2),popId='pop-gh-'+idx;
     var assets=release.assets||[],zipAsset=null;
     for(var i=0;i<assets.length;i++){if(assets[i].name&&assets[i].name.endsWith('.zip')){zipAsset=assets[i];break;}}
+    // Use asset fields: size, download_count, created_at (upload time), updated_at (if updated), browser_download_url
     var fileSize=zipAsset?formatSize(zipAsset.size):null;
-    var dlCount=getTotalDownloads(assets),dlCountStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount+''):null;
+    var dlCount=zipAsset?(zipAsset.download_count||0):getTotalDownloads(assets);
+    var dlCountStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount+''):null;
+    var uploadDate=zipAsset?formatDate(zipAsset.created_at):formatDate(release.published_at);
+    var updatedDate=zipAsset&&zipAsset.updated_at&&zipAsset.updated_at!==zipAsset.created_at?formatDate(zipAsset.updated_at):null;
     var metaHTML='<div class="post-meta">';
-    // Date
-    metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+date+'</span></span>';
-    // File size inline
+    // Upload date (asset created_at)
+    metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+uploadDate+'</span></span>';
+    // Updated date (asset updated_at) if different from created_at
+    if(updatedDate)metaHTML+='<span class="post-meta-item" style="color:var(--accent2)" title="Updated"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M23 4v6h-6M1 20v-6h6M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+updatedDate+'</span></span>';
+    // File size (asset size)
     if(fileSize)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>'+fileSize+'</span></span>';
-    // Download count inline with accent color
+    // Download count (asset download_count)
     if(dlCountStr)metaHTML+='<span class="post-meta-item" style="color:var(--accent3)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span style="font-weight:700">'+dlCountStr+'</span></span>';
     metaHTML+='</div>';
     var changeHTML='';
