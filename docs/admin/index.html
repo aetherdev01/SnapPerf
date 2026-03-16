@@ -1221,6 +1221,7 @@ async function renderReleases(){
         xhr.setRequestHeader('Authorization','Bearer '+spToken);
         xhr.setRequestHeader('Content-Type','application/zip');
         xhr.setRequestHeader('Accept','application/vnd.github+json');
+        xhr.setRequestHeader('X-GitHub-Api-Version','2022-11-28');
 
         xhr.upload.onprogress=function(e){
           if(e.lengthComputable){
@@ -1366,6 +1367,8 @@ async function renderReleases(){
         var bw=document.getElementById('nr-bar-wrap');if(bw) bw.classList.remove('visible');
         var bb=document.getElementById('nr-bar');if(bb) bb.style.width='0';
         if(uploadStatus) uploadStatus.textContent='';
+        // Clear release cache so new asset shows in archive
+        try{sessionStorage.removeItem('sp_releases_v2');sessionStorage.removeItem('sp_releases_ts_v2');localStorage.removeItem('sp_releases_v2');localStorage.removeItem('sp_releases_ts_v2');}catch(e){}
         setTimeout(function(){renderReleases();},1500);
       }
     }
