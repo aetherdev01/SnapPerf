@@ -1,274 +1,313 @@
-<!DOCTYPE html><html lang="id" data-theme="light"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Updates – SnapPerf</title><meta name="description" content="SnapPerf release history and changelogs."/><meta name="author" content="AetherDev"/><meta name="robots" content="index,follow"/><meta property="og:title" content="Updates – SnapPerf"/><meta property="og:image" content="assets/banner.webp"/><meta http-equiv="X-Content-Type-Options" content="nosniff"/><meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/><meta http-equiv="X-Frame-Options" content="DENY"/><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://raw.githubusercontent.com https://api.github.com https://api.mymemory.translated.net https://*.supabase.co https://api.emailjs.com; frame-ancestors 'none'; base-uri 'self'"/><link rel="canonical" href="https://aetherdev01.github.io/SnapPerf/updates"/>
-<link rel="icon" href="assets/aether.webp" type="image/webp"/><link rel="stylesheet" href="css/style.css"/><link rel="stylesheet" href="css/animations.css" media="print" onload="this.media='all'"/><noscript><link rel="stylesheet" href="css/animations.css"/></noscript><script>(function(){var th=localStorage.getItem('sp-theme')||'light';document.documentElement.setAttribute('data-theme',th);var co=navigator.hardwareConcurrency||4,m=navigator.deviceMemory||4,mob=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);if((co<=4||m<=2)&&mob)document.documentElement.classList.add('perf-low');})()</script></head><body><nav class="navbar" id="navbar"><div class="nav-pill"><a href="index.html" class="nav-logo"><img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/><span>SnapPerf</span></a><div class="nav-links"><a href="index.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a><a href="updates.html" class="nav-link active ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a><a href="about.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a></div><div class="nav-right"><button class="lang-btn ripple-btn" id="langToggle" aria-label="Switch language"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><span id="langLabel">ID</span></button><button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme"><svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button><button class="hamburger ripple-btn" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button></div></div></nav><div class="mobile-menu" id="mobileMenu"><a href="index.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a><a href="updates.html" class="mob-link active ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a><a href="about.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a><div class="mob-sep"></div><button class="mob-lang-btn ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg><span class="mob-lang-label">Switch to English</span></button></div><div class="page-hero"><div class="blob blob-1" style="opacity:.35;top:-10%;left:-5%"></div><div class="blob blob-2" style="opacity:.25;top:5%;right:-5%"></div><div class="page-hero-content reveal"><span class="badge badge-blue" data-i18n="updates.badge">Rilis Terbaru</span><h1 data-i18n="updates.h1">Pembaruan &amp; Rilis</h1><p data-i18n="updates.sub">Changelog, catatan rilis, dan histori pembaruan.</p></div></div><section class="section"><div class="container"><div class="updates-controls reveal"><div class="filter-row"><button class="filter-btn active ripple-btn" data-filter="all" data-i18n="filter.all">Semua</button><button class="filter-btn ripple-btn" data-filter="stable" data-i18n="filter.stable">Stabil</button><button class="filter-btn ripple-btn" data-filter="fix" data-i18n="filter.fix">Perbaikan</button><button class="filter-btn ripple-btn" data-filter="beta" data-i18n="filter.beta">Beta</button></div><div class="search-row"><div class="search-box"><svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><input type="search" id="postSearch" placeholder="Cari rilis…" data-i18n-placeholder="search.placeholder" autocomplete="off" spellcheck="false"/></div></div></div>  <div id="releasesContainer"><div class="releases-loading" id="releasesLoading"><div class="spin"></div><span>Loading…</span></div><div class="posts-grid" id="releasesGrid" style="display:none"></div><div class="releases-empty" id="releasesEmpty" style="display:none">No releases found.</div><div class="releases-error" id="releasesError" style="display:none"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:middle;margin-right:.4rem"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Could not load releases. <a href="https://github.com/aetherdev01/SnapPerf/releases" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">View on GitHub</a></div></div><div style="margin-top:1rem"><article class="post-card reveal" data-tags="fix" style="max-width:360px"><div class="post-card-inner"><div class="post-header"><div class="post-badges"><span class="badge badge-green">Bug Report</span></div></div><h2 class="post-title">Bug Reports &amp; Known Issues</h2><p class="post-body">Found a bug? Report it on Telegram. Include your device model, Snapdragon variant, Android version, and a logcat if possible.</p><div class="post-footer"><a href="https://t.me/AetherDev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="13" height="13" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Report via Telegram </a></div></div></article></div></div></section><footer class="footer"><div class="container"><div class="footer-bottom-only"><div class="footer-logo-row"><img src="assets/aether.webp" width="18" height="18" style="border-radius:50%;object-fit:cover;" alt="SnapPerf"/><span class="footer-brand-name">SnapPerf</span></div><span class="footer-copy-txt" data-i18n="footer.copy">&copy; 2026 AetherDev</span></div></div></footer><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<!DOCTYPE html><html lang="en" data-theme="light"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Updates – SnapPerf</title>
+<meta name="description" content="SnapPerf release history and changelogs."/>
+<meta name="author" content="AetherDev"/><meta name="robots" content="noindex,nofollow"/>
+<meta property="og:title" content="Updates – SnapPerf"/><meta property="og:image" content="assets/banner.webp"/>
+<meta http-equiv="X-Content-Type-Options" content="nosniff"/>
+<meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
+<meta http-equiv="X-Frame-Options" content="DENY"/>
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://raw.githubusercontent.com https://api.github.com; frame-ancestors 'none'; base-uri 'self'"/>
+<link rel="icon" href="assets/aether.webp" type="image/webp"/>
+<link rel="stylesheet" href="css/style.css"/>
+<link rel="stylesheet" href="css/animations.css"/>
+</head>
+<body class="page-transitioning">
+
+<nav class="navbar" id="navbar">
+  <div class="nav-pill">
+    <a href="index.html" class="nav-logo">
+      <img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/>
+      <span>SnapPerf</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a>
+      <a href="updates.html" class="nav-link active ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a>
+      <a href="about.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a>
+    </div>
+    <div class="nav-right">
+      <button class="lang-btn ripple-btn" id="langToggle" aria-label="Switch language">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        <span id="langLabel">ID</span>
+      </button>
+      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="mobile-menu" id="mobileMenu">
+  <a href="index.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a>
+  <a href="updates.html" class="mob-link active ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a>
+  <a href="about.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a>
+  <div class="mob-sep"></div>
+  <button class="mob-lang-btn ripple-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    <span class="mob-lang-label">Switch to English</span>
+  </button>
+</div>
+
+<div class="page-hero">
+  <div class="blob blob-1" style="opacity:.35;top:-10%;left:-5%"></div>
+  <div class="blob blob-2" style="opacity:.25;top:5%;right:-5%"></div>
+  <div class="page-hero-content reveal">
+    <span class="badge badge-blue" data-i18n="updates.badge">Rilis Terbaru</span>
+    <h1 data-i18n="updates.h1">Pembaruan &amp; Rilis</h1>
+    <p data-i18n="updates.sub">Changelog, catatan rilis, dan histori pembaruan.</p>
+  </div>
+</div>
+
+<section class="section">
+  <div class="container">
+    <div class="updates-controls reveal">
+      <div class="filter-row">
+        <button class="filter-btn active ripple-btn" data-filter="all" data-i18n="filter.all">Semua</button>
+        <button class="filter-btn ripple-btn" data-filter="stable" data-i18n="filter.stable">Stabil</button>
+        <button class="filter-btn ripple-btn" data-filter="fix" data-i18n="filter.fix">Perbaikan</button>
+        <button class="filter-btn ripple-btn" data-filter="beta" data-i18n="filter.beta">Beta</button>
+      </div>
+      <div class="search-row">
+        <div class="search-box">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          <input type="search" id="postSearch" placeholder="Cari rilis…" data-i18n-placeholder="search.placeholder" autocomplete="off" spellcheck="false"/>
+        </div>
+      </div>
+    </div>
+    <div id="releasesContainer">
+      <div class="releases-loading" id="releasesLoading"><div class="spin"></div><span>Loading…</span></div>
+      <div class="posts-grid" id="releasesGrid" style="display:none"></div>
+      <div class="releases-empty" id="releasesEmpty" style="display:none">No releases found.</div>
+      <div class="releases-error" id="releasesError" style="display:none">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="display:inline-block;vertical-align:middle;margin-right:.4rem"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        Could not load releases. <a href="https://github.com/aetherdev22/snapperf/releases" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">View on GitHub</a>
+      </div>
+    </div>
+    <div style="margin-top:1rem">
+      <article class="post-card reveal" data-tags="fix" style="max-width:360px">
+        <div class="post-card-inner">
+          <div class="post-header">
+            <div class="post-badges"><span class="badge badge-red">Bug Report</span></div>
+          </div>
+          <h2 class="post-title">Bug Reports &amp; Known Issues</h2>
+          <p class="post-body">Found a bug? Report it on Telegram. Include your device model, Snapdragon variant, Android version, and a logcat if possible.</p>
+          <div class="post-footer">
+            <a href="https://t.me/AetherDev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg>
+              Report via Telegram
+            </a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-bottom-only">
+      <div class="footer-logo-row">
+        <img src="assets/aether.webp" width="18" height="18" style="border-radius:50%;object-fit:cover;" alt="SnapPerf"/>
+        <span class="footer-brand-name">SnapPerf</span>
+      </div>
+      <span class="footer-copy-txt" data-i18n="footer.copy">&copy; 2026 AetherDev. Semua hak dilindungi.</span>
+    </div>
+  </div>
+</footer>
+
 <script src="js/main.js"></script>
-<script src="js/comments.js"></script>
 <script>
 (function(){
-  function getCurLang(){return(window.SP_TRANSLATE&&window.SP_TRANSLATE.getLang)?window.SP_TRANSLATE.getLang():(localStorage.getItem('sp-lang')||'id');}
-  var COLORS=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
-  window._SP_REPO='aetherdev01/SnapPerf';
-  function esc(s){return window.escHTML?window.escHTML(s):String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
-  function parseVersion(tag){var m=tag.match(/v?([\d]+(?:\.[\d]+)*)/i);return m?'v'+m[1]:tag;}
-  function getReleaseTypes(r){var tag=(r.tag_name||'').toLowerCase(),name=(r.name||'').toLowerCase(),body=(r.body||'').toLowerCase(),types=[];if(r.prerelease||tag.includes('beta')||tag.includes('alpha')||tag.includes('-rc')||name.includes('beta'))types.push('beta');if(tag.includes('fix')||tag.includes('hotfix')||tag.includes('patch')||name.includes('fix')||body.startsWith('fix'))types.push('fix');if(tag.includes('stable')||name.includes('stable'))types.push('stable');if(!types.length)types.push('stable');return types;}
-  function getBadges(types){var map={stable:'<span class="badge badge-green">Stable</span>',fix:'<span class="badge badge-red">Fix</span>',beta:'<span class="badge badge-orange">Beta</span>'};return types.map(function(t){return map[t]||'';}).join('');}
-  function formatDate(iso){try{return new Date(iso).toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});}catch(e){return iso||'';}}
-  function parseChangelog(body){if(!body)return[];var items=[],i=0;body.split('\n').forEach(function(line){var m=line.match(/^[-*]\s+(.+)/);if(m){items.push({text:esc(m[1].trim()),color:COLORS[i%COLORS.length]});i++;}});return items;}
-  function getDownloadUrl(r){
-    // Prioritas 1: asset .zip
-    var assets=r.assets||[];
-    for(var i=0;i<assets.length;i++){
-      if(assets[i].browser_download_url&&assets[i].name&&assets[i].name.toLowerCase().endsWith('.zip'))
-        return assets[i].browser_download_url;
-    }
-    // Prioritas 2: asset apapun (jpg, apk, dll) - pakai yg pertama
-    for(var i=0;i<assets.length;i++){
-      if(assets[i].browser_download_url)
-        return assets[i].browser_download_url;
-    }
-    // Fallback: kosongkan (jangan pakai zipball_url = source code)
-    return '';
-  }
-  function formatSize(bytes){if(!bytes)return null;if(bytes>=1048576)return(bytes/1048576).toFixed(1)+' MB';if(bytes>=1024)return Math.round(bytes/1024)+' KB';return bytes+' B';}
-  function getTotalDownloads(assets){return(assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);}
+ var COLORS=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
+ function esc(s){return window.escHTML?window.escHTML(s):String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ function parseVersion(tag){
+ var m=tag.match(/v?([\d]+(?:\.[\d]+)*)/i);
+ return m?'v'+m[1]:tag;
+ }
+ function getReleaseTypes(release){
+ var tag=(release.tag_name||'').toLowerCase();
+ var name=(release.name||'').toLowerCase();
+ var body=(release.body||'').toLowerCase();
+ var types=[];
+ if(release.prerelease||tag.includes('beta')||tag.includes('alpha')||tag.includes('-rc')||name.includes('beta'))types.push('beta');
+ if(tag.includes('fix')||tag.includes('hotfix')||tag.includes('patch')||name.includes('fix')||body.startsWith('fix'))types.push('fix');
+ if(tag.includes('stable')||name.includes('stable'))types.push('stable');
+ if(!types.length)types.push('stable');
+ return types;
+ }
+ function getBadges(types){
+ var map={stable:'<span class="badge badge-green">Stable</span>',fix:'<span class="badge badge-red">Fix</span>',beta:'<span class="badge badge-orange">Beta</span>'};
+ return types.map(function(t){return map[t]||'';}).join('');
+ }
+ function formatDate(iso){
+ try{
+ var d=new Date(iso);
+ return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+ }catch(e){return iso||'';}
+ }
+ function parseChangelog(body){
+ if(!body)return[];
+ var lines=body.split('\n');
+ var items=[];
+ var i=0;
+ for(var l=0;l<lines.length;l++){
+ var m=lines[l].match(/^[-*]\s+(.+)/);
+ if(m){items.push({text:esc(m[1].trim()),color:COLORS[i%COLORS.length]});i++;}
+ }
+ return items;
+ }
+ function getDownloadUrl(release){
+ var assets=release.assets||[];
+ for(var i=0;i<assets.length;i++){
+ var a=assets[i];
+ if(a.browser_download_url&&a.name&&a.name.endsWith('.zip'))return a.browser_download_url;
+ }
+ return release.zipball_url||'';
+ }
+ function formatSize(bytes){
+ if(!bytes)return null;
+ if(bytes>=1048576)return(bytes/1048576).toFixed(1)+' MB';
+ if(bytes>=1024)return Math.round(bytes/1024)+' KB';
+ return bytes+' B';
+ }
+ function getTotalDownloads(assets){
+ return(assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);
+ }
+ function buildCard(release,idx){
+ var ver=parseVersion(release.tag_name||'');
+ var types=getReleaseTypes(release);
+ var badges=getBadges(types);
+ var tagsAttr=types.join(' ');
+ var date=formatDate(release.published_at);
+ var title=esc(release.name||('SnapPerf '+ver));
+ var dlUrl=getDownloadUrl(release);
+ var ghUrl=esc(release.html_url||'https://github.com/aetherdev22/snapperf/releases');
+ var changeItems=parseChangelog(release.body);
+ var delay=(idx*0.05).toFixed(2);
+ var popId='pop-gh-'+idx;
 
-  function buildCard(release,idx){
-    var ver=parseVersion(release.tag_name||''),types=getReleaseTypes(release),badges=getBadges(types),tagsAttr=types.join(' ');
-    var date=formatDate(release.published_at),title=esc(release.name||('SnapPerf '+ver));
-    var dlUrl=getDownloadUrl(release),ghUrl=esc(release.html_url||'https://github.com/aetherdev01/SnapPerf/releases');
-    var changeItems=parseChangelog(release.body),delay=(idx*0.045).toFixed(2),popId='pop-gh-'+idx;
-    var assets=release.assets||[],zipAsset=null;
-    for(var i=0;i<assets.length;i++){if(assets[i].name&&assets[i].name.endsWith('.zip')){zipAsset=assets[i];break;}}
-    var fileSize=zipAsset?formatSize(zipAsset.size):null;
-    var dlCount=getTotalDownloads(assets),dlCountStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount+''):null;
-    var metaHTML='<div class="post-meta">';
-    // Date
-    metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+date+'</span></span>';
-    // File size inline
-    if(fileSize)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>'+fileSize+'</span></span>';
-    // Download count inline with accent color
-    if(dlCountStr)metaHTML+='<span class="post-meta-item" style="color:var(--accent3)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span style="font-weight:700">'+dlCountStr+'</span></span>';
-    metaHTML+='</div>';
-    var changeHTML='';
-    if(changeItems.length){changeHTML='<ul class="post-changes">';var showMax=Math.min(changeItems.length,6);for(var i=0;i<showMax;i++)changeHTML+='<li><span class="cl-dot" style="background:'+changeItems[i].color+'"></span>'+changeItems[i].text+'</li>';if(changeItems.length>showMax)changeHTML+='<li class="post-changes-more">+'+(changeItems.length-showMax)+(getCurLang()==='id'?' perubahan lagi':' more changes')+'</li>';changeHTML+='</ul>';}
-    // Mirror per-release: parse dari body (support 2 format: HTML comment dan plaintext)
-    var _bodyStr=release.body||'';
-    // Format 1: <!-- [mirror]: URL --> (HTML comment, tidak tampil di GitHub UI)
-    var _mirrorMatch=_bodyStr.match(/<!--\s*\[mirror\]:\s*(https?:\/\/[^\s>]+)\s*-->/i);
-    // Format 2: [mirror]: URL (plaintext legacy)
-    if(!_mirrorMatch) _mirrorMatch=_bodyStr.match(/\[mirror\]:\s*(https?:\/\/[^\s\n]+)/i);
-    var mirrorUrl=_mirrorMatch?_mirrorMatch[1].trim():'';
-    var dlBtnHTML='';
-    if(dlUrl){
-      dlBtnHTML+='<a href="'+esc(dlUrl)+'" class="btn btn-dl btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>';
-    }
-    if(mirrorUrl){
-      dlBtnHTML+='<a href="'+esc(mirrorUrl)+'" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer" title="Mirror link"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6M15 3h6v6M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Mirror</a>';
-    }
-    var engageHTML=window.spBuildEngage?window.spBuildEngage(release.tag_name||ver):'';
-    return '<article class="post-card reveal" data-tags="'+tagsAttr+'" style="animation-delay:'+delay+'s"><div class="post-card-inner"><div class="post-header"><div class="post-badges"><span class="badge badge-blue">'+esc(ver)+'</span>'+badges+'</div><div class="post-dots" data-popup="'+popId+'"><button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button><div class="popup-menu" id="'+popId+'">'+(dlUrl?'<a href="'+esc(dlUrl)+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Download</a>':'')+'<a href="'+ghUrl+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a><a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Telegram</a></div></div></div><h2 class="post-title">'+title+'</h2>'+metaHTML+changeHTML+'<div class="post-footer">'+dlBtnHTML+'<a href="'+ghUrl+'" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a></div></div>'+engageHTML+'</article>';
-  }
+ // meta info
+ var assets=release.assets||[];
+ var zipAsset=null;
+ for(var i=0;i<assets.length;i++){if(assets[i].name&&assets[i].name.endsWith('.zip')){zipAsset=assets[i];break;}}
+ var fileSize=zipAsset?formatSize(zipAsset.size):null;
+ var dlCount=getTotalDownloads(assets);
+ var dlCountStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount+''):null;
 
-  function reinitGrid(grid){
-    var obs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});},{threshold:.06,rootMargin:'0px 0px -24px 0px'});
-    grid.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
-    grid.querySelectorAll('.post-dots').forEach(function(wrapper){
-      var btn=wrapper.querySelector('.dots-btn'),pid=wrapper.dataset.popup,popup=document.getElementById(pid);
-      if(!btn||!popup)return;
-      btn.addEventListener('click',function(e){
-        e.stopPropagation();
-        var isOpen=popup.classList.contains('open');
-        document.querySelectorAll('.popup-menu.open').forEach(function(p){p.classList.remove('open');p.classList.add('close');p.addEventListener('animationend',function(){p.classList.remove('close');p.style.display='';},{once:true});});
-        if(!isOpen){popup.style.display='flex';popup.classList.remove('close');requestAnimationFrame(function(){popup.classList.add('open');});}
-      });
-    });
-    var si=document.getElementById('postSearch');
-    if(si&&!si._wired){si._wired=true;si.addEventListener('input',function(){if(window.applyFilters)window.applyFilters();});}
-    if(window.spUpdateAllBars)window.spUpdateAllBars();
-  }
+ // meta strip HTML
+ var metaHTML='<div class="post-meta">';
+ metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+date+'</span></span>';
+ if(fileSize)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+fileSize+'</span></span>';
+ if(dlCountStr)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+dlCountStr+' downloads</span></span>';
+ metaHTML+='</div>';
 
-  function showError(loading,errEl){loading.style.display='none';errEl.style.display='flex';errEl.style.flexDirection='column';errEl.style.gap='.6rem';}
+ // changelog HTML — show all, no cap
+ var changeHTML='';
+ if(changeItems.length){
+ changeHTML='<ul class="post-changes">';
+ var showMax=Math.min(changeItems.length,6);
+ for(var i=0;i<showMax;i++){
+ changeHTML+='<li><span class="cl-dot" style="background:'+changeItems[i].color+'"></span>'+changeItems[i].text+'</li>';
+ }
+ if(changeItems.length>showMax)changeHTML+='<li class="post-changes-more">+' +(changeItems.length-showMax)+' more changes</li>';
+ changeHTML+='</ul>';
+ }
 
-  async function loadReleases(){
-    var loading=document.getElementById('releasesLoading');
-    var grid=document.getElementById('releasesGrid');
-    var empty=document.getElementById('releasesEmpty');
-    var errEl=document.getElementById('releasesError');
-    if(!loading||!grid||!empty||!errEl)return;
+ var dlBtnHTML='';
+ if(dlUrl){
+ dlBtnHTML='<a href="'+esc(dlUrl)+'" class="btn btn-dl btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>';
+ }
 
-    loading.style.display='flex';
-    grid.style.display='none';
-    empty.style.display='none';
-    errEl.style.display='none';
-
-    // Cache keys
-    var CACHE_KEY='sp_releases_v2';
-    var CACHE_TS='sp_releases_ts_v2';
-    var CACHE_ETAG='sp_releases_etag_v2';
-    var CACHE_TTL=30*60*1000; // 30 min
-
-    function showReleases(releases){
-      if(!releases||!releases.length){
-        loading.style.display='none';
-        empty.style.display='block';
-        return;
-      }
-      var html='';
-      for(var i=0;i<releases.length;i++) html+=buildCard(releases[i],i);
-      grid.innerHTML=html;
-      loading.style.display='none';
-      grid.style.display='';
-      reinitGrid(grid);
-    }
-
-    function showError(msg){
-      loading.style.display='none';
-      errEl.style.display='flex';
-      errEl.style.flexDirection='column';
-      errEl.style.gap='.6rem';
-      errEl.innerHTML='<div style="display:flex;flex-direction:column;gap:.7rem;align-items:flex-start">'
-        +'<span style="font-weight:700;color:var(--text)">'+(msg||'Gagal memuat rilis')+'</span>'
-        +'<a href="https://github.com/aetherdev01/SnapPerf/releases" target="_blank" rel="noopener noreferrer" class="btn btn-ghost btn-sm">'
-        +'<svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>'
-        +' Lihat di GitHub</a></div>';
-    }
-
-    // Check local cache first
-    var cached=null,cachedTs=0;
-    try{
-      var raw=sessionStorage.getItem(CACHE_KEY);
-      cachedTs=parseInt(sessionStorage.getItem(CACHE_TS)||'0',10);
-      if(raw&&(Date.now()-cachedTs<CACHE_TTL)) cached=JSON.parse(raw);
-    }catch(e){}
-    if(!cached){
-      try{
-        var lraw=localStorage.getItem(CACHE_KEY);
-        var lts=parseInt(localStorage.getItem(CACHE_TS)||'0',10);
-        if(lraw&&(Date.now()-lts<CACHE_TTL)) cached=JSON.parse(lraw);
-      }catch(e){}
-    }
-
-    // Show cached immediately, then try to refresh
-    if(cached&&cached.length){
-      showReleases(cached);
-    }
-
-    // Fetch from GitHub Releases API
-    try{
-      var headers={
-        'Accept':'application/vnd.github+json',
-        'X-GitHub-Api-Version':'2022-11-28'
-      };
-      // Use ETag for conditional requests (saves rate limit)
-      var etag=null;
-      try{etag=sessionStorage.getItem(CACHE_ETAG);}catch(e){}
-      if(etag&&cached) headers['If-None-Match']=etag;
-
-      var controller=new AbortController();
-      var timeout=setTimeout(function(){controller.abort();},10000);
-
-      var res=await fetch('https://api.github.com/repos/aetherdev01/SnapPerf/releases?per_page=20',{
-        headers:headers,
-        signal:controller.signal,
-        cache:'no-cache'
-      });
-      clearTimeout(timeout);
-
-      // 304 Not Modified - cache is still fresh
-      if(res.status===304){
-        if(!cached) showError('Data tidak ditemukan');
-        return;
-      }
-
-      // Rate limited
-      if(res.status===403||res.status===429){
-        var reset=res.headers.get('X-RateLimit-Reset');
-        var resetTime=reset?new Date(parseInt(reset)*1000).toLocaleTimeString('id-ID',{hour:'2-digit',minute:'2-digit'}):'beberapa menit';
-        if(cached&&cached.length){
-          // Already showing cached data, add a subtle notice
-          var notice=document.createElement('div');
-          notice.style.cssText='margin-bottom:.8rem;padding:.5rem .85rem;background:rgba(255,159,10,.1);border:1px solid rgba(255,159,10,.25);border-radius:var(--r-lg);font-size:.74rem;color:#ff9f0a;display:flex;align-items:center;gap:.45rem;';
-          notice.innerHTML='<svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" stroke="currentColor" stroke-width="2"/><path d="M12 9v4M12 17h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>'
-            +'GitHub API rate limit &mdash; data cache. Reset: '+resetTime;
-          if(grid.parentNode) grid.parentNode.insertBefore(notice,grid);
-        }else{
-          showError('GitHub API rate limit. Coba lagi pukul '+resetTime);
-        }
-        return;
-      }
-
-      if(!res.ok){
-        if(!cached||!cached.length) showError('GitHub API error: '+res.status);
-        return;
-      }
-
-      // Save ETag for next request
-      var newEtag=res.headers.get('ETag');
-      if(newEtag){
-        try{sessionStorage.setItem(CACHE_ETAG,newEtag);}catch(e){}
-      }
-
-      var releases=await res.json();
-      if(!Array.isArray(releases)||!releases.length){
-        if(!cached||!cached.length){loading.style.display='none';empty.style.display='block';}
-        return;
-      }
-
-      // Save to cache
-      try{
-        sessionStorage.setItem(CACHE_KEY,JSON.stringify(releases));
-        sessionStorage.setItem(CACHE_TS,Date.now().toString());
-        localStorage.setItem(CACHE_KEY,JSON.stringify(releases));
-        localStorage.setItem(CACHE_TS,Date.now().toString());
-      }catch(e){}
-
-      // Only re-render if we didn't already show cached (or if data changed)
-      if(!cached||!cached.length){
-        showReleases(releases);
-      } else {
-        // Silently update cache, re-render in background if different
-        var oldJson=JSON.stringify(cached.map(function(r){return r.id;}));
-        var newJson=JSON.stringify(releases.map(function(r){return r.id;}));
-        if(oldJson!==newJson){
-          showReleases(releases);
-        }
-      }
-
-    }catch(err){
-      if(err.name==='AbortError'){
-        if(!cached||!cached.length) showError('Request timeout. Cek koneksi internet.');
-      }else{
-        if(!cached||!cached.length) showError('Gagal memuat rilis.');
-      }
-    }
-  }
-
-  if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',loadReleases);}else{setTimeout(loadReleases,0);}
-  // Re-render cards when language changes
-  document.addEventListener('sp:langchange', function(){
-    var grid=document.getElementById('releasesGrid');
-    if(!grid||!grid.innerHTML) return;
-    var cached=null;
-    try{cached=JSON.parse(sessionStorage.getItem('sp_releases_v2'));}catch(e){}
-    if(cached&&cached.length){
-      var html='';for(var i=0;i<cached.length;i++)html+=buildCard(cached[i],i);
-      grid.innerHTML=html;reinitGrid(grid);
-    }
-  });
-  // Re-render when language changes
-  document.addEventListener('sp:langchange', function(){
-    var grid=document.getElementById('releasesGrid');
-    if(grid&&grid.innerHTML){
-      // Re-build cards from cache to update translated labels
-      var cached=null;
-      try{cached=JSON.parse(sessionStorage.getItem('sp_releases_cache'));}catch(e){}
-      if(cached&&cached.length){
-        var html='';
-        for(var i=0;i<cached.length;i++)html+=buildCard(cached[i],i);
-        grid.innerHTML=html;
-        reinitGrid(grid);
-      }
-    }
-  });
+ return '<article class="post-card reveal" data-tags="'+tagsAttr+'" style="animation-delay:'+delay+'s">'+
+ '<div class="post-card-inner">'+
+ '<div class="post-header">'+
+ '<div class="post-badges"><span class="badge badge-blue">'+esc(ver)+'</span>'+badges+'</div>'+
+ '<div class="post-dots" data-popup="'+popId+'">'+
+ '<button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button>'+
+ '<div class="popup-menu" id="'+popId+'">'+
+ (dlUrl?'<a href="'+esc(dlUrl)+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Download</a>':'')+
+ '<a href="'+ghUrl+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a>'+
+ '<a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Telegram</a>'+
+ '</div></div></div>'+
+ '<h2 class="post-title">'+title+'</h2>'+
+ metaHTML+
+ changeHTML+
+ '<div class="post-footer">'+
+ dlBtnHTML+
+ '<a href="'+ghUrl+'" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>'+
+ '</div>'+
+ '</div></article>';
+ }
+ async function loadReleases(){
+ var loading=document.getElementById('releasesLoading');
+ var grid=document.getElementById('releasesGrid');
+ var empty=document.getElementById('releasesEmpty');
+ var errEl=document.getElementById('releasesError');
+ try{
+ var res=await fetch('https://api.github.com/repos/aetherdev22/snapperf/releases',{
+ cache:'no-store',
+ headers:{Accept:'application/vnd.github.v3+json'}
+ });
+ if(!res.ok)throw new Error('HTTP '+res.status);
+ var releases=await res.json();
+ if(!Array.isArray(releases)||!releases.length){
+ loading.style.display='none';
+ empty.style.display='';
+ return;
+ }
+ var html='';
+ for(var i=0;i<releases.length;i++){
+ html+=buildCard(releases[i],i);
+ }
+ grid.innerHTML=html;
+ loading.style.display='none';
+ grid.style.display='';
+ // Re-init IntersectionObserver for new cards
+ var obs=new IntersectionObserver(function(entries){
+ entries.forEach(function(e){
+ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+ });
+ },{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+ grid.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+ // Re-init popup dots for new cards
+ grid.querySelectorAll('.post-dots').forEach(function(wrapper){
+ var btn=wrapper.querySelector('.dots-btn');
+ var pid=wrapper.dataset.popup;
+ var popup=document.getElementById(pid);
+ if(!btn||!popup)return;
+ btn.addEventListener('click',function(e){
+ e.stopPropagation();
+ var isOpen=popup.classList.contains('open');
+ document.querySelectorAll('.popup-menu.open').forEach(function(p){
+ p.classList.remove('open');p.classList.add('close');
+ p.addEventListener('animationend',function(){p.classList.remove('close');p.style.display='';},{once:true});
+ });
+ if(!isOpen){
+ popup.style.display='flex';popup.classList.remove('close');
+ requestAnimationFrame(function(){popup.classList.add('open');});
+ }
+ });
+ });
+ // Wire search input
+ var si=document.getElementById('postSearch');
+ if(si){
+ si.addEventListener('input',function(){
+ if(window.applyFilters)window.applyFilters();
+ });
+ }
+ }catch(err){
+ loading.style.display='none';
+ errEl.style.display='';
+ }
+ }
+ // Wait for main.js DOMContentLoaded to fire first, then load releases
+ if(document.readyState==='loading'){
+ document.addEventListener('DOMContentLoaded',loadReleases);
+ }else{
+ loadReleases();
+ }
 })();
-</script></body></html>
+</script>
+</body></html>
