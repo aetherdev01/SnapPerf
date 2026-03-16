@@ -951,10 +951,17 @@ async function renderReleases(){
     // Step indicator
     html+='<div class="adm-step-row"><div class="adm-step active" id="step1">① Info</div><div class="adm-step" id="step2">② Links</div><div class="adm-step" id="step3">③ Publish</div></div>';
 
-    // Archive URL info banner
-    html+='<div style="background:rgba(var(--accent-rgb),.07);border:1px solid rgba(var(--accent-rgb),.18);border-radius:var(--r-lg);padding:.6rem .85rem;margin-bottom:1rem;display:flex;gap:.5rem;align-items:center">';
-    html+='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;color:var(--accent)"><circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/><path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
-    html+='<span style="font-size:.75rem;color:var(--text2)">Direct link otomatis: <code style="font-size:.72rem">...archive/refs/tags/<b>{tag}</b>.zip</code> setelah publish</span>';
+    // Upload zone
+    html+='<div style="margin-bottom:.9rem">';
+    html+='<div class="adm-label" style="margin-bottom:.45rem">Upload File .ZIP <span style="font-size:.63rem;color:var(--text3);font-weight:400;text-transform:none;letter-spacing:0">akan jadi release asset → direct link otomatis</span></div>';
+    html+='<div class="adm-dropzone" id="nr-dropzone">';
+    html+='<input type="file" id="nr-file" accept=".zip,application/zip" style="user-select:text!important;-webkit-user-select:text!important"/>';
+    html+='<div class="adm-dropzone-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4M17 8l-5-5-5 5M12 3v13" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>';
+    html+='<div class="adm-dropzone-text">Drag & drop .zip ke sini, atau klik untuk pilih</div>';
+    html+='<div class="adm-dropzone-sub">.zip · maks 2 GB · upload ke release asset</div>';
+    html+='<div class="adm-file-chosen" id="nr-file-name">✓ File dipilih</div>';
+    html+='</div>';
+    html+='<div class="adm-upload-bar-wrap" id="nr-bar-wrap"><div class="adm-upload-bar" id="nr-bar"></div></div>';
     html+='</div>';
 
     // Row 1: Nama + Tag
@@ -1047,7 +1054,7 @@ async function renderReleases(){
     html+='<div class="adm-form">';
     html+='<div class="adm-form-row" style="margin-bottom:.75rem">';
     html+='<div><div class="adm-label" style="margin-bottom:.32rem">Versi</div><input class="adm-input" id="rel-ver" type="text" placeholder="v1.5.4 (Stable)" value="'+esc(curVer)+'"/></div>';
-    html+='<div><div class="adm-label" style="margin-bottom:.32rem">urlZip (Direct)</div><input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/…/archive/refs/tags/….zip" value="'+esc(curDirect)+'"/></div>';
+    html+='<div><div class="adm-label" style="margin-bottom:.32rem">urlZip (Direct)</div><input class="adm-input" id="rel-direct" type="text" placeholder="https://github.com/aetherdev01/SnapPerf/releases/download/{tag}/{file.zip}" value="'+esc(curDirect)+'"/></div>';
     html+='</div>';
     html+='<div class="adm-form-row" style="margin-bottom:.9rem">';
     html+='<div><div class="adm-label" style="margin-bottom:.32rem">link (Mirror)</div><input class="adm-input" id="rel-mirror" type="text" placeholder="https://safefileku.com/…" value="'+esc(curMirror)+'"/></div>';
@@ -1058,8 +1065,44 @@ async function renderReleases(){
     html+='</div></div>';
     pg.innerHTML=html;
 
-    // No dropzone - archive URL used automatically
+    // ── Dropzone wiring ───────────────────────────────────────────
     var selectedFile=null;
+    var dropzoneEl=document.getElementById('nr-dropzone');
+    var fileInputEl=document.getElementById('nr-file');
+    var fileNameEl=document.getElementById('nr-file-name');
+
+    function setFileDisplay(file){
+      selectedFile=file;
+      fileNameEl.textContent='✓ '+file.name+' ('+(file.size/1048576).toFixed(2)+' MB)';
+      fileNameEl.classList.add('visible');
+      // Auto-suggest tag from filename
+      var tagEl=document.getElementById('nr-tag');
+      if(tagEl&&!tagEl.value){
+        var suggested=file.name.replace(/\.zip$/i,'');
+        tagEl.value=suggested;
+      }
+      setStep(2);
+    }
+
+    if(dropzoneEl){
+      dropzoneEl.addEventListener('dragover',function(e){e.preventDefault();dropzoneEl.classList.add('drag-over');});
+      dropzoneEl.addEventListener('dragleave',function(e){if(!dropzoneEl.contains(e.relatedTarget))dropzoneEl.classList.remove('drag-over');});
+      dropzoneEl.addEventListener('drop',function(e){
+        e.preventDefault();dropzoneEl.classList.remove('drag-over');
+        var f=e.dataTransfer&&e.dataTransfer.files&&e.dataTransfer.files[0];
+        if(f){
+          if(!f.name.toLowerCase().endsWith('.zip')){toast('Harus file berformat .zip',false);return;}
+          setFileDisplay(f);
+        }
+      });
+    }
+    if(fileInputEl){
+      fileInputEl.addEventListener('change',function(){
+        var f=fileInputEl.files&&fileInputEl.files[0];
+        if(f) setFileDisplay(f);
+      });
+    }
+
     function setStep(n){for(var i=1;i<=3;i++){var s=document.getElementById('step'+i);if(!s)continue;s.className='adm-step'+(i<n?' done':i===n?' active':'');}}
 
     async function saveUpdateJson(ver,direct,mirror,cl,statusEl){
@@ -1082,25 +1125,7 @@ async function renderReleases(){
     }
 
 
-    // =====================================================
-    // UPLOAD FILE KE GITHUB REPO
-    // Menggunakan GitHub Contents API (api.github.com) yang
-    // 100% bisa diakses dari browser tanpa masalah CORS.
-    // File tersimpan di: releases/{tag}/{filename} dalam repo.
-    // Download URL: raw.githubusercontent.com/{repo}/main/releases/{tag}/{filename}
-    // =====================================================
-
-    // ============================================================
-    // FILE UPLOAD: Simpan ke repo via GitHub Contents API
-    // File tersimpan sebagai release asset di: releases/{tag}/{file}
-    // URL download: https://raw.githubusercontent.com/{repo}/main/releases/{tag}/{file}
-    // ============================================================
-    // ============================================================
-    // TIDAK ADA UPLOAD FILE KE REPO
-    // GitHub auto-generate download URL dari tag:
-    // https://github.com/{repo}/archive/refs/tags/{tag}.zip
-    // URL ini di-set otomatis setelah release dibuat
-    // ============================================================
+    // Upload via GitHub Release Assets API (browser_download_url)
 
 
     async function uploadZipAsset(releaseId,file,barEl,barWrap){
@@ -1163,7 +1188,7 @@ async function renderReleases(){
       var barWrap=document.getElementById('nr-bar-wrap');
       if(!tag){toast('Tag wajib diisi',false);return;}
       if(!jsonOnly&&!name){toast('Nama Rilis wajib diisi',false);return;}
-      // file upload is optional - archive URL will be used if no direct link
+      // file upload is optional if direct link is already provided
       if(st){st.className='adm-status checking';st.textContent='Memproses...';}
       setStep(3);
       if(!jsonOnly){
@@ -1185,11 +1210,10 @@ async function renderReleases(){
               toast('⚠ Upload ZIP gagal: '+upErr.message+'. Menggunakan archive URL.',false);
             }
           }
-          // Fallback to archive URL if still no direct link
+          // No automatic fallback - direct link must come from file upload or manual input
+          // If still no direct link after upload, warn user
           if(!direct){
-            var archiveUrl='https://github.com/'+SP_GH_REPO+'/archive/refs/tags/'+encodeURIComponent(relData.tag_name||tag)+'.zip';
-            direct=archiveUrl;
-            var diEl=document.getElementById('nr-direct');if(diEl)diEl.value=direct;
+            toast('⚠ Tidak ada direct link. Isi manual atau upload file .zip.',false);
           }
         }catch(e){
           if(st){st.className='adm-status err';st.textContent='✗ '+e.message;}
@@ -1211,6 +1235,11 @@ async function renderReleases(){
     document.getElementById('nr-only-json').addEventListener('click',function(){submitNewRelease(true);});
     document.getElementById('nr-reset').addEventListener('click',function(){
       ['nr-name','nr-tag','nr-desc','nr-direct','nr-mirror'].forEach(function(id){var el=document.getElementById(id);if(el)el.value='';});
+      selectedFile=null;
+      if(fileNameEl)fileNameEl.classList.remove('visible');
+      if(fileInputEl)fileInputEl.value='';
+      var bw=document.getElementById('nr-bar-wrap');if(bw)bw.classList.remove('visible');
+      var bb=document.getElementById('nr-bar');if(bb)bb.style.width='0';
       var st=document.getElementById('nr-st');if(st){st.className='adm-status';st.textContent='';}
       setStep(1);
     });
