@@ -24,13 +24,14 @@
 <meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=()"/>
 <link rel="canonical" href="https://aetherdev01.github.io/SnapPerf/"/>
 <link rel="icon" href="assets/aether.webp" type="image/webp"/>
+<link rel="preload" href="assets/banner.webp" as="image" type="image/webp" fetchpriority="high"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link rel="preload" href="https://fonts.gstatic.com/s/outfit/v11/QGYvz_MVcBeNP4NjuGObqx1XmO1I4TC1C4G-EiAou6Y.woff2" as="font" type="font/woff2" crossorigin/>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" media="print" onload="this.media='all'"/>
 <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap"/></noscript>
 <link rel="stylesheet" href="css/style.css"/>
-<link rel="stylesheet" href="css/animations.css"/>
+<link rel="stylesheet" href="css/animations.css" media="print" onload="this.media='all'"/><noscript><link rel="stylesheet" href="css/animations.css"/></noscript>
 <script>(function(){var th=localStorage.getItem('sp-theme')||'light';document.documentElement.setAttribute('data-theme',th);var c=navigator.hardwareConcurrency||4,m=navigator.deviceMemory||4,mob=/Mobi|Android|iPhone|iPad/i.test(navigator.userAgent);if((c<=4||m<=2)&&mob)document.documentElement.classList.add('perf-low');})()</script>
 </head>
 <body>
@@ -113,7 +114,7 @@
     </div>
     <div class="hero-image reveal" style="animation-delay:.2s">
       <div class="img-card">
-        <img src="assets/banner.webp" alt="SnapPerf Banner – Magisk Performance Module for Snapdragon" loading="eager" fetchpriority="high" fetchpriority="high" class="banner-img" width="400" height="280"/>
+        <img src="assets/banner.webp" alt="SnapPerf Banner – Magisk Performance Module for Snapdragon" loading="eager" fetchpriority="high" class="banner-img" width="400" height="280"/>
         <div class="img-glow" aria-hidden="true"></div>
         <div class="img-glass-overlay" aria-hidden="true"></div>
       </div>

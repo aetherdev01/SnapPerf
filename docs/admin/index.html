@@ -1216,65 +1216,126 @@ async function renderReleases(){
       if(barWrap) barWrap.classList.add('visible');
       if(uploadStatus) uploadStatus.textContent='Mengupload...';
 
-      // Deteksi MIME type dari ekstensi file
       function getMime(name){
         var ext=(name.split('.').pop()||'').toLowerCase();
         var map={zip:'application/zip',apk:'application/vnd.android.package-archive',
           jpg:'image/jpeg',jpeg:'image/jpeg',png:'image/png',webp:'image/webp',
-          gif:'image/gif',pdf:'application/pdf',json:'application/json',
-          txt:'text/plain',md:'text/plain',xml:'application/xml'};
+          gif:'image/gif',pdf:'application/pdf'};
         return map[ext]||'application/octet-stream';
       }
 
-      var uploadUrl='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
-      var mime=getMime(file.name);
-
-      // Baca file sebagai ArrayBuffer untuk upload binary
-      var buffer=await file.arrayBuffer();
-
-      // Progress simulasi (fetch tidak support upload progress natively)
-      var progTimer=null;var progVal=0;
-      if(barEl){
-        barEl.style.width='0%';
+      // Progress simulasi
+      var progVal=0,progTimer=null;
+      function startProg(){
         progTimer=setInterval(function(){
-          progVal=Math.min(progVal+8,85);
-          barEl.style.width=progVal+'%';
-          if(uploadStatus) uploadStatus.textContent='Upload: '+progVal+'%';
-        },200);
+          progVal=Math.min(progVal+5,88);
+          if(barEl) barEl.style.width=progVal+'%';
+          if(uploadStatus) uploadStatus.textContent='Uploading: '+progVal+'%';
+        },250);
       }
+      function stopProg(){clearInterval(progTimer);if(barEl)barEl.style.width='100%';}
 
-      try{
+      // ── METODE 1: GitHub Releases Asset API (native asset, URL terbaik) ──
+      async function tryReleasesAPI(){
+        startProg();
+        var buffer=await file.arrayBuffer();
+        var uploadUrl='https://uploads.github.com/repos/'+SP_GH_REPO+'/releases/'+releaseId+'/assets?name='+encodeURIComponent(file.name);
         var res=await fetch(uploadUrl,{
           method:'POST',
           headers:{
             'Authorization':'Bearer '+spToken,
-            'Content-Type':mime,
+            'Content-Type':getMime(file.name),
             'Accept':'application/vnd.github+json',
             'X-GitHub-Api-Version':'2022-11-28'
           },
-          body:buffer
+          body:buffer,
+          mode:'cors'
+        });
+        stopProg();
+        if(!res.ok){
+          var ed={};try{ed=await res.json();}catch(ex){}
+          throw new Error('HTTP '+res.status+': '+(ed.message||res.statusText));
+        }
+        return await res.json(); // {browser_download_url, ...}
+      }
+
+      // ── METODE 2: GitHub Contents API (fallback - upload ke folder di repo) ──
+      async function tryContentsAPI(){
+        if(uploadStatus) uploadStatus.textContent='Mencoba metode alternatif...';
+        progVal=0;startProg();
+
+        // Baca file sebagai base64
+        var buffer=await file.arrayBuffer();
+        var bytes=new Uint8Array(buffer);
+        var binary='';
+        for(var i=0;i<bytes.byteLength;i++) binary+=String.fromCharCode(bytes[i]);
+        var base64=btoa(binary);
+
+        // Upload ke folder server/releases-archive/ di repo
+        var timestamp=Date.now();
+        var safeFilename=file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+        var filePath='server/releases-archive/'+timestamp+'_'+safeFilename;
+        var apiUrl='https://api.github.com/repos/'+SP_GH_REPO+'/contents/'+filePath;
+
+        // Cek apakah file sudah ada (untuk dapat SHA)
+        var sha=null;
+        try{
+          var chk=await fetch(apiUrl,{headers:{'Authorization':'Bearer '+spToken,'Accept':'application/vnd.github+json'}});
+          if(chk.ok){var cd=await chk.json();sha=cd.sha;}
+        }catch(ex){}
+
+        var body={
+          message:'chore: upload release asset '+safeFilename+' [skip ci]',
+          content:base64
+        };
+        if(sha) body.sha=sha;
+
+        var putRes=await fetch(apiUrl,{
+          method:'PUT',
+          headers:{
+            'Authorization':'Bearer '+spToken,
+            'Content-Type':'application/json',
+            'Accept':'application/vnd.github+json',
+            'X-GitHub-Api-Version':'2022-11-28'
+          },
+          body:JSON.stringify(body)
         });
 
-        clearInterval(progTimer);
-        if(barEl) barEl.style.width='100%';
-
-        if(!res.ok){
-          var errData={};
-          try{errData=await res.json();}catch(ex){}
-          var errMsg='Upload gagal HTTP '+res.status+': '+(errData.message||errData.errors||res.statusText||'Unknown error');
-          if(uploadStatus) uploadStatus.textContent='✗ '+errMsg;
-          throw new Error(errMsg);
+        stopProg();
+        if(!putRes.ok){
+          var ed2={};try{ed2=await putRes.json();}catch(ex){}
+          throw new Error('Contents API HTTP '+putRes.status+': '+(ed2.message||putRes.statusText));
         }
 
-        var data=await res.json();
-        if(uploadStatus) uploadStatus.textContent='✓ Upload selesai: '+file.name;
-        return data;
+        var putData=await putRes.json();
+        // Raw URL: https://raw.githubusercontent.com/{owner}/{repo}/main/{path}
+        var rawUrl='https://raw.githubusercontent.com/'+SP_GH_REPO+'/main/'+filePath;
+        // Atau pakai download_url dari response
+        var dlUrl=(putData.content&&putData.content.download_url)||rawUrl;
 
-      }catch(err){
-        clearInterval(progTimer);
-        if(barEl) barEl.style.width='0%';
-        if(uploadStatus) uploadStatus.textContent='✗ '+err.message;
-        throw err;
+        if(uploadStatus) uploadStatus.textContent='✓ Upload via Contents API';
+        // Return format mirip releases asset
+        return {browser_download_url:dlUrl,name:file.name,_via_contents:true};
+      }
+
+      try{
+        // Coba metode 1 dulu
+        var result=await tryReleasesAPI();
+        if(uploadStatus) uploadStatus.textContent='✓ Upload selesai: '+file.name;
+        return result;
+      }catch(err1){
+        console.warn('Releases API gagal:',err1.message,', fallback ke Contents API...');
+        if(uploadStatus) uploadStatus.textContent='⚠ Metode 1 gagal, mencoba metode 2...';
+        try{
+          var result2=await tryContentsAPI();
+          if(uploadStatus) uploadStatus.textContent='✓ Upload selesai (via fallback): '+file.name;
+          return result2;
+        }catch(err2){
+          if(barEl) barEl.style.width='0%';
+          var finalMsg='Upload gagal. Metode 1: '+err1.message+' | Metode 2: '+err2.message;
+          if(uploadStatus) uploadStatus.textContent='✗ '+finalMsg;
+          throw new Error(finalMsg);
+        }
       }
     }
 

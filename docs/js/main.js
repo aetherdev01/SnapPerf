@@ -383,6 +383,13 @@ document.addEventListener('DOMContentLoaded',function(){
 
   loadUpdateJson();
   loadNotification();
+
+  // Add body transition AFTER first paint - prevents FCP/LCP delay
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      document.body.style.transition = 'background .4s cubic-bezier(.4,0,.2,1),color .4s cubic-bezier(.4,0,.2,1)';
+    }, 150);
+  }, {once:true});
 });
 
 window.applyFilters=function(){var activeBtn=document.querySelector('.filter-btn.active');var f=activeBtn?activeBtn.dataset.filter:'all';var si=document.getElementById('postSearch');var sv=si?si.value.toLowerCase().trim():'';document.querySelectorAll('.post-card').forEach(function(card){var tags=(card.dataset.tags||'').split(/\s+/);var text=card.textContent.toLowerCase();var mf=(f==='all'||tags.indexOf(f)!==-1);var ms=!sv||text.indexOf(sv)!==-1;if(mf&&ms){card.style.removeProperty('display');card.style.animation='filterReveal .26s cubic-bezier(.16,1,.3,1) both';card.addEventListener('animationend',function(){card.style.animation='';},{once:true});}else{card.style.display='none';}});};
