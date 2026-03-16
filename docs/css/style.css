@@ -419,120 +419,18 @@
 /* Sort toggle in mod toolbar */
 #sp-mod-sort-btn{white-space:nowrap}
 
-/* ===== HERO LAYOUT FIX – consistent with navbar on desktop ===== */
-.hero{padding-top:calc(5rem + 56px);} /* offset = navbar height */
-.hero-inner{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:3rem;
-  width:100%;
-  max-width:1080px;
-  margin:0 auto;
-}
-.hero-content{
-  flex:1 1 0;
-  min-width:0;
-  max-width:520px;
-}
-.hero-image{
-  flex:0 0 auto;
-  width:clamp(280px,38vw,420px);
-  max-width:100%;
-}
-@media(max-width:960px){
-  .hero-image{width:clamp(220px,42vw,340px);}
-  .hero-inner{gap:2rem;}
-}
-@media(max-width:768px){
-  .hero{padding-top:calc(4rem + 56px);min-height:auto;}
-  .hero-inner{flex-direction:column;gap:1.75rem;align-items:flex-start;}
-  .hero-content{max-width:100%;}
-  .hero-image{width:100%;max-width:420px;align-self:center;}
-}
 
-/* ===== PERFORMANCE CSS – reduce CLS / paint ===== */
-.banner-img{
-  aspect-ratio:400/280;
-  object-fit:cover;
-  width:100%;
-  height:auto;
-  display:block;
-}
-img{max-width:100%;height:auto;}
+/* =================================================================
+   DEFINITIVE LAYOUT OVERRIDES - replaces all previous patches
+================================================================= */
 
-/* ===== SEO – ensure text is readable / no contrast issues ===== */
-body{color:var(--text);}
-h1,h2,h3{color:var(--text);}
-
-/* ===== Admin form-row two column ===== */
-.adm-form-row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:.7rem;
-}
-@media(max-width:640px){
-  .adm-form-row{grid-template-columns:1fr;}
-}
-
-/* ===== Admin Upload Drop Zone ===== */
-.adm-dropzone{
-  border:2px dashed var(--glass-border2);
-  border-radius:var(--r-lg);
-  padding:2rem 1rem;
-  text-align:center;
-  cursor:pointer;
-  transition:border-color .2s,background .2s;
-  background:var(--glass);
-  position:relative;
-}
-.adm-dropzone:hover,.adm-dropzone.drag-over{
-  border-color:rgba(var(--accent-rgb),.55);
-  background:var(--accent-soft);
-}
-.adm-dropzone input[type=file]{
-  position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;
-}
-.adm-dropzone-icon{color:var(--accent);margin-bottom:.5rem;}
-.adm-dropzone-text{font-size:.8rem;color:var(--text2);font-weight:600;}
-.adm-dropzone-sub{font-size:.7rem;color:var(--text3);margin-top:.2rem;}
-.adm-file-chosen{font-size:.77rem;color:var(--green);font-weight:700;margin-top:.5rem;display:none;}
-.adm-file-chosen.visible{display:block;}
-
-/* ===== Upload progress bar ===== */
-.adm-upload-bar-wrap{
-  height:6px;background:var(--glass);border-radius:3px;overflow:hidden;margin-top:.5rem;display:none;
-}
-.adm-upload-bar-wrap.visible{display:block;}
-.adm-upload-bar{
-  height:100%;background:var(--grad);border-radius:3px;width:0;
-  transition:width .3s ease;
-}
-
-/* ===== Releases page upload card ===== */
-.adm-upload-steps{
-  display:flex;gap:.35rem;margin-bottom:.7rem;flex-wrap:wrap;
-}
-.adm-step{
-  display:flex;align-items:center;gap:.3rem;font-size:.68rem;font-weight:700;
-  color:var(--text3);padding:.18rem .52rem;border-radius:var(--r-pill);
-  border:1px solid var(--glass-border2);background:var(--glass);
-}
-.adm-step.done{color:var(--green);border-color:rgba(0,229,184,.3);background:rgba(0,229,184,.08);}
-.adm-step.active{color:var(--accent);border-color:rgba(var(--accent-rgb),.3);background:var(--accent-soft);}
-
-/* === PERFORMANCE OPTIMIZATIONS === */
-.feature-card,.post-card,.about-section-card{contain:layout style;}
-.sections-container{content-visibility:auto;contain-intrinsic-size:0 800px;}
-html{font-size:16px;}
-body{font-display:swap;}
-
-/* === HERO DESKTOP LAYOUT FIX - aligns with navbar container === */
+/* ── HERO: correct padding to clear fixed floating navbar ─────── */
 .hero{
-  padding:0 1.5rem;
-  padding-top:calc(5.5rem + 46px);
-  padding-bottom:4rem;
-  min-height:100svh;
+  padding-top:5.5rem;
+  padding-bottom:5rem;
+  padding-left:2rem;
+  padding-right:2rem;
+  min-height:90svh;
   display:flex;
   align-items:center;
   justify-content:center;
@@ -540,495 +438,120 @@ body{font-display:swap;}
 .hero-inner{
   display:flex;
   align-items:center;
-  justify-content:space-between;
-  gap:3.5rem;
+  gap:4rem;
   width:100%;
   max-width:1080px;
   margin:0 auto;
-  z-index:2;
   position:relative;
+  z-index:2;
 }
-.hero-content{
-  flex:1 1 0;
-  min-width:0;
-  max-width:500px;
-}
-.hero-image{
-  flex:0 0 auto;
-  width:clamp(280px,36vw,430px);
-  max-width:100%;
-}
+.hero-content{flex:1 1 0;min-width:0;max-width:500px;}
+.hero-image{flex:0 0 clamp(280px,36vw,430px);width:clamp(280px,36vw,430px);}
+
+/* ── HERO breakpoints ─────────────────────────────────────────── */
 @media(min-width:1200px){
-  .hero-image{width:460px;}
-  .hero-inner{gap:4rem;}
+  .hero-image{flex:0 0 460px;width:460px;}
+  .hero-inner{gap:5rem;}
 }
 @media(max-width:1024px){
-  .hero-image{width:clamp(240px,38vw,360px);}
+  .hero-image{flex:0 0 clamp(240px,38vw,360px);width:clamp(240px,38vw,360px);}
+  .hero-inner{gap:3rem;}
 }
 @media(max-width:768px){
-  .hero{
-    padding-top:calc(4.5rem + 46px);
-    padding-left:1.25rem;
-    padding-right:1.25rem;
-    min-height:auto;
-  }
-  .hero-inner{
-    flex-direction:column;
-    gap:1.75rem;
-    align-items:flex-start;
-  }
+  .hero{padding-top:4.8rem;padding-left:1.25rem;padding-right:1.25rem;padding-bottom:2.5rem;min-height:auto;}
+  .hero-inner{flex-direction:column;gap:1.75rem;align-items:flex-start;}
   .hero-content{max-width:100%;}
-  .hero-image{width:100%;max-width:100%;align-self:center;}
+  .hero-image{flex:none;width:100%;max-width:100%;align-self:center;}
+  .section{padding:1.4rem 0;}
+  .features-section .container,
+  .download-section .container,
+  .community-section .container,
+  .changelog-section .container{border-radius:1.25rem;padding:1.4rem 1.15rem;}
+  .download-card{flex-direction:column;gap:1.2rem;padding:1.35rem;}
+  .comm-small-grid{flex-direction:column;}
+  .page-hero{padding-top:4.8rem;padding-left:1.25rem;padding-right:1.25rem;}
+}
+@media(max-width:540px){
+  .hero-actions{flex-direction:column;align-items:stretch;}
+  .btn{justify-content:center;}
+  .dl-actions{flex-direction:column;}
+  .dl-actions .btn{justify-content:center;}
 }
 
-/* === ABOUT page desktop layout === */
-.about-container{max-width:860px;margin:0 auto;padding:0 1.5rem 2rem;}
-@media(min-width:900px){
-  .about-container{padding:0 0 2rem;}
+/* ── ABOUT page ───────────────────────────────────────────────── */
+.about-container{display:flex;flex-direction:column;gap:.9rem;max-width:860px;margin:0 auto;}
+.page-hero{
+  padding-top:5.5rem;
+  padding-bottom:2.5rem;
+  padding-left:1.5rem;
+  padding-right:1.5rem;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  z-index:1;
 }
+.page-hero-content{position:relative;z-index:1;max-width:520px;margin:0 auto;}
+.page-hero h1{font-size:clamp(1.8rem,4vw,2.7rem);font-weight:800;letter-spacing:-.04em;margin:.5rem 0;}
+.page-hero p{color:var(--text2);font-size:.9rem;}
 
-/* === Admin no-select === */
-#sp-app, #sp-lock{
-  user-select:none;
-  -webkit-user-select:none;
-  -moz-user-select:none;
-}
-#sp-app input, #sp-app textarea, #sp-app .adm-search{
-  user-select:text;
-  -webkit-user-select:text;
-}
-
-/* ================================================================
-   DESKTOP LAYOUT OVERHAUL - Unified spacing & alignment
-   ================================================================ */
-
-/* --- Navbar height variable for consistent offsets --- */
-:root{
-  --navbar-h: 56px;
-  --section-gap: 2.5rem;
-  --container-px: 1.5rem;
-}
-
-/* --- Hero: single authoritative definition --- */
-.hero{
-  padding: calc(var(--navbar-h) + 5rem) var(--container-px) 4rem;
-  min-height: 100svh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-.hero-inner{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 4rem;
-  width: 100%;
-  max-width: 1080px;
-  margin: 0 auto;
-  z-index: 2;
-  position: relative;
-}
-.hero-content{
-  flex: 1 1 0;
-  min-width: 0;
-  max-width: 490px;
-}
-.hero-image{
-  flex: 0 0 clamp(300px, 38vw, 440px);
-  width: clamp(300px, 38vw, 440px);
-}
-
-/* --- Sections: consistent vertical rhythm --- */
-.section{
-  padding: var(--section-gap) 0;
-  position: relative;
-  z-index: 1;
-}
-.features-section{ padding-top: 1.5rem; }
-
-/* --- Sections with glassmorphism container --- */
+/* ── SECTIONS ─────────────────────────────────────────────────── */
+.section{padding:2rem 0;position:relative;z-index:1;}
+.features-section{padding-top:1rem;}
 .features-section .container,
 .download-section .container,
 .community-section .container,
 .changelog-section .container{
-  background: var(--glass);
-  backdrop-filter: blur(20px) saturate(155%);
-  -webkit-backdrop-filter: blur(20px) saturate(155%);
-  border: 1px solid var(--glass-border2);
-  border-radius: 1.6rem;
-  padding: 2rem 2.2rem;
-  box-shadow: var(--glass-shadow);
-  position: relative;
-  overflow: hidden;
+  background:var(--glass);
+  backdrop-filter:blur(20px) saturate(155%);
+  -webkit-backdrop-filter:blur(20px) saturate(155%);
+  border:1px solid var(--glass-border2);
+  border-radius:1.6rem;
+  padding:1.8rem 2rem;
+  box-shadow:var(--glass-shadow);
+  position:relative;
+  overflow:hidden;
 }
 .features-section .container::before,
 .download-section .container::before,
 .community-section .container::before,
 .changelog-section .container::before{
-  content: '';
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: linear-gradient(135deg,rgba(255,255,255,.09) 0%,transparent 55%);
+  content:'';position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:linear-gradient(135deg,rgba(255,255,255,.09) 0%,transparent 55%);
 }
 
-/* --- Section headers --- */
-.section-header{ text-align: center; margin-bottom: 2rem; }
-.section-tag{ margin-bottom: .6rem; }
+/* ── PERF & CLS fixes ─────────────────────────────────────────── */
+.banner-img{width:100%;height:auto;object-fit:cover;display:block;aspect-ratio:400/280;}
+.feature-card,.post-card,.about-section-card{contain:layout style;}
+.page-transitioning{opacity:1;transition:opacity .2s;}
+.page-leaving{opacity:0!important;transition:opacity .15s ease!important;}
 
-/* --- About page --- */
-.about-container{
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  max-width: 840px;
-  margin: 0 auto;
+/* ── ADMIN select-none ────────────────────────────────────────── */
+#sp-app *:not(input):not(textarea):not(.adm-search):not([contenteditable]){
+  user-select:none!important;-webkit-user-select:none!important;
 }
-.page-hero{
-  padding: calc(var(--navbar-h) + 4rem) var(--container-px) 2.5rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  z-index: 1;
-}
-.page-hero-content{
-  position: relative;
-  z-index: 1;
-  max-width: 560px;
-  margin: 0 auto;
-}
-.page-hero h1{
-  font-size: clamp(1.9rem, 4vw, 2.8rem);
-  margin: .6rem 0 .55rem;
+#sp-lock{user-select:none!important;-webkit-user-select:none!important;}
+#sp-lock input,#sp-app input,#sp-app textarea,.adm-search{
+  user-select:text!important;-webkit-user-select:text!important;
 }
 
-/* --- Downloads card alignment --- */
-.download-card{
-  display: flex;
-  gap: 2.5rem;
-  align-items: center;
-  padding: 2rem 2.2rem;
-}
-
-/* --- Community grid --- */
-.community-hero-card{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-}
-
-/* --- Changelog card centered --- */
-.changelog-card{
-  max-width: 600px;
-  margin: 0 auto;
-}
-
-/* ================================================================
-   ADMIN PANEL DESKTOP LAYOUT
-   ================================================================ */
-
-/* Sidebar fixed width, main content fills rest */
-.adm-sidebar{
-  position: fixed;
-  top: 0; left: 0;
-  width: 232px;
-  height: 100vh;
-  background: var(--glass2);
-  border-right: 1px solid var(--glass-border2);
-  display: flex;
-  flex-direction: column;
-  z-index: 100;
-  overflow-y: auto;
-  scrollbar-width: none;
-}
-.adm-sidebar::-webkit-scrollbar{ display: none; }
-.adm-main{ margin-left: 232px; }
-.adm-content{
-  padding: 1.6rem 2rem;
-  max-width: 1000px;
-}
-
-/* Admin topbar */
-.adm-topbar{
-  padding: .8rem 2rem;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  background: var(--glass);
-  border-bottom: 1px solid var(--glass-border2);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* Admin cards spacing */
-.adm-card{
-  margin-bottom: 1.1rem;
-  border-radius: 1rem;
-}
-.adm-card-title{
-  font-size: .78rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .07em;
-  color: var(--text3);
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: .4rem;
-}
-
-/* Stats grid spacing */
-.adm-stats-grid4{
-  display: grid;
-  grid-template-columns: repeat(4,1fr);
-  gap: .9rem;
-  margin-bottom: 1.2rem;
-}
-.adm-stat-card4{
-  border-radius: .9rem;
-  padding: 1rem 1.1rem;
-}
-.adm-sc4-num{
-  font-size: 2rem;
-  font-weight: 900;
-  letter-spacing: -.05em;
-  line-height: 1;
-  color: var(--text);
-}
-.adm-sc4-lbl{
-  font-size: .67rem;
-  color: var(--text3);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .06em;
-  margin-top: .28rem;
-}
-
-/* Nav items */
-.adm-nav{ padding: .5rem .65rem; }
-.adm-nav-item{
-  padding: .58rem .85rem;
-  border-radius: .7rem;
-  font-size: .81rem;
-  margin-bottom: .12rem;
-}
-.adm-nav-section{
-  padding: .55rem .85rem .2rem;
-  font-size: .6rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  color: var(--text3);
-}
-
-/* Form row */
-.adm-form-row{
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .8rem;
-  margin-bottom: 0;
-}
-.adm-form{ gap: .8rem; }
-
-/* Table */
-.adm-table th{ padding: .55rem .8rem; }
-.adm-table td{ padding: .65rem .8rem; }
-
-/* ================================================================
-   RESPONSIVE BREAKPOINTS
-   ================================================================ */
-@media(min-width:1280px){
-  .hero-content{ max-width: 520px; }
-  .hero-image{ flex: 0 0 480px; width: 480px; }
-  .hero-inner{ gap: 5rem; }
-  .features-section .container,
-  .download-section .container,
-  .community-section .container,
-  .changelog-section .container{ padding: 2.2rem 2.5rem; }
-}
-@media(max-width:960px){
-  .hero-inner{ gap: 2.5rem; }
-  .hero-image{ flex: 0 0 clamp(240px,40vw,340px); width: clamp(240px,40vw,340px); }
-  .community-hero-card{ grid-template-columns: 1fr; }
-  .comm-small-grid{ flex-direction: row; }
-  .adm-stats-grid4{ grid-template-columns: repeat(2,1fr); }
-}
-@media(max-width:768px){
-  :root{ --section-gap: 1.5rem; }
-  .hero{
-    padding: calc(var(--navbar-h) + 4rem) 1.25rem 2.5rem;
-    min-height: auto;
-  }
-  .hero-inner{
-    flex-direction: column;
-    gap: 1.75rem;
-    align-items: flex-start;
-  }
-  .hero-content{ max-width: 100%; }
-  .hero-image{
-    flex: none;
-    width: 100%;
-    max-width: 100%;
-    align-self: center;
-  }
-  .section{ padding: 1.2rem 0; }
-  .features-section .container,
-  .download-section .container,
-  .community-section .container,
-  .changelog-section .container{
-    border-radius: 1.25rem;
-    padding: 1.4rem 1.25rem;
-  }
-  .download-card{
-    flex-direction: column;
-    gap: 1.2rem;
-    padding: 1.4rem;
-  }
-  .comm-small-grid{ flex-direction: column; }
-  .page-hero{ padding: calc(var(--navbar-h) + 3rem) 1.25rem 2rem; }
-  .about-container{ gap: .85rem; }
-}
-@media(max-width:700px){
-  .adm-main{ margin-left: 0; }
-  .adm-content{ padding: 1rem .95rem; }
-  .adm-topbar{ padding: .65rem 1rem; }
-  .adm-stats-grid4{ grid-template-columns: repeat(2,1fr); }
-  .adm-form-row{ grid-template-columns: 1fr; }
-}
-@media(max-width:540px){
-  .hero-actions{ flex-direction: column; align-items: stretch; }
-  .btn{ justify-content: center; }
-  .dl-actions{ flex-direction: column; }
-  .dl-actions .btn{ justify-content: center; }
-}
-
-/* ================================================================
-   UPDATES PAGE - STATS BAR
-   ================================================================ */
-.releases-stats-bar{
-  display:none;
-  align-items:center;
-  gap:0;
-  background:var(--glass);
-  backdrop-filter:blur(20px) saturate(155%);
-  -webkit-backdrop-filter:blur(20px) saturate(155%);
-  border:1px solid var(--glass-border2);
-  border-radius:var(--r-lg);
-  padding:.55rem .5rem;
-  margin-bottom:1.2rem;
-  box-shadow:var(--glass-shadow);
-  flex-wrap:wrap;
-  justify-content:space-around;
-  position:relative;
-  overflow:hidden;
-}
-.releases-stats-bar::before{
-  content:'';
-  position:absolute;inset:0;
-  pointer-events:none;
-  background:linear-gradient(135deg,rgba(255,255,255,.08) 0%,transparent 55%);
-}
-.rstat-item{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:.18rem;
-  padding:.3rem .9rem;
-  position:relative;
-  z-index:1;
-  flex:1;
-  min-width:80px;
-}
-.rstat-num{
-  font-size:1.35rem;
-  font-weight:900;
-  letter-spacing:-.04em;
-  color:var(--text);
-  line-height:1;
-}
-.rstat-lbl{
-  font-size:.62rem;
-  font-weight:700;
-  text-transform:uppercase;
-  letter-spacing:.07em;
-  color:var(--text3);
-}
-.rstat-sep{
-  width:1px;
-  height:2.4rem;
-  background:var(--glass-border2);
-  flex-shrink:0;
-  align-self:center;
-}
-@media(max-width:480px){
-  .rstat-sep{display:none;}
-  .rstat-item{min-width:70px;padding:.3rem .5rem;}
-  .rstat-num{font-size:1.1rem;}
-}
-
-/* ================================================================
-   COMMENT LOGIN ROW - only shows inside comment section
-   ================================================================ */
-.sp-cmt-login-row{
-  display:none;
-  align-items:center;
-  gap:.55rem;
-  padding:.6rem .85rem .4rem;
-  flex-wrap:wrap;
-  border-bottom:1px solid var(--glass-border);
-  background:rgba(var(--accent-rgb),.04);
-}
-.sp-cmt-login-row span{
-  font-size:.76rem;
-  color:var(--text3);
-  flex-shrink:0;
-}
-
-/* ================================================================
-   POST-CARD DOWNLOAD BUTTON IMPROVEMENTS
-   ================================================================ */
-.post-footer{
-  display:flex;
-  gap:.38rem;
-  flex-wrap:wrap;
-  margin-top:auto;
-  padding-top:.68rem;
-  border-top:1px solid var(--glass-border);
-  align-items:center;
-}
-.btn-dl{
-  background:var(--accent);
-  color:#fff;
-  box-shadow:0 2px 10px rgba(var(--accent-rgb),.35);
-  font-weight:700;
-}
-.btn-dl:hover{
-  filter:brightness(1.1);
-  box-shadow:0 5px 18px rgba(var(--accent-rgb),.5);
-}
-
-/* Stats number accent color */
-.rstat-num{
-  background:var(--grad);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-}
-/* Override for proper display */
-@supports not (-webkit-background-clip:text){
-  .rstat-num{color:var(--accent);}
-}
-
-/* === BACKGROUND EFFECTS REMOVED (performance) === */
-.bg-wrap,#bg-canvas{display:none!important;}
-.blob-1,.blob-2,.blob-3{display:none!important;animation:none!important;}
-
-/* Remove heavy body::before gradient for performance */
-body::before{display:none!important;}
+/* ── ADMIN form & upload ──────────────────────────────────────── */
+.adm-badge-stable{background:rgba(0,229,184,.12);color:var(--green);padding:.13rem .5rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:800;border:1px solid rgba(0,229,184,.25);display:inline-block;}
+.adm-badge-beta{background:rgba(255,159,10,.12);color:var(--gold);padding:.13rem .5rem;border-radius:var(--r-pill);font-size:.65rem;font-weight:800;border:1px solid rgba(255,159,10,.28);display:inline-block;}
+.adm-form-row{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+@media(max-width:640px){.adm-form-row{grid-template-columns:1fr;}}
+.adm-dropzone{border:2px dashed var(--glass-border2);border-radius:var(--r-lg);padding:1.8rem 1rem;text-align:center;cursor:pointer;transition:border-color .2s,background .2s;background:var(--glass);position:relative;overflow:hidden;}
+.adm-dropzone:hover,.adm-dropzone.drag-over{border-color:rgba(var(--accent-rgb),.55);background:var(--accent-soft);}
+.adm-dropzone input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.adm-dropzone-icon{color:var(--accent);margin-bottom:.5rem;display:flex;justify-content:center;}
+.adm-dropzone-text{font-size:.82rem;color:var(--text2);font-weight:600;}
+.adm-dropzone-sub{font-size:.7rem;color:var(--text3);margin-top:.2rem;}
+.adm-file-chosen{font-size:.77rem;color:var(--green);font-weight:700;margin-top:.55rem;display:none;padding:.28rem .65rem;background:rgba(0,229,184,.08);border:1px solid rgba(0,229,184,.2);border-radius:var(--r-pill);}
+.adm-file-chosen.visible{display:inline-block;}
+.adm-upload-bar-wrap{height:5px;background:var(--glass);border-radius:3px;overflow:hidden;margin-top:.7rem;display:none;}
+.adm-upload-bar-wrap.visible{display:block;}
+.adm-upload-bar{height:100%;background:var(--grad);border-radius:3px;width:0;transition:width .3s ease;}
+.adm-step-row{display:flex;gap:.35rem;margin-bottom:.85rem;flex-wrap:wrap;}
+.adm-step{display:flex;align-items:center;gap:.28rem;font-size:.68rem;font-weight:700;color:var(--text3);padding:.18rem .52rem;border-radius:var(--r-pill);border:1px solid var(--glass-border2);background:var(--glass);}
+.adm-step.done{color:var(--green);border-color:rgba(0,229,184,.3);background:rgba(0,229,184,.08);}
+.adm-step.active{color:var(--accent);border-color:rgba(var(--accent-rgb),.35);background:var(--accent-soft);}
+.adm-nav-section{font-size:.6rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em;color:var(--text3);padding:.4rem .75rem .15rem;}
