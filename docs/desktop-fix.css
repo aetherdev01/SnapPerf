@@ -1,0 +1,29 @@
+@media (min-width: 768px) {
+  .hero {
+    min-height: 72vh !important;
+    padding: 5rem 1.5rem 2rem !important;
+  }
+  .section, .comm-section, .changelog-section, .features-section, .download-section {
+    padding: 2rem 1.5rem !important;
+  }
+  .container {
+    max-width: 1000px !important;
+  }
+  .feat-grid, .comm-grid {
+    gap: 1rem !important;
+  }
+  .footer {
+    margin-top: 0 !important;
+    padding: 1.5rem 0 !important;
+  }
+  .page-hero {
+    min-height: 32vh !important;
+    padding: 4.5rem 1.5rem 2rem !important;
+  }
+  .about-container {
+    gap: 1rem !important;
+  }
+  .about-section-card {
+    padding: 1.2rem !important;
+  }
+}
