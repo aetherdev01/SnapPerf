@@ -1,0 +1,3 @@
+# GitHub Pages config
+# Clean URL: /download serves download/index.html natively via Jekyll
+permalink: pretty
