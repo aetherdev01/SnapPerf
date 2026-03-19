@@ -1,544 +1,449 @@
-/* ===================================================
-   SnapPerf Download Page — app.js
-   =================================================== */
+/* =========================================================
+   SnapPerf · app.js
+   ========================================================= */
 (function () {
   'use strict';
 
-  const REPO    = 'aetherdev01/SnapPerf';
-  const API     = `https://api.github.com/repos/${REPO}/releases?per_page=30`;
-  const UPLOADER = '@AetherDev22';
-  const MIRRORS_KEY = 'snapperf_mirrors_v1';
+  const REPO        = 'aetherdev01/SnapPerf';
+  const API_URL     = `https://api.github.com/repos/${REPO}/releases?per_page=30`;
+  const UPLOADER    = '@AetherDev22';
+  const MIR_KEY     = 'sp_mirrors_v1';
 
-  /* ── State ─────────────────────────────────────────── */
-  let releases    = [];
-  let filter      = 'all';
-  let query       = '';
-  let mirrorTagFocus = null; // tag_name of release being edited for mirrors
+  /* ── state ───────────────────────────────────────────── */
+  let releases   = [];
+  let activeFilter = 'all';
+  let searchQ    = '';
+  let mirFocusTag = null;
 
-  /* ── DOM ────────────────────────────────────────────── */
+  /* ── DOM ─────────────────────────────────────────────── */
   const $ = id => document.getElementById(id);
 
-  const listEl      = $('releasesList');
-  const emptyEl     = $('emptyState');
-  const errorEl     = $('errorState');
-  const errorMsgEl  = $('errorMsg');
-  const searchIn    = $('searchInput');
-  const searchClr   = $('searchClear');
-  const retryBtn    = $('retryBtn');
+  const listEl    = $('releasesList');
+  const emptyEl   = $('emptyState');
+  const errorEl   = $('errorState');
+  const errorMsg  = $('errorMsg');
+  const searchIn  = $('searchInput');
+  const searchClr = $('searchClear');
 
-  const statReleases  = $('statReleases');
-  const statDownloads = $('statDownloads');
-  const statLatest    = $('statLatest');
+  const stRel  = $('statReleases');
+  const stDl   = $('statDownloads');
+  const stLast = $('statLatest');
 
   // Changelog modal
-  const clOverlay = $('changelogOverlay');
-  const clBox     = $('changelogBox');
-  const clTag     = $('clTag');
-  const clTitle   = $('clTitle');
-  const clBody    = $('clBody');
-  const clClose   = $('changelogClose');
+  const clOv    = $('clOverlay');
+  const clTag   = $('clTag');
+  const clTitle = $('clTitle');
+  const clBody  = $('clBody');
+  const clClose = $('clClose');
 
   // Mirror modal
-  const mirrorOverlay    = $('mirrorOverlay');
-  const mirrorBox        = $('mirrorBox');
-  const mirrorTitleEl    = $('mirrorTitle');
-  const mirrorLinksEl    = $('mirrorLinksList');
-  const mirrorUrlInput   = $('mirrorUrlInput');
-  const mirrorLabelInput = $('mirrorLabelInput');
-  const addMirrorBtn     = $('addMirrorBtn');
-  const mirrorClose      = $('mirrorClose');
+  const mirOv    = $('mirOverlay');
+  const mirTitle = $('mirTitle');
+  const mirList  = $('mirList');
+  const mirUrl   = $('mirUrl');
+  const mirLabel = $('mirLabel');
+  const mirAdd   = $('mirAdd');
+  const mirClose = $('mirClose');
 
-  /* ── Theme ──────────────────────────────────────────── */
-  const html       = document.documentElement;
-  const toggleBtn  = $('themeToggle');
-  const ripple     = $('themeRipple');
+  /* ── Theme ───────────────────────────────────────────── */
+  const html      = document.documentElement;
+  const themeBtn  = $('themeBtn');
+  const rippleEl  = $('tRipple');
 
-  const savedTheme = localStorage.getItem('snapperf_theme') || 'dark';
-  html.setAttribute('data-theme', savedTheme);
+  // Apply saved theme on load
+  const saved = localStorage.getItem('sp_theme') || 'dark';
+  html.setAttribute('data-theme', saved);
 
-  toggleBtn.addEventListener('click', e => {
-    const current   = html.getAttribute('data-theme');
-    const next      = current === 'dark' ? 'light' : 'dark';
-    const rect      = toggleBtn.getBoundingClientRect();
-    const cx        = rect.left + rect.width / 2;
-    const cy        = rect.top  + rect.height / 2;
+  themeBtn.addEventListener('click', () => {
+    const cur  = html.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
 
-    // Compute size to cover full screen from btn origin
-    const maxDim = Math.max(
+    // Ripple from button center
+    const r   = themeBtn.getBoundingClientRect();
+    const cx  = r.left + r.width / 2;
+    const cy  = r.top  + r.height / 2;
+    const sz  = Math.max(
       Math.hypot(cx, cy),
       Math.hypot(window.innerWidth - cx, cy),
       Math.hypot(cx, window.innerHeight - cy),
       Math.hypot(window.innerWidth - cx, window.innerHeight - cy)
-    ) * 2;
+    ) * 2.1;
 
-    const size = maxDim;
+    Object.assign(rippleEl.style, {
+      width:  sz + 'px',
+      height: sz + 'px',
+      left:   (cx - sz / 2) + 'px',
+      top:    (cy - sz / 2) + 'px',
+    });
+    rippleEl.className = `t-ripple rip-${next}`;
 
-    // Position ripple
-    ripple.style.cssText = `
-      width: ${size}px;
-      height: ${size}px;
-      left: ${cx - size / 2}px;
-      top: ${cy - size / 2}px;
-      border-radius: 50%;
-      position: fixed;
-      pointer-events: none;
-      z-index: 9999;
-      transform: scale(0);
-      opacity: 1;
-    `;
-
-    ripple.className = `theme-ripple ripple-${next}`;
-
-    // After ripple peaks, apply theme
     setTimeout(() => {
       html.setAttribute('data-theme', next);
-      localStorage.setItem('snapperf_theme', next);
-    }, 200);
+      localStorage.setItem('sp_theme', next);
+    }, 210);
 
-    // Remove ripple after animation
     setTimeout(() => {
-      ripple.className = 'theme-ripple';
-      ripple.style.cssText = '';
+      rippleEl.className = 't-ripple';
+      rippleEl.removeAttribute('style');
     }, 620);
   });
 
-  /* ── Mirrors storage ─────────────────────────────────── */
+  /* ── Mirror storage ──────────────────────────────────── */
   function getMirrors() {
-    try { return JSON.parse(localStorage.getItem(MIRRORS_KEY) || '{}'); }
-    catch { return {}; }
+    try { return JSON.parse(localStorage.getItem(MIR_KEY) || '{}'); } catch { return {}; }
+  }
+  function saveMirrors(d) { localStorage.setItem(MIR_KEY, JSON.stringify(d)); }
+  function getTagMirrors(tag) { return getMirrors()[tag] || []; }
+  function addTagMirror(tag, url, label) {
+    const d = getMirrors();
+    if (!d[tag]) d[tag] = [];
+    d[tag].push({ url, label: label || url });
+    saveMirrors(d);
+  }
+  function delTagMirror(tag, idx) {
+    const d = getMirrors();
+    if (d[tag]) { d[tag].splice(idx, 1); saveMirrors(d); }
   }
 
-  function saveMirrors(data) {
-    localStorage.setItem(MIRRORS_KEY, JSON.stringify(data));
-  }
-
-  function getMirrorsForTag(tag) {
-    return getMirrors()[tag] || [];
-  }
-
-  function addMirrorForTag(tag, url, label) {
-    const all = getMirrors();
-    if (!all[tag]) all[tag] = [];
-    all[tag].push({ url, label: label || url });
-    saveMirrors(all);
-  }
-
-  function deleteMirrorForTag(tag, idx) {
-    const all = getMirrors();
-    if (!all[tag]) return;
-    all[tag].splice(idx, 1);
-    saveMirrors(all);
-  }
-
-  /* ── Fetch ──────────────────────────────────────────── */
+  /* ── Fetch ───────────────────────────────────────────── */
   async function fetchReleases() {
-    showSkeleton();
+    showSkel();
     try {
-      const r = await fetch(API, {
+      const res = await fetch(API_URL, {
         headers: { Accept: 'application/vnd.github.v3+json' }
       });
-      if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.statusText}`);
-      const data = await r.json();
-      if (!Array.isArray(data)) throw new Error('Unexpected API format');
+      if (!res.ok) throw new Error(`GitHub API: HTTP ${res.status} ${res.statusText}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('Unexpected API response format');
+
       releases = data;
-      computeStats(data);
-      renderFiltered();
-    } catch (err) {
-      showError(err.message);
+      updateStats(data);
+      renderList();
+    } catch (e) {
+      showError(e.message);
     }
   }
 
-  /* ── Stats ──────────────────────────────────────────── */
-  function computeStats(data) {
-    const totalDL   = data.reduce((s, r) =>
+  /* ── Stats ───────────────────────────────────────────── */
+  function updateStats(data) {
+    const totalDl = data.reduce((s, r) =>
       s + r.assets.reduce((a, x) => a + (x.download_count || 0), 0), 0);
-    const stable    = data.find(r => !r.prerelease);
-    statReleases.textContent  = data.length;
-    statDownloads.textContent = fmtNum(totalDL);
-    statLatest.textContent    = stable ? stable.tag_name : (data[0]?.tag_name || '—');
+    const stable  = data.find(r => !r.prerelease);
+
+    stRel.textContent  = data.length || '0';
+    stDl.textContent   = fNum(totalDl);
+    stLast.textContent = stable ? stable.tag_name : (data[0]?.tag_name || 'N/A');
   }
 
   /* ── Render ──────────────────────────────────────────── */
-  function renderFiltered() {
-    const q = query.toLowerCase();
+  function renderList() {
+    const q = searchQ.toLowerCase();
     const filtered = releases.filter(r => {
-      const ok = filter === 'all'    ? true
-               : filter === 'stable' ? !r.prerelease
-               : filter === 'beta'   ? r.prerelease : true;
-      const match = !q
+      const byFilter =
+        activeFilter === 'stable' ? !r.prerelease :
+        activeFilter === 'beta'   ?  r.prerelease : true;
+      const byQ = !q
         || r.tag_name.toLowerCase().includes(q)
         || (r.name  || '').toLowerCase().includes(q)
         || (r.body  || '').toLowerCase().includes(q);
-      return ok && match;
+      return byFilter && byQ;
     });
 
-    clearList();
+    listEl.innerHTML = '';
 
     if (!filtered.length) { showEmpty(); return; }
-    hideEmpty(); hideError();
+    emptyEl.hidden = true;
+    errorEl.hidden = true;
 
-    filtered.forEach((r, i) => {
-      const card = buildCard(r, i);
-      listEl.appendChild(card);
-    });
+    filtered.forEach((r, i) => listEl.appendChild(buildCard(r, i)));
   }
 
-  /* ── Card ───────────────────────────────────────────── */
+  /* ── Card ────────────────────────────────────────────── */
   function buildCard(r, idx) {
-    const pre    = r.prerelease;
-    const tag    = r.tag_name;
-    const name   = r.name || tag;
-    const date   = fmtDate(r.published_at);
-    const totalDL = r.assets.reduce((a, x) => a + (x.download_count || 0), 0);
-    const mirrors = getMirrorsForTag(tag);
+    const pre   = r.prerelease;
+    const tag   = r.tag_name;
+    const name  = r.name || tag;
+    const dl    = r.assets.reduce((a, x) => a + (x.download_count || 0), 0);
+    const mirs  = getTagMirrors(tag);
 
-    const card = mk('div', 'release-card');
-    card.style.animationDelay = `${idx * 55}ms`;
+    const card = mk('div', 'r-card');
+    card.style.animationDelay = `${idx * 50}ms`;
 
-    /* ── Top section ── */
-    const top = mk('div', 'card-top');
+    /* head */
+    const head = mk('div', 'c-head');
+    const row  = mk('div', 'c-title-row');
 
-    // Left: version/name/meta
-    const info = mk('div', '');
-    info.style.flex = '1';
-
-    const vRow = mk('div', 'card-version-row');
-    const vEl  = mk('span', 'card-version');
-    vEl.textContent = tag;
-    const tagEl = mk('span', pre ? 'tag-beta' : 'tag-stable');
+    // Left
+    const left  = mk('div', 'c-left');
+    const verRow = mk('div', 'c-ver');
+    const verNum = mk('span', 'c-ver-num'); verNum.textContent = tag;
+    const tagEl  = mk('span', pre ? 'tag tag-b' : 'tag tag-s');
     tagEl.textContent = pre ? 'Beta' : 'Stable';
-    vRow.append(vEl, tagEl);
+    verRow.append(verNum, tagEl);
 
-    const nameEl = mk('p', 'card-name');
+    const nameEl = mk('p', 'c-name');
     nameEl.textContent = (name !== tag) ? name : `SnapPerf ${tag}`;
 
-    const meta = mk('div', 'card-meta');
-    meta.appendChild(metaItem(calIco(), date));
-    meta.appendChild(metaItem(dlIco(), `${fmtNum(totalDL)} downloads`));
-    meta.appendChild(metaItem(pkgIco(), `${r.assets.length} file${r.assets.length !== 1 ? 's' : ''}`));
+    const meta = mk('div', 'c-meta');
+    meta.appendChild(metaI(icoDate(), fDate(r.published_at)));
+    meta.appendChild(metaI(icoDl(), `${fNum(dl)} downloads`));
+    if (r.assets.length) meta.appendChild(metaI(icoPkg(), `${r.assets.length} asset${r.assets.length !== 1 ? 's' : ''}`));
 
-    const uploader = mk('div', 'card-uploader');
-    uploader.innerHTML = `${personIco()} Uploaded by <strong>${UPLOADER}</strong>`;
+    const upl = mk('div', 'c-uploader');
+    upl.innerHTML = `${icoUser()} Uploaded by <strong>${UPLOADER}</strong>`;
 
-    info.append(vRow, nameEl, meta, uploader);
+    left.append(verRow, nameEl, meta, upl);
 
-    // Right: changelog + mirror buttons
-    const topRight = mk('div', 'card-top-right');
+    // Right: buttons
+    const right = mk('div', 'c-right');
 
     const clBtn = mk('button', 'btn-ghost');
-    clBtn.innerHTML = `${docIco()} Changelog`;
+    clBtn.innerHTML = `${icoDoc()} Changelog`;
     clBtn.addEventListener('click', () => openChangelog(r));
 
     const mirBtn = mk('button', 'btn-ghost');
-    mirBtn.innerHTML = `${linkIco()} Mirrors${mirrors.length ? ` (${mirrors.length})` : ''}`;
-    mirBtn.dataset.mirrorTag = tag;
-    mirBtn.addEventListener('click', () => openMirrors(r, mirBtn));
+    mirBtn.innerHTML = `${icoLink()} Mirrors${mirs.length ? ` (${mirs.length})` : ''}`;
+    mirBtn.dataset.tag = tag;
+    mirBtn.addEventListener('click', () => openMirror(r, mirBtn));
 
-    topRight.append(clBtn, mirBtn);
-    top.append(info, topRight);
+    right.append(clBtn, mirBtn);
+    row.append(left, right);
+    head.append(row);
 
-    /* ── Asset rows ── */
-    const assetsWrap = mk('div', 'card-assets');
-
+    /* assets */
+    const assets = mk('div', 'c-assets');
     if (!r.assets.length) {
-      const empty = mk('p', '');
-      empty.textContent = 'No downloadable assets';
-      empty.style.cssText = 'font-size:13px;color:var(--text-3);padding:4px 0';
-      assetsWrap.appendChild(empty);
+      const noA = mk('p', '');
+      noA.textContent = 'No downloadable assets for this release.';
+      noA.style.cssText = 'font-size:13px;color:var(--t3);padding:4px 0';
+      assets.appendChild(noA);
     } else {
-      r.assets.forEach(a => assetsWrap.appendChild(buildAssetRow(a)));
+      r.assets.forEach(a => assets.appendChild(buildAssetRow(a)));
     }
 
-    /* ── Footer bar: mirror chips ── */
-    const footerBar = mk('div', 'card-footer-bar');
-    footerBar.id = `mirrorBar_${tag.replace(/[^a-z0-9]/gi, '_')}`;
+    /* foot: mirror chips + gh link */
+    const foot = mk('div', 'c-foot');
+    foot.id = `cfoot_${tag.replace(/\W/g,'_')}`;
 
-    const chips = mk('div', 'mirror-chips');
-    renderMirrorChips(chips, tag);
+    const chips = mk('div', 'c-mirrors');
+    buildMirChips(chips, tag);
 
-    const ghLink = mk('a', 'btn-ghost');
-    ghLink.href   = r.html_url;
-    ghLink.target = '_blank';
-    ghLink.rel    = 'noopener noreferrer';
-    ghLink.innerHTML = `${ghIco()} View release`;
+    const ghA = mk('a', 'btn-ghost');
+    ghA.href   = r.html_url;
+    ghA.target = '_blank';
+    ghA.rel    = 'noopener noreferrer';
+    ghA.innerHTML = `${icoGH()} View release`;
 
-    footerBar.append(chips, ghLink);
-
-    card.append(top, assetsWrap, footerBar);
+    foot.append(chips, ghA);
+    card.append(head, assets, foot);
     return card;
   }
 
-  /* ── Render mirror chips into a container ─────────────── */
-  function renderMirrorChips(container, tag) {
+  function buildMirChips(container, tag) {
     container.innerHTML = '';
-    const mirrors = getMirrorsForTag(tag);
-    if (!mirrors.length) return;
-
-    mirrors.forEach(m => {
-      const chip = mk('a', 'mirror-chip');
-      chip.href   = m.url;
-      chip.target = '_blank';
-      chip.rel    = 'noopener noreferrer';
-      chip.innerHTML = `${linkIco()} ${m.label}`;
+    getTagMirrors(tag).forEach(m => {
+      const chip = mk('a', 'mir-chip');
+      chip.href = m.url; chip.target = '_blank'; chip.rel = 'noopener noreferrer';
+      chip.innerHTML = `${icoLink()} ${m.label}`;
       container.appendChild(chip);
     });
   }
 
-  /* ── Refresh mirror chips on a specific card ──────────── */
-  function refreshCardMirrors(tag) {
-    const safeId = `mirrorBar_${tag.replace(/[^a-z0-9]/gi, '_')}`;
-    const bar    = document.getElementById(safeId);
-    if (!bar) return;
-    const chips  = bar.querySelector('.mirror-chips');
-    if (chips) renderMirrorChips(chips, tag);
+  function refreshFoot(tag) {
+    const foot = document.getElementById(`cfoot_${tag.replace(/\W/g,'_')}`);
+    if (!foot) return;
+    const chips = foot.querySelector('.c-mirrors');
+    if (chips) buildMirChips(chips, tag);
 
-    // Also refresh mirror button label
-    const mirBtn = bar.closest('.release-card')?.querySelector('[data-mirror-tag]');
-    if (mirBtn) {
-      const count = getMirrorsForTag(tag).length;
-      mirBtn.innerHTML = `${linkIco()} Mirrors${count ? ` (${count})` : ''}`;
-    }
+    // refresh button label
+    const mirBtns = document.querySelectorAll(`[data-tag="${tag}"]`);
+    mirBtns.forEach(btn => {
+      const count = getTagMirrors(tag).length;
+      btn.innerHTML = `${icoLink()} Mirrors${count ? ` (${count})` : ''}`;
+    });
   }
 
-  /* ── Asset Row ──────────────────────────────────────── */
-  function buildAssetRow(asset) {
-    const row  = mk('div', 'asset-row');
-    const ico  = mk('div', 'asset-file-icon');
-    ico.innerHTML = zipIco();
-
-    const info = mk('div', 'asset-info');
-    const fn   = mk('div', 'asset-filename');
-    fn.textContent = asset.name;
-    const sub  = mk('div', 'asset-sub');
-    sub.innerHTML  = `<span>${fmtBytes(asset.size)}</span><span>${fmtNum(asset.download_count)} downloads</span>`;
-    info.append(fn, sub);
-
+  /* ── Asset row ───────────────────────────────────────── */
+  function buildAssetRow(a) {
+    const row  = mk('div', 'a-row');
+    const ico  = mk('div', 'a-ico'); ico.innerHTML = icoZip();
+    const info = mk('div', 'a-info');
+    const name = mk('div', 'a-name'); name.textContent = a.name;
+    const sub  = mk('div', 'a-sub');
+    sub.innerHTML = `<span>${fBytes(a.size)}</span><span>${fNum(a.download_count)} dl</span>`;
+    info.append(name, sub);
     const btn = mk('a', 'btn-dl');
-    btn.href     = asset.browser_download_url;
-    btn.download = '';
-    btn.innerHTML = `${dlArrowIco()} Download`;
-
+    btn.href = a.browser_download_url; btn.download = '';
+    btn.innerHTML = `${icoDlArr()} Download`;
     row.append(ico, info, btn);
     return row;
   }
 
-  /* ── Meta item helper ───────────────────────────────── */
-  function metaItem(iconSvg, text) {
-    const el = mk('div', 'card-meta-item');
-    el.innerHTML = `${iconSvg}<span>${text}</span>`;
+  function metaI(ico, text) {
+    const el = mk('div', 'c-meta-i');
+    el.innerHTML = `${ico}<b>${text}</b>`;
     return el;
   }
 
-  /* ── Changelog modal ────────────────────────────────── */
+  /* ── Changelog modal ─────────────────────────────────── */
   function openChangelog(r) {
     clTag.textContent   = r.tag_name;
     clTitle.textContent = r.name || r.tag_name;
-
-    const body = r.body ? r.body.trim() : '*No changelog provided.*';
-    clBody.innerHTML = (typeof marked !== 'undefined')
+    const body = (r.body || '').trim() || '*No changelog provided for this release.*';
+    clBody.innerHTML = typeof marked !== 'undefined'
       ? marked.parse(body)
-      : `<pre style="white-space:pre-wrap;font-size:13px;color:var(--text-2)">${escHtml(body)}</pre>`;
+      : `<pre style="white-space:pre-wrap;font-size:13px;color:var(--t2)">${escH(body)}</pre>`;
+    openMod(clOv);
+  }
+  clClose.addEventListener('click', () => closeMod(clOv));
 
-    openModal(clOverlay);
+  /* ── Mirror modal ────────────────────────────────────── */
+  function openMirror(r, btn) {
+    mirFocusTag = r.tag_name;
+    mirTitle.textContent = r.name || r.tag_name;
+    mirUrl.value = ''; mirLabel.value = '';
+    buildMirList();
+    openMod(mirOv);
   }
 
-  clClose.addEventListener('click', () => closeModal(clOverlay));
-
-  /* ── Mirror modal ───────────────────────────────────── */
-  function openMirrors(r, triggerBtn) {
-    mirrorTagFocus         = r.tag_name;
-    mirrorTitleEl.textContent = r.name || r.tag_name;
-    mirrorUrlInput.value   = '';
-    mirrorLabelInput.value = '';
-    renderMirrorList();
-    openModal(mirrorOverlay);
-  }
-
-  function renderMirrorList() {
-    if (!mirrorTagFocus) return;
-    mirrorLinksEl.innerHTML = '';
-    const mirrors = getMirrorsForTag(mirrorTagFocus);
-
-    if (!mirrors.length) {
-      const empty = mk('p', 'mirror-empty');
-      empty.textContent = 'No mirror links added yet.';
-      mirrorLinksEl.appendChild(empty);
-      return;
+  function buildMirList() {
+    mirList.innerHTML = '';
+    const mirs = getTagMirrors(mirFocusTag);
+    if (!mirs.length) {
+      const e = mk('p', 'mir-empty'); e.textContent = 'No mirrors added yet.';
+      mirList.appendChild(e); return;
     }
-
-    mirrors.forEach((m, idx) => {
-      const entry  = mk('div', 'mirror-entry');
-      const mInfo  = mk('div', 'mirror-entry-info');
-      const label  = mk('div', 'mirror-entry-label');
-      label.textContent = m.label || m.url;
-      const url    = mk('div', 'mirror-entry-url');
-      url.textContent = m.url;
-      mInfo.append(label, url);
-
-      const del    = mk('button', 'mirror-entry-del');
-      del.innerHTML = '✕';
-      del.title     = 'Remove';
+    mirs.forEach((m, i) => {
+      const entry = mk('div', 'mir-entry');
+      const info  = mk('div', 'mir-entry-info');
+      const lbl   = mk('div', 'mir-el'); lbl.textContent = m.label;
+      const url   = mk('div', 'mir-eu'); url.textContent = m.url;
+      info.append(lbl, url);
+      const del  = mk('button', 'mir-del');
+      del.innerHTML = '✕'; del.title = 'Remove';
       del.addEventListener('click', () => {
-        deleteMirrorForTag(mirrorTagFocus, idx);
-        renderMirrorList();
-        refreshCardMirrors(mirrorTagFocus);
+        delTagMirror(mirFocusTag, i);
+        buildMirList();
+        refreshFoot(mirFocusTag);
       });
-
-      entry.append(mInfo, del);
-      mirrorLinksEl.appendChild(entry);
+      entry.append(info, del);
+      mirList.appendChild(entry);
     });
   }
 
-  addMirrorBtn.addEventListener('click', () => {
-    const url   = mirrorUrlInput.value.trim();
-    const label = mirrorLabelInput.value.trim();
-    if (!url) { mirrorUrlInput.focus(); return; }
-
-    try { new URL(url); }
-    catch {
-      mirrorUrlInput.style.borderColor = '#ff453a';
-      setTimeout(() => { mirrorUrlInput.style.borderColor = ''; }, 1200);
+  mirAdd.addEventListener('click', () => {
+    const url   = mirUrl.value.trim();
+    const label = mirLabel.value.trim();
+    if (!url) { mirUrl.focus(); return; }
+    try { new URL(url); } catch {
+      mirUrl.style.borderColor = '#ff3b30';
+      setTimeout(() => mirUrl.style.borderColor = '', 1200);
       return;
     }
-
-    addMirrorForTag(mirrorTagFocus, url, label || url);
-    mirrorUrlInput.value   = '';
-    mirrorLabelInput.value = '';
-    renderMirrorList();
-    refreshCardMirrors(mirrorTagFocus);
+    addTagMirror(mirFocusTag, url, label || url);
+    mirUrl.value = ''; mirLabel.value = '';
+    buildMirList();
+    refreshFoot(mirFocusTag);
   });
+  mirClose.addEventListener('click', () => closeMod(mirOv));
 
-  mirrorClose.addEventListener('click', () => closeModal(mirrorOverlay));
-
-  /* ── Modal helpers ──────────────────────────────────── */
-  function openModal(overlay) {
-    overlay.hidden = false;
-    requestAnimationFrame(() => overlay.classList.add('open'));
+  /* ── Modal helpers ───────────────────────────────────── */
+  function openMod(ov) {
+    ov.hidden = false;
+    requestAnimationFrame(() => ov.classList.add('open'));
     document.body.style.overflow = 'hidden';
   }
-
-  function closeModal(overlay) {
-    overlay.classList.remove('open');
-    setTimeout(() => {
-      overlay.hidden = true;
-      document.body.style.overflow = '';
-    }, 260);
+  function closeMod(ov) {
+    ov.classList.remove('open');
+    setTimeout(() => { ov.hidden = true; document.body.style.overflow = ''; }, 250);
   }
+  // No backdrop click to close — only X button
 
-  // No backdrop close — only X button closes modal (per requirement)
-
-  /* ── Search ─────────────────────────────────────────── */
+  /* ── Search ──────────────────────────────────────────── */
   searchIn.addEventListener('input', () => {
-    query = searchIn.value;
-    searchClr.classList.toggle('show', query.length > 0);
-    renderFiltered();
+    searchQ = searchIn.value;
+    searchClr.classList.toggle('on', searchQ.length > 0);
+    renderList();
   });
-
   searchClr.addEventListener('click', () => {
-    searchIn.value = '';
-    query = '';
-    searchClr.classList.remove('show');
-    searchIn.focus();
-    renderFiltered();
+    searchIn.value = ''; searchQ = '';
+    searchClr.classList.remove('on');
+    searchIn.focus(); renderList();
   });
 
-  /* ── Filter pills ───────────────────────────────────── */
+  /* ── Pills ───────────────────────────────────────────── */
   document.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.pill').forEach(b => {
-        b.classList.remove('active');
-        b.removeAttribute('aria-selected');
-      });
-      btn.classList.add('active');
-      btn.setAttribute('aria-selected', 'true');
-      filter = btn.dataset.filter;
-      renderFiltered();
+      document.querySelectorAll('.pill').forEach(b => b.classList.remove('pill-active'));
+      btn.classList.add('pill-active');
+      activeFilter = btn.dataset.filter;
+      renderList();
     });
   });
 
-  /* ── Retry ──────────────────────────────────────────── */
-  retryBtn.addEventListener('click', fetchReleases);
+  /* ── Retry ───────────────────────────────────────────── */
+  $('retryBtn').addEventListener('click', fetchReleases);
 
-  /* ── Disable text selection ─────────────────────────── */
+  /* ── No selection / copy ─────────────────────────────── */
   document.addEventListener('selectstart', e => {
-    const tag = e.target.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (['INPUT','TEXTAREA'].includes(e.target.tagName)) return;
     e.preventDefault();
   });
-
   document.addEventListener('contextmenu', e => e.preventDefault());
-
   document.addEventListener('copy', e => {
-    const tag = document.activeElement?.tagName;
-    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    if (['INPUT','TEXTAREA'].includes(document.activeElement?.tagName)) return;
     e.preventDefault();
   });
 
-  /* ── List helpers ───────────────────────────────────── */
-  function showSkeleton() {
+  /* ── List state helpers ──────────────────────────────── */
+  function showSkel() {
     listEl.innerHTML = `
-      <div class="skel-card" style="height:240px"></div>
-      <div class="skel-card" style="height:200px"></div>
-      <div class="skel-card" style="height:220px"></div>`;
-    emptyEl.hidden = true;
-    errorEl.hidden = true;
+      <div class="skel" style="height:230px"></div>
+      <div class="skel" style="height:200px"></div>
+      <div class="skel" style="height:215px"></div>`;
+    emptyEl.hidden = true; errorEl.hidden = true;
   }
-
-  function clearList() { listEl.innerHTML = ''; }
   function showEmpty() { emptyEl.hidden = false; errorEl.hidden = true; }
-  function hideEmpty() { emptyEl.hidden = true; }
   function showError(msg) {
-    clearList();
-    errorMsgEl.textContent = msg || 'Unknown error';
-    errorEl.hidden   = false;
-    emptyEl.hidden   = true;
+    listEl.innerHTML = '';
+    errorMsg.textContent = msg || 'Unknown error';
+    errorEl.hidden = false; emptyEl.hidden = true;
   }
-  function hideError() { errorEl.hidden = true; }
 
-  /* ── Format helpers ─────────────────────────────────── */
-  function fmtNum(n) {
+  /* ── Format ──────────────────────────────────────────── */
+  function fNum(n) {
     if (!n) return '0';
-    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
-    if (n >= 1e3) return (n / 1e3).toFixed(1) + 'k';
+    if (n >= 1e6) return (n/1e6).toFixed(1)+'M';
+    if (n >= 1e3) return (n/1e3).toFixed(1)+'k';
     return String(n);
   }
-
-  function fmtBytes(b) {
+  function fBytes(b) {
     if (!b) return '—';
-    if (b < 1024)      return b + ' B';
-    if (b < 1048576)   return (b / 1024).toFixed(1) + ' KB';
-    return (b / 1048576).toFixed(2) + ' MB';
+    if (b < 1024)    return b + ' B';
+    if (b < 1048576) return (b/1024).toFixed(1) + ' KB';
+    return (b/1048576).toFixed(2) + ' MB';
   }
-
-  function fmtDate(iso) {
+  function fDate(iso) {
     if (!iso) return '—';
-    return new Date(iso).toLocaleDateString('en-US', {
-      year: 'numeric', month: 'short', day: 'numeric'
-    });
+    return new Date(iso).toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
   }
-
-  function escHtml(s) {
+  function escH(s) {
     return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
+  function mk(t, c) { const e = document.createElement(t); if (c) e.className = c; return e; }
 
-  function mk(tag, cls) {
-    const e = document.createElement(tag);
-    if (cls) e.className = cls;
-    return e;
-  }
+  /* ── Icons ───────────────────────────────────────────── */
+  function icoDate()   { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="2"/><path d="M1 5h12M5 1v2M9 1v2"/></svg>`; }
+  function icoDl()     { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7 1v8M4 6.5l3 3 3-3M1 11h12"/></svg>`; }
+  function icoPkg()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="5" width="12" height="8" rx="1.5"/><path d="M1 8h12M4.5 1l-2 4h9l-2-4"/></svg>`; }
+  function icoUser()   { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="5" r="3"/><path d="M1 13c0-3 2.7-5 6-5s6 2 6 5"/></svg>`; }
+  function icoDoc()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3"/></svg>`; }
+  function icoLink()   { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5.5 8.5a4 4 0 005.6-5.6L9.5 1.3a4 4 0 00-5.6 5.6M8.5 5.5a4 4 0 00-5.6 5.6l1.6 1.6a4 4 0 005.6-5.6"/></svg>`; }
+  function icoGH()     { return `<svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 .175C3.5.175.7 2.95.7 6.4c0 2.75 1.8 5.1 4.3 5.925.3.05.425-.125.425-.275 0-.125-.025-.575-.025-1.075-1.675.35-2.025-.8-2.025-.8-.275-.7-.675-.875-.675-.875-.55-.375.05-.375.05-.375.6.05.925.625.925.625.55.925 1.425.675 1.775.5.05-.4.2-.675.375-.825-1.325-.125-2.725-.65-2.725-2.95 0-.65.225-1.2.625-1.625-.075-.15-.275-.775.075-1.6 0 0 .525-.175 1.7.625.5-.125 1.025-.2 1.55-.2s1.05.075 1.55.2c1.175-.8 1.7-.625 1.7-.625.35.825.15 1.45.075 1.6.4.425.625.975.625 1.625 0 2.3-1.4 2.8-2.75 2.95.225.2.425.575.425 1.175v1.75c0 .15.1.325.425.275 2.5-.825 4.3-3.175 4.3-5.925C13.3 2.95 10.5.175 7 .175z"/></svg>`; }
+  function icoZip()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M5.5 1v3L7 5l1.5-1V1M7 5v2"/><circle cx="7" cy="9" r="1" fill="currentColor" stroke="none"/></svg>`; }
+  function icoDlArr()  { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v8M4.5 6.5l2.5 3 2.5-3M1 11h12"/></svg>`; }
 
-  /* ── Inline SVG icons ───────────────────────────────── */
-  function calIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="2"/><path d="M1 5h12M5 1v2M9 1v2"/></svg>`; }
-  function dlIco()     { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7 1v8M4 6l3 3 3-3M1 11h12"/></svg>`; }
-  function pkgIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="5" width="12" height="8" rx="1.5"/><path d="M1 8h12M4.5 1l-2 4h9l-2-4"/></svg>`; }
-  function personIco() { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="5" r="3"/><path d="M1 13c0-3 2.7-5 6-5s6 2 6 5"/></svg>`; }
-  function docIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3"/></svg>`; }
-  function linkIco()   { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5.5 8.5a4 4 0 005.6-5.6L9.5 1.3a4 4 0 00-5.6 5.6"/><path d="M8.5 5.5a4 4 0 00-5.6 5.6l1.6 1.6a4 4 0 005.6-5.6"/></svg>`; }
-  function ghIco()     { return `<svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 .175C3.5.175.7 2.95.7 6.4c0 2.75 1.8 5.1 4.3 5.925.3.05.425-.125.425-.275 0-.125-.025-.575-.025-1.075-1.675.35-2.025-.8-2.025-.8-.275-.7-.675-.875-.675-.875-.55-.375.05-.375.05-.375.6.05.925.625.925.625.55.925 1.425.675 1.775.5.05-.4.2-.675.375-.825-1.325-.125-2.725-.65-2.725-2.95 0-.65.225-1.2.625-1.625-.075-.15-.275-.775.075-1.6 0 0 .525-.175 1.7.625.5-.125 1.025-.2 1.55-.2s1.05.075 1.55.2c1.175-.8 1.7-.625 1.7-.625.35.825.15 1.45.075 1.6.4.425.625.975.625 1.625 0 2.3-1.4 2.8-2.75 2.95.225.2.425.575.425 1.175v1.75c0 .15.1.325.425.275 2.5-.825 4.3-3.175 4.3-5.925C13.3 2.95 10.5.175 7 .175z"/></svg>`; }
-  function zipIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M5.5 1v3.5L7 5.5l1.5-1V1M7 5.5v2"/><circle cx="7" cy="9.5" r="1" fill="currentColor" stroke="none"/></svg>`; }
-  function dlArrowIco(){ return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v8M4 6.5l3 3 3-3M1 11h12"/></svg>`; }
-
-  /* ── Init ───────────────────────────────────────────── */
+  /* ── Boot ────────────────────────────────────────────── */
   fetchReleases();
 
 })();

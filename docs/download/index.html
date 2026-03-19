@@ -2,164 +2,157 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="SnapPerf Manager – Snapdragon Performance Optimizer for Magisk, KernelSU & APatch" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="description" content="SnapPerf Manager – Snapdragon Performance Optimizer" />
   <title>SnapPerf — Downloads</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap" rel="stylesheet" />
   <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
-  <div class="theme-ripple" id="themeRipple"></div>
+  <!-- Theme transition ripple -->
+  <div class="t-ripple" id="tRipple"></div>
 
-  <!-- Header -->
-  <header class="header">
-    <div class="header-inner">
-      <div class="brand">
-        <svg class="brand-mark" viewBox="0 0 28 28" fill="none">
-          <rect x="1" y="1" width="26" height="26" rx="7" stroke="currentColor" stroke-width="1.4"/>
-          <path d="M8 14 L11.5 10 L15 14 L18.5 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-          <circle cx="14" cy="18.5" r="1.2" fill="currentColor"/>
+  <!-- ════════════════ HEADER ════════════════ -->
+  <header class="hdr">
+    <div class="hdr-inner">
+      <div class="hdr-brand">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5"/>
+          <path d="M7 12 L10 8.5 L13 12 L16 8.5"/>
+          <circle cx="12" cy="15.5" r="1" fill="currentColor" stroke="none"/>
         </svg>
-        <span class="brand-name">SnapPerf</span>
+        <span>SnapPerf</span>
       </div>
-      <div class="header-actions">
-        <a href="https://github.com/aetherdev01/SnapPerf" target="_blank" class="hdr-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+
+      <div class="hdr-right">
+        <a href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener" class="hdr-a">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
           GitHub
         </a>
-        <a href="https://t.me/get01projects" target="_blank" class="hdr-link">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        <a href="https://t.me/get01projects" target="_blank" rel="noopener" class="hdr-a">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
           Channel
         </a>
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-          <svg class="icon-sun" viewBox="0 0 20 20" fill="currentColor">
-            <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
-          </svg>
-          <svg class="icon-moon" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
-          </svg>
+        <button class="hdr-theme-btn" id="themeBtn" aria-label="Toggle theme">
+          <!-- sun -->
+          <svg class="ico-sun" viewBox="0 0 20 20" fill="currentColor"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"/></svg>
+          <!-- moon -->
+          <svg class="ico-moon" viewBox="0 0 20 20" fill="currentColor"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/></svg>
         </button>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- ════════════════ HERO ════════════════ -->
   <section class="hero">
-    <div class="hero-inner">
-      <h1 class="hero-title">Downloads</h1>
-      <p class="hero-desc">Snapdragon Performance Optimizer for Magisk · KernelSU · APatch</p>
-      <div class="stats-row" id="statsRow">
-        <div class="stat-chip">
-          <span class="stat-val" id="statReleases">—</span>
-          <span class="stat-lbl">Releases</span>
-        </div>
-        <div class="stat-dot"></div>
-        <div class="stat-chip">
-          <span class="stat-val" id="statDownloads">—</span>
-          <span class="stat-lbl">Downloads</span>
-        </div>
-        <div class="stat-dot"></div>
-        <div class="stat-chip">
-          <span class="stat-val" id="statLatest">—</span>
-          <span class="stat-lbl">Latest</span>
-        </div>
+    <h1 class="hero-h1">Downloads</h1>
+    <p class="hero-sub">Snapdragon Performance Optimizer · Magisk · KernelSU · APatch</p>
+
+    <div class="stats-bar">
+      <div class="stat-unit">
+        <b id="statReleases">—</b>
+        <span>Releases</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-unit">
+        <b id="statDownloads">—</b>
+        <span>Downloads</span>
+      </div>
+      <div class="stat-sep"></div>
+      <div class="stat-unit">
+        <b id="statLatest">—</b>
+        <span>Latest</span>
       </div>
     </div>
   </section>
 
-  <!-- Controls -->
-  <div class="controls">
-    <div class="controls-inner">
-      <div class="search-box">
-        <svg class="search-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
-          <circle cx="8" cy="8" r="5.5"/><path d="M13 13l2.5 2.5"/>
-        </svg>
-        <input id="searchInput" class="search-input" type="search" placeholder="Search releases, versions…" autocomplete="off" spellcheck="false" />
-        <button id="searchClear" class="search-clear" aria-label="Clear search">✕</button>
+  <!-- ════════════════ CONTROLS ════════════════ -->
+  <div class="ctrls">
+    <div class="ctrls-inner">
+      <div class="search-wrap">
+        <svg class="s-ico" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"><circle cx="8" cy="8" r="5"/><path d="M13 13l2 2"/></svg>
+        <input id="searchInput" class="s-input" type="search" placeholder="Search releases, versions…" autocomplete="off" spellcheck="false" />
+        <button id="searchClear" class="s-clear" aria-label="Clear">✕</button>
       </div>
-      <div class="filter-row">
-        <button class="pill active" data-filter="all">All</button>
-        <button class="pill" data-filter="stable"><span class="dot-stable"></span>Stable</button>
-        <button class="pill" data-filter="beta"><span class="dot-beta"></span>Beta</button>
+      <div class="pills" role="group" aria-label="Filter">
+        <button class="pill pill-active" data-filter="all">All</button>
+        <button class="pill" data-filter="stable">
+          <span class="pdot pdot-s"></span>Stable
+        </button>
+        <button class="pill" data-filter="beta">
+          <span class="pdot pdot-b"></span>Beta
+        </button>
       </div>
     </div>
   </div>
 
-  <!-- Releases list -->
-  <main class="releases-main">
-    <div class="releases-list" id="releasesList">
-      <div class="skel-card" style="height:220px"></div>
-      <div class="skel-card" style="height:180px"></div>
-      <div class="skel-card" style="height:200px"></div>
+  <!-- ════════════════ LIST ════════════════ -->
+  <main class="list-wrap">
+    <div id="releasesList" class="r-list">
+      <div class="skel" style="height:230px"></div>
+      <div class="skel" style="height:190px"></div>
+      <div class="skel" style="height:210px"></div>
     </div>
-    <div class="empty-state" id="emptyState" hidden>
-      <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2">
-        <circle cx="28" cy="28" r="24"/>
-        <path d="M20 28h16M28 20v16" stroke-linecap="round" opacity=".4"/>
-      </svg>
-      <p>No releases found</p>
-      <small>Try a different filter or search term</small>
+    <div id="emptyState" class="sv-state" hidden>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="20"/><path d="M16 24h16" stroke-linecap="round" opacity=".5"/></svg>
+      <strong>No releases found</strong>
+      <span>Try a different filter or keyword</span>
     </div>
-    <div class="error-state" id="errorState" hidden>
-      <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" stroke-width="1.2">
-        <circle cx="28" cy="28" r="24"/>
-        <path d="M28 18v14M28 34v2" stroke-linecap="round"/>
-      </svg>
-      <p>Unable to load releases</p>
-      <small id="errorMsg">GitHub API error</small>
+    <div id="errorState" class="sv-state" hidden>
+      <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="24" cy="24" r="20"/><path d="M24 16v11M24 30v2" stroke-linecap="round"/></svg>
+      <strong>Could not load releases</strong>
+      <span id="errorMsg">GitHub API error</span>
       <button id="retryBtn" class="btn-retry">Retry</button>
     </div>
   </main>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="footer-inner">
-      <div class="footer-brand">SnapPerf · by <a href="https://github.com/aetherdev01" target="_blank">@aetherdev22</a></div>
-      <div class="footer-links">
-        <a href="https://t.me/get01projects" target="_blank">GET01 Project</a>
-        <a href="https://github.com/aetherdev01/SnapPerf/issues" target="_blank">Report Bug</a>
-      </div>
+  <!-- ════════════════ FOOTER ════════════════ -->
+  <footer class="ftr">
+    <div class="ftr-inner">
+      <span>SnapPerf · by <a href="https://github.com/aetherdev01" target="_blank" rel="noopener">@aetherdev22</a></span>
+      <span class="ftr-links">
+        <a href="https://t.me/get01projects" target="_blank" rel="noopener">GET01 Project</a>
+        <a href="https://github.com/aetherdev01/SnapPerf/issues" target="_blank" rel="noopener">Report Bug</a>
+      </span>
     </div>
   </footer>
 
-  <!-- Changelog Modal -->
-  <div class="modal-overlay" id="changelogOverlay" hidden>
-    <div class="modal-box" id="changelogBox">
-      <div class="modal-hdr">
-        <div class="modal-hdr-info">
-          <span class="modal-tag" id="clTag"></span>
-          <h2 class="modal-title" id="clTitle"></h2>
+  <!-- ════════════════ MODAL: CHANGELOG ════════════════ -->
+  <div class="m-overlay" id="clOverlay" hidden>
+    <div class="m-box" id="clBox">
+      <div class="m-head">
+        <div>
+          <p class="m-tag" id="clTag"></p>
+          <h2 class="m-title" id="clTitle"></h2>
         </div>
-        <button class="modal-x" id="changelogClose" aria-label="Close">
+        <button class="m-close" id="clClose" aria-label="Close">
           <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/></svg>
         </button>
       </div>
-      <div class="modal-content markdown-body" id="clBody"></div>
+      <div class="m-body md-body" id="clBody"></div>
     </div>
   </div>
 
-  <!-- Mirror Modal -->
-  <div class="modal-overlay" id="mirrorOverlay" hidden>
-    <div class="modal-box modal-sm" id="mirrorBox">
-      <div class="modal-hdr">
-        <div class="modal-hdr-info">
-          <span class="modal-tag">Mirror Links</span>
-          <h2 class="modal-title" id="mirrorTitle"></h2>
+  <!-- ════════════════ MODAL: MIRRORS ════════════════ -->
+  <div class="m-overlay" id="mirOverlay" hidden>
+    <div class="m-box m-box-sm" id="mirBox">
+      <div class="m-head">
+        <div>
+          <p class="m-tag">Mirror Links</p>
+          <h2 class="m-title" id="mirTitle"></h2>
         </div>
-        <button class="modal-x" id="mirrorClose" aria-label="Close">
+        <button class="m-close" id="mirClose" aria-label="Close">
           <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/></svg>
         </button>
       </div>
-      <div class="modal-content">
-        <p class="mirror-hint">Add alternative download links for this release. Stored locally on your device.</p>
-        <div class="mirror-links-list" id="mirrorLinksList"></div>
-        <div class="mirror-form">
-          <input type="url" id="mirrorUrlInput" class="form-input" placeholder="https://mirror.example.com/SnapPerf-v1.0.zip" />
-          <input type="text" id="mirrorLabelInput" class="form-input" placeholder="Mirror label (e.g. Mediafire, GDrive)" />
-          <button class="btn-primary" id="addMirrorBtn">Add Mirror</button>
+      <div class="m-body">
+        <p class="mir-hint">Add alternative download links. Saved locally on your device.</p>
+        <div id="mirList" class="mir-list"></div>
+        <div class="mir-form">
+          <input type="url" id="mirUrl" class="f-input" placeholder="https://mirror.example.com/file.zip" />
+          <input type="text" id="mirLabel" class="f-input" placeholder="Label (e.g. Mediafire, Google Drive)" />
+          <button id="mirAdd" class="btn-primary">Add Mirror</button>
         </div>
       </div>
     </div>
