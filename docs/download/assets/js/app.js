@@ -1,395 +1,544 @@
 /* ===================================================
    SnapPerf Download Page — app.js
-   GitHub Releases API Integration
    =================================================== */
-
 (function () {
   'use strict';
 
-  /* ── Config ─────────────────────────────────────── */
   const REPO    = 'aetherdev01/SnapPerf';
-  const API_URL = `https://api.github.com/repos/${REPO}/releases`;
-  const PER_PAGE = 30;
+  const API     = `https://api.github.com/repos/${REPO}/releases?per_page=30`;
+  const UPLOADER = '@AetherDev22';
+  const MIRRORS_KEY = 'snapperf_mirrors_v1';
 
-  /* ── State ──────────────────────────────────────── */
-  let allReleases   = [];
-  let activeFilter  = 'all';
-  let searchQuery   = '';
-  let staggerIndex  = 0;
+  /* ── State ─────────────────────────────────────────── */
+  let releases    = [];
+  let filter      = 'all';
+  let query       = '';
+  let mirrorTagFocus = null; // tag_name of release being edited for mirrors
 
-  /* ── DOM refs ───────────────────────────────────── */
-  const listEl      = document.getElementById('releasesList');
-  const emptyEl     = document.getElementById('emptyState');
-  const errorEl     = document.getElementById('errorState');
-  const errorMsgEl  = document.getElementById('errorMsg');
-  const searchIn    = document.getElementById('searchInput');
-  const searchClr   = document.getElementById('searchClear');
-  const retryBtn    = document.getElementById('retryBtn');
-  const modalOv     = document.getElementById('modalOverlay');
-  const modalClose  = document.getElementById('modalClose');
-  const modalTag    = document.getElementById('modalTag');
-  const modalTitle  = document.getElementById('modalTitle');
-  const modalBody   = document.getElementById('modalBody');
-  const statTotal   = document.getElementById('statTotal');
-  const statDL      = document.getElementById('statDownloads');
-  const statLatest  = document.getElementById('statLatest');
+  /* ── DOM ────────────────────────────────────────────── */
+  const $ = id => document.getElementById(id);
 
-  /* ── Fetch releases ──────────────────────────────── */
+  const listEl      = $('releasesList');
+  const emptyEl     = $('emptyState');
+  const errorEl     = $('errorState');
+  const errorMsgEl  = $('errorMsg');
+  const searchIn    = $('searchInput');
+  const searchClr   = $('searchClear');
+  const retryBtn    = $('retryBtn');
+
+  const statReleases  = $('statReleases');
+  const statDownloads = $('statDownloads');
+  const statLatest    = $('statLatest');
+
+  // Changelog modal
+  const clOverlay = $('changelogOverlay');
+  const clBox     = $('changelogBox');
+  const clTag     = $('clTag');
+  const clTitle   = $('clTitle');
+  const clBody    = $('clBody');
+  const clClose   = $('changelogClose');
+
+  // Mirror modal
+  const mirrorOverlay    = $('mirrorOverlay');
+  const mirrorBox        = $('mirrorBox');
+  const mirrorTitleEl    = $('mirrorTitle');
+  const mirrorLinksEl    = $('mirrorLinksList');
+  const mirrorUrlInput   = $('mirrorUrlInput');
+  const mirrorLabelInput = $('mirrorLabelInput');
+  const addMirrorBtn     = $('addMirrorBtn');
+  const mirrorClose      = $('mirrorClose');
+
+  /* ── Theme ──────────────────────────────────────────── */
+  const html       = document.documentElement;
+  const toggleBtn  = $('themeToggle');
+  const ripple     = $('themeRipple');
+
+  const savedTheme = localStorage.getItem('snapperf_theme') || 'dark';
+  html.setAttribute('data-theme', savedTheme);
+
+  toggleBtn.addEventListener('click', e => {
+    const current   = html.getAttribute('data-theme');
+    const next      = current === 'dark' ? 'light' : 'dark';
+    const rect      = toggleBtn.getBoundingClientRect();
+    const cx        = rect.left + rect.width / 2;
+    const cy        = rect.top  + rect.height / 2;
+
+    // Compute size to cover full screen from btn origin
+    const maxDim = Math.max(
+      Math.hypot(cx, cy),
+      Math.hypot(window.innerWidth - cx, cy),
+      Math.hypot(cx, window.innerHeight - cy),
+      Math.hypot(window.innerWidth - cx, window.innerHeight - cy)
+    ) * 2;
+
+    const size = maxDim;
+
+    // Position ripple
+    ripple.style.cssText = `
+      width: ${size}px;
+      height: ${size}px;
+      left: ${cx - size / 2}px;
+      top: ${cy - size / 2}px;
+      border-radius: 50%;
+      position: fixed;
+      pointer-events: none;
+      z-index: 9999;
+      transform: scale(0);
+      opacity: 1;
+    `;
+
+    ripple.className = `theme-ripple ripple-${next}`;
+
+    // After ripple peaks, apply theme
+    setTimeout(() => {
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('snapperf_theme', next);
+    }, 200);
+
+    // Remove ripple after animation
+    setTimeout(() => {
+      ripple.className = 'theme-ripple';
+      ripple.style.cssText = '';
+    }, 620);
+  });
+
+  /* ── Mirrors storage ─────────────────────────────────── */
+  function getMirrors() {
+    try { return JSON.parse(localStorage.getItem(MIRRORS_KEY) || '{}'); }
+    catch { return {}; }
+  }
+
+  function saveMirrors(data) {
+    localStorage.setItem(MIRRORS_KEY, JSON.stringify(data));
+  }
+
+  function getMirrorsForTag(tag) {
+    return getMirrors()[tag] || [];
+  }
+
+  function addMirrorForTag(tag, url, label) {
+    const all = getMirrors();
+    if (!all[tag]) all[tag] = [];
+    all[tag].push({ url, label: label || url });
+    saveMirrors(all);
+  }
+
+  function deleteMirrorForTag(tag, idx) {
+    const all = getMirrors();
+    if (!all[tag]) return;
+    all[tag].splice(idx, 1);
+    saveMirrors(all);
+  }
+
+  /* ── Fetch ──────────────────────────────────────────── */
   async function fetchReleases() {
     showSkeleton();
     try {
-      const res = await fetch(`${API_URL}?per_page=${PER_PAGE}&page=1`, {
-        headers: { 'Accept': 'application/vnd.github.v3+json' }
+      const r = await fetch(API, {
+        headers: { Accept: 'application/vnd.github.v3+json' }
       });
-
-      if (!res.ok) {
-        throw new Error(`GitHub API returned ${res.status}: ${res.statusText}`);
-      }
-
-      const data = await res.json();
-      if (!Array.isArray(data)) throw new Error('Unexpected API response');
-
-      allReleases = data;
+      if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.statusText}`);
+      const data = await r.json();
+      if (!Array.isArray(data)) throw new Error('Unexpected API format');
+      releases = data;
       computeStats(data);
       renderFiltered();
     } catch (err) {
       showError(err.message);
-      console.error('[SnapPerf] Fetch error:', err);
     }
   }
 
-  /* ── Stats ──────────────────────────────────────── */
-  function computeStats(releases) {
-    const totalDL = releases.reduce((acc, r) => {
-      return acc + r.assets.reduce((a2, asset) => a2 + (asset.download_count || 0), 0);
-    }, 0);
-
-    const latestStable = releases.find(r => !r.prerelease);
-    const latestVer    = latestStable ? latestStable.tag_name : (releases[0]?.tag_name || '—');
-
-    statTotal.textContent  = releases.length;
-    statDL.textContent     = formatNum(totalDL);
-    statLatest.textContent = latestVer;
+  /* ── Stats ──────────────────────────────────────────── */
+  function computeStats(data) {
+    const totalDL   = data.reduce((s, r) =>
+      s + r.assets.reduce((a, x) => a + (x.download_count || 0), 0), 0);
+    const stable    = data.find(r => !r.prerelease);
+    statReleases.textContent  = data.length;
+    statDownloads.textContent = fmtNum(totalDL);
+    statLatest.textContent    = stable ? stable.tag_name : (data[0]?.tag_name || '—');
   }
 
-  /* ── Render ──────────────────────────────────────── */
+  /* ── Render ──────────────────────────────────────────── */
   function renderFiltered() {
-    const q = searchQuery.toLowerCase().trim();
-
-    const filtered = allReleases.filter(r => {
-      const matchFilter =
-        activeFilter === 'all'    ? true :
-        activeFilter === 'stable' ? !r.prerelease :
-        activeFilter === 'beta'   ? r.prerelease  : true;
-
-      const matchSearch = !q ||
-        r.tag_name.toLowerCase().includes(q)  ||
-        (r.name || '').toLowerCase().includes(q) ||
-        (r.body || '').toLowerCase().includes(q);
-
-      return matchFilter && matchSearch;
+    const q = query.toLowerCase();
+    const filtered = releases.filter(r => {
+      const ok = filter === 'all'    ? true
+               : filter === 'stable' ? !r.prerelease
+               : filter === 'beta'   ? r.prerelease : true;
+      const match = !q
+        || r.tag_name.toLowerCase().includes(q)
+        || (r.name  || '').toLowerCase().includes(q)
+        || (r.body  || '').toLowerCase().includes(q);
+      return ok && match;
     });
 
     clearList();
-    staggerIndex = 0;
 
-    if (filtered.length === 0) {
-      showEmpty();
-      return;
-    }
+    if (!filtered.length) { showEmpty(); return; }
+    hideEmpty(); hideError();
 
-    hideEmpty();
-    hideError();
-
-    filtered.forEach((release, i) => {
-      const card = buildCard(release, i);
+    filtered.forEach((r, i) => {
+      const card = buildCard(r, i);
       listEl.appendChild(card);
     });
   }
 
-  /* ── Card builder ───────────────────────────────── */
-  function buildCard(release, index) {
-    const isPrerelease = release.prerelease;
-    const version      = release.tag_name;
-    const name         = release.name || version;
-    const date         = formatDate(release.published_at);
-    const totalDL      = release.assets.reduce((a, x) => a + (x.download_count || 0), 0);
+  /* ── Card ───────────────────────────────────────────── */
+  function buildCard(r, idx) {
+    const pre    = r.prerelease;
+    const tag    = r.tag_name;
+    const name   = r.name || tag;
+    const date   = fmtDate(r.published_at);
+    const totalDL = r.assets.reduce((a, x) => a + (x.download_count || 0), 0);
+    const mirrors = getMirrorsForTag(tag);
 
-    // Get primary asset (first .zip)
-    const assets = release.assets || [];
+    const card = mk('div', 'release-card');
+    card.style.animationDelay = `${idx * 55}ms`;
 
-    const card = el('div', 'release-card');
-    card.style.animationDelay = `${index * 70}ms`;
-    card.setAttribute('data-id', release.id);
+    /* ── Top section ── */
+    const top = mk('div', 'card-top');
 
-    /* ─ Card Main ─ */
-    const main = el('div', 'card-main');
+    // Left: version/name/meta
+    const info = mk('div', '');
+    info.style.flex = '1';
 
-    // Left column
-    const left = el('div', 'card-left');
-    const iconRing = el('div', 'card-icon-ring');
-    iconRing.innerHTML = moduleIconSVG();
-    const typeBadge = el('span', `card-type-badge ${isPrerelease ? 'badge-beta' : 'badge-stable'}`);
-    typeBadge.textContent = isPrerelease ? 'Beta' : 'Stable';
-    left.append(iconRing, typeBadge);
+    const vRow = mk('div', 'card-version-row');
+    const vEl  = mk('span', 'card-version');
+    vEl.textContent = tag;
+    const tagEl = mk('span', pre ? 'tag-beta' : 'tag-stable');
+    tagEl.textContent = pre ? 'Beta' : 'Stable';
+    vRow.append(vEl, tagEl);
 
-    // Right column
-    const right = el('div', 'card-right');
+    const nameEl = mk('p', 'card-name');
+    nameEl.textContent = (name !== tag) ? name : `SnapPerf ${tag}`;
 
-    // Header
-    const header = el('div', 'card-header');
-    const versionEl = el('span', 'card-version');
-    versionEl.textContent = version;
-    const nameEl = el('span', 'card-name');
-    nameEl.textContent = name !== version ? name : '';
-    header.append(versionEl, nameEl);
+    const meta = mk('div', 'card-meta');
+    meta.appendChild(metaItem(calIco(), date));
+    meta.appendChild(metaItem(dlIco(), `${fmtNum(totalDL)} downloads`));
+    meta.appendChild(metaItem(pkgIco(), `${r.assets.length} file${r.assets.length !== 1 ? 's' : ''}`));
 
-    // Date
-    const dateEl = el('div', 'card-date');
-    dateEl.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${date}`;
+    const uploader = mk('div', 'card-uploader');
+    uploader.innerHTML = `${personIco()} Uploaded by <strong>${UPLOADER}</strong>`;
 
-    // Metrics
-    const metrics = el('div', 'card-metrics');
-    metrics.append(
-      metricEl(totalDL > 0 ? formatNum(totalDL) : '—', 'Downloads'),
-      metricEl(assets.length > 0 ? formatBytes(assets[0].size) : '—', 'Size'),
-      metricEl(assets.length > 0 ? String(assets.length) : '—', 'Assets')
-    );
+    info.append(vRow, nameEl, meta, uploader);
 
-    // Assets rows
-    const assetsWrap = el('div', 'card-assets');
-    if (assets.length === 0) {
-      const noAsset = el('div', 'asset-row');
-      noAsset.innerHTML = '<span style="color:var(--text-3);font-size:13px;">No downloadable assets</span>';
-      assetsWrap.appendChild(noAsset);
+    // Right: changelog + mirror buttons
+    const topRight = mk('div', 'card-top-right');
+
+    const clBtn = mk('button', 'btn-ghost');
+    clBtn.innerHTML = `${docIco()} Changelog`;
+    clBtn.addEventListener('click', () => openChangelog(r));
+
+    const mirBtn = mk('button', 'btn-ghost');
+    mirBtn.innerHTML = `${linkIco()} Mirrors${mirrors.length ? ` (${mirrors.length})` : ''}`;
+    mirBtn.dataset.mirrorTag = tag;
+    mirBtn.addEventListener('click', () => openMirrors(r, mirBtn));
+
+    topRight.append(clBtn, mirBtn);
+    top.append(info, topRight);
+
+    /* ── Asset rows ── */
+    const assetsWrap = mk('div', 'card-assets');
+
+    if (!r.assets.length) {
+      const empty = mk('p', '');
+      empty.textContent = 'No downloadable assets';
+      empty.style.cssText = 'font-size:13px;color:var(--text-3);padding:4px 0';
+      assetsWrap.appendChild(empty);
     } else {
-      assets.forEach(asset => {
-        assetsWrap.appendChild(buildAssetRow(asset));
-      });
+      r.assets.forEach(a => assetsWrap.appendChild(buildAssetRow(a)));
     }
 
-    right.append(header, dateEl, metrics, assetsWrap);
-    main.append(left, right);
+    /* ── Footer bar: mirror chips ── */
+    const footerBar = mk('div', 'card-footer-bar');
+    footerBar.id = `mirrorBar_${tag.replace(/[^a-z0-9]/gi, '_')}`;
 
-    /* ─ Card Footer ─ */
-    const footer = el('div', 'card-footer');
+    const chips = mk('div', 'mirror-chips');
+    renderMirrorChips(chips, tag);
 
-    const clBtn = el('button', 'btn-changelog');
-    clBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>Changelog`;
-    clBtn.addEventListener('click', () => openModal(release));
-
-    const ghLink = el('a', 'card-gh-link');
-    ghLink.href   = release.html_url;
+    const ghLink = mk('a', 'btn-ghost');
+    ghLink.href   = r.html_url;
     ghLink.target = '_blank';
     ghLink.rel    = 'noopener noreferrer';
-    ghLink.innerHTML = `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>View on GitHub`;
+    ghLink.innerHTML = `${ghIco()} View release`;
 
-    footer.append(clBtn, ghLink);
+    footerBar.append(chips, ghLink);
 
-    card.append(main, footer);
+    card.append(top, assetsWrap, footerBar);
     return card;
   }
 
-  /* ── Asset Row ──────────────────────────────────── */
+  /* ── Render mirror chips into a container ─────────────── */
+  function renderMirrorChips(container, tag) {
+    container.innerHTML = '';
+    const mirrors = getMirrorsForTag(tag);
+    if (!mirrors.length) return;
+
+    mirrors.forEach(m => {
+      const chip = mk('a', 'mirror-chip');
+      chip.href   = m.url;
+      chip.target = '_blank';
+      chip.rel    = 'noopener noreferrer';
+      chip.innerHTML = `${linkIco()} ${m.label}`;
+      container.appendChild(chip);
+    });
+  }
+
+  /* ── Refresh mirror chips on a specific card ──────────── */
+  function refreshCardMirrors(tag) {
+    const safeId = `mirrorBar_${tag.replace(/[^a-z0-9]/gi, '_')}`;
+    const bar    = document.getElementById(safeId);
+    if (!bar) return;
+    const chips  = bar.querySelector('.mirror-chips');
+    if (chips) renderMirrorChips(chips, tag);
+
+    // Also refresh mirror button label
+    const mirBtn = bar.closest('.release-card')?.querySelector('[data-mirror-tag]');
+    if (mirBtn) {
+      const count = getMirrorsForTag(tag).length;
+      mirBtn.innerHTML = `${linkIco()} Mirrors${count ? ` (${count})` : ''}`;
+    }
+  }
+
+  /* ── Asset Row ──────────────────────────────────────── */
   function buildAssetRow(asset) {
-    const row = el('div', 'asset-row');
+    const row  = mk('div', 'asset-row');
+    const ico  = mk('div', 'asset-file-icon');
+    ico.innerHTML = zipIco();
 
-    const ico = el('div', 'asset-ico');
-    ico.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>`;
+    const info = mk('div', 'asset-info');
+    const fn   = mk('div', 'asset-filename');
+    fn.textContent = asset.name;
+    const sub  = mk('div', 'asset-sub');
+    sub.innerHTML  = `<span>${fmtBytes(asset.size)}</span><span>${fmtNum(asset.download_count)} downloads</span>`;
+    info.append(fn, sub);
 
-    const info = el('div', 'asset-info');
-    const nameEl = el('div', 'asset-name');
-    nameEl.textContent = asset.name;
-    const metaEl = el('div', 'asset-meta');
-    metaEl.innerHTML = `<span>${formatBytes(asset.size)}</span><span>${formatNum(asset.download_count)} downloads</span>`;
-    info.append(nameEl, metaEl);
+    const btn = mk('a', 'btn-dl');
+    btn.href     = asset.browser_download_url;
+    btn.download = '';
+    btn.innerHTML = `${dlArrowIco()} Download`;
 
-    const dlBtn = el('a', 'btn-dl');
-    dlBtn.href = asset.browser_download_url;
-    dlBtn.download = '';
-    dlBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg><span>Download</span>`;
-
-    row.append(ico, info, dlBtn);
+    row.append(ico, info, btn);
     return row;
   }
 
-  /* ── Metric element ─────────────────────────────── */
-  function metricEl(val, lbl) {
-    const m = el('div', 'metric');
-    const v = el('span', 'metric-val');
-    v.textContent = val;
-    const l = el('span', 'metric-lbl');
-    l.textContent = lbl;
-    m.append(v, l);
-    return m;
+  /* ── Meta item helper ───────────────────────────────── */
+  function metaItem(iconSvg, text) {
+    const el = mk('div', 'card-meta-item');
+    el.innerHTML = `${iconSvg}<span>${text}</span>`;
+    return el;
   }
 
-  /* ── Modal ──────────────────────────────────────── */
-  function openModal(release) {
-    modalTag.textContent   = release.tag_name;
-    modalTitle.textContent = release.name || release.tag_name;
+  /* ── Changelog modal ────────────────────────────────── */
+  function openChangelog(r) {
+    clTag.textContent   = r.tag_name;
+    clTitle.textContent = r.name || r.tag_name;
 
-    const body = release.body || '_No changelog provided._';
-    // Use marked if available, else plain text
-    if (typeof marked !== 'undefined') {
-      modalBody.innerHTML = marked.parse(body);
-    } else {
-      modalBody.innerHTML = `<pre style="white-space:pre-wrap;font-family:inherit;font-size:14px;color:var(--text-2)">${escapeHtml(body)}</pre>`;
+    const body = r.body ? r.body.trim() : '*No changelog provided.*';
+    clBody.innerHTML = (typeof marked !== 'undefined')
+      ? marked.parse(body)
+      : `<pre style="white-space:pre-wrap;font-size:13px;color:var(--text-2)">${escHtml(body)}</pre>`;
+
+    openModal(clOverlay);
+  }
+
+  clClose.addEventListener('click', () => closeModal(clOverlay));
+
+  /* ── Mirror modal ───────────────────────────────────── */
+  function openMirrors(r, triggerBtn) {
+    mirrorTagFocus         = r.tag_name;
+    mirrorTitleEl.textContent = r.name || r.tag_name;
+    mirrorUrlInput.value   = '';
+    mirrorLabelInput.value = '';
+    renderMirrorList();
+    openModal(mirrorOverlay);
+  }
+
+  function renderMirrorList() {
+    if (!mirrorTagFocus) return;
+    mirrorLinksEl.innerHTML = '';
+    const mirrors = getMirrorsForTag(mirrorTagFocus);
+
+    if (!mirrors.length) {
+      const empty = mk('p', 'mirror-empty');
+      empty.textContent = 'No mirror links added yet.';
+      mirrorLinksEl.appendChild(empty);
+      return;
     }
 
-    modalOv.classList.add('open');
+    mirrors.forEach((m, idx) => {
+      const entry  = mk('div', 'mirror-entry');
+      const mInfo  = mk('div', 'mirror-entry-info');
+      const label  = mk('div', 'mirror-entry-label');
+      label.textContent = m.label || m.url;
+      const url    = mk('div', 'mirror-entry-url');
+      url.textContent = m.url;
+      mInfo.append(label, url);
+
+      const del    = mk('button', 'mirror-entry-del');
+      del.innerHTML = '✕';
+      del.title     = 'Remove';
+      del.addEventListener('click', () => {
+        deleteMirrorForTag(mirrorTagFocus, idx);
+        renderMirrorList();
+        refreshCardMirrors(mirrorTagFocus);
+      });
+
+      entry.append(mInfo, del);
+      mirrorLinksEl.appendChild(entry);
+    });
+  }
+
+  addMirrorBtn.addEventListener('click', () => {
+    const url   = mirrorUrlInput.value.trim();
+    const label = mirrorLabelInput.value.trim();
+    if (!url) { mirrorUrlInput.focus(); return; }
+
+    try { new URL(url); }
+    catch {
+      mirrorUrlInput.style.borderColor = '#ff453a';
+      setTimeout(() => { mirrorUrlInput.style.borderColor = ''; }, 1200);
+      return;
+    }
+
+    addMirrorForTag(mirrorTagFocus, url, label || url);
+    mirrorUrlInput.value   = '';
+    mirrorLabelInput.value = '';
+    renderMirrorList();
+    refreshCardMirrors(mirrorTagFocus);
+  });
+
+  mirrorClose.addEventListener('click', () => closeModal(mirrorOverlay));
+
+  /* ── Modal helpers ──────────────────────────────────── */
+  function openModal(overlay) {
+    overlay.hidden = false;
+    requestAnimationFrame(() => overlay.classList.add('open'));
     document.body.style.overflow = 'hidden';
   }
 
-  function closeModal() {
-    modalOv.classList.remove('open');
-    document.body.style.overflow = '';
+  function closeModal(overlay) {
+    overlay.classList.remove('open');
+    setTimeout(() => {
+      overlay.hidden = true;
+      document.body.style.overflow = '';
+    }, 260);
   }
 
-  modalClose.addEventListener('click', closeModal);
-  modalOv.addEventListener('click', e => { if (e.target === modalOv) closeModal(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+  // No backdrop close — only X button closes modal (per requirement)
 
-  /* ── Search ──────────────────────────────────────── */
+  /* ── Search ─────────────────────────────────────────── */
   searchIn.addEventListener('input', () => {
-    searchQuery = searchIn.value;
-    searchClr.classList.toggle('visible', searchQuery.length > 0);
+    query = searchIn.value;
+    searchClr.classList.toggle('show', query.length > 0);
     renderFiltered();
   });
 
   searchClr.addEventListener('click', () => {
     searchIn.value = '';
-    searchQuery    = '';
-    searchClr.classList.remove('visible');
+    query = '';
+    searchClr.classList.remove('show');
     searchIn.focus();
     renderFiltered();
   });
 
-  /* ── Filter tabs ─────────────────────────────────── */
-  document.querySelectorAll('.tab-btn').forEach(btn => {
+  /* ── Filter pills ───────────────────────────────────── */
+  document.querySelectorAll('.pill').forEach(btn => {
     btn.addEventListener('click', () => {
-      document.querySelectorAll('.tab-btn').forEach(b => {
+      document.querySelectorAll('.pill').forEach(b => {
         b.classList.remove('active');
-        b.setAttribute('aria-selected', 'false');
+        b.removeAttribute('aria-selected');
       });
       btn.classList.add('active');
       btn.setAttribute('aria-selected', 'true');
-      activeFilter = btn.dataset.filter;
+      filter = btn.dataset.filter;
       renderFiltered();
     });
   });
 
-  /* ── Retry ───────────────────────────────────────── */
+  /* ── Retry ──────────────────────────────────────────── */
   retryBtn.addEventListener('click', fetchReleases);
 
-  /* ── Helpers ─────────────────────────────────────── */
-  function el(tag, cls) {
+  /* ── Disable text selection ─────────────────────────── */
+  document.addEventListener('selectstart', e => {
+    const tag = e.target.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    e.preventDefault();
+  });
+
+  document.addEventListener('contextmenu', e => e.preventDefault());
+
+  document.addEventListener('copy', e => {
+    const tag = document.activeElement?.tagName;
+    if (tag === 'INPUT' || tag === 'TEXTAREA') return;
+    e.preventDefault();
+  });
+
+  /* ── List helpers ───────────────────────────────────── */
+  function showSkeleton() {
+    listEl.innerHTML = `
+      <div class="skel-card" style="height:240px"></div>
+      <div class="skel-card" style="height:200px"></div>
+      <div class="skel-card" style="height:220px"></div>`;
+    emptyEl.hidden = true;
+    errorEl.hidden = true;
+  }
+
+  function clearList() { listEl.innerHTML = ''; }
+  function showEmpty() { emptyEl.hidden = false; errorEl.hidden = true; }
+  function hideEmpty() { emptyEl.hidden = true; }
+  function showError(msg) {
+    clearList();
+    errorMsgEl.textContent = msg || 'Unknown error';
+    errorEl.hidden   = false;
+    emptyEl.hidden   = true;
+  }
+  function hideError() { errorEl.hidden = true; }
+
+  /* ── Format helpers ─────────────────────────────────── */
+  function fmtNum(n) {
+    if (!n) return '0';
+    if (n >= 1e6) return (n / 1e6).toFixed(1) + 'M';
+    if (n >= 1e3) return (n / 1e3).toFixed(1) + 'k';
+    return String(n);
+  }
+
+  function fmtBytes(b) {
+    if (!b) return '—';
+    if (b < 1024)      return b + ' B';
+    if (b < 1048576)   return (b / 1024).toFixed(1) + ' KB';
+    return (b / 1048576).toFixed(2) + ' MB';
+  }
+
+  function fmtDate(iso) {
+    if (!iso) return '—';
+    return new Date(iso).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'short', day: 'numeric'
+    });
+  }
+
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function mk(tag, cls) {
     const e = document.createElement(tag);
     if (cls) e.className = cls;
     return e;
   }
 
-  function formatDate(iso) {
-    if (!iso) return '—';
-    const d = new Date(iso);
-    return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-  }
+  /* ── Inline SVG icons ───────────────────────────────── */
+  function calIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="2"/><path d="M1 5h12M5 1v2M9 1v2"/></svg>`; }
+  function dlIco()     { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7 1v8M4 6l3 3 3-3M1 11h12"/></svg>`; }
+  function pkgIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="5" width="12" height="8" rx="1.5"/><path d="M1 8h12M4.5 1l-2 4h9l-2-4"/></svg>`; }
+  function personIco() { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="5" r="3"/><path d="M1 13c0-3 2.7-5 6-5s6 2 6 5"/></svg>`; }
+  function docIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3"/></svg>`; }
+  function linkIco()   { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5.5 8.5a4 4 0 005.6-5.6L9.5 1.3a4 4 0 00-5.6 5.6"/><path d="M8.5 5.5a4 4 0 00-5.6 5.6l1.6 1.6a4 4 0 005.6-5.6"/></svg>`; }
+  function ghIco()     { return `<svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 .175C3.5.175.7 2.95.7 6.4c0 2.75 1.8 5.1 4.3 5.925.3.05.425-.125.425-.275 0-.125-.025-.575-.025-1.075-1.675.35-2.025-.8-2.025-.8-.275-.7-.675-.875-.675-.875-.55-.375.05-.375.05-.375.6.05.925.625.925.625.55.925 1.425.675 1.775.5.05-.4.2-.675.375-.825-1.325-.125-2.725-.65-2.725-2.95 0-.65.225-1.2.625-1.625-.075-.15-.275-.775.075-1.6 0 0 .525-.175 1.7.625.5-.125 1.025-.2 1.55-.2s1.05.075 1.55.2c1.175-.8 1.7-.625 1.7-.625.35.825.15 1.45.075 1.6.4.425.625.975.625 1.625 0 2.3-1.4 2.8-2.75 2.95.225.2.425.575.425 1.175v1.75c0 .15.1.325.425.275 2.5-.825 4.3-3.175 4.3-5.925C13.3 2.95 10.5.175 7 .175z"/></svg>`; }
+  function zipIco()    { return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M5.5 1v3.5L7 5.5l1.5-1V1M7 5.5v2"/><circle cx="7" cy="9.5" r="1" fill="currentColor" stroke="none"/></svg>`; }
+  function dlArrowIco(){ return `<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M7 1v8M4 6.5l3 3 3-3M1 11h12"/></svg>`; }
 
-  function formatBytes(bytes) {
-    if (!bytes || bytes === 0) return '—';
-    if (bytes < 1024)       return bytes + ' B';
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
-    return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
-  }
-
-  function formatNum(n) {
-    if (n === undefined || n === null) return '—';
-    if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
-    if (n >= 1000)    return (n / 1000).toFixed(1) + 'k';
-    return String(n);
-  }
-
-  function escapeHtml(str) {
-    return str
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#039;');
-  }
-
-  function moduleIconSVG() {
-    return `<svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:28px;height:28px">
-      <polygon points="20,3 37,12 37,28 20,37 3,28 3,12" fill="none" stroke="url(#ci)" stroke-width="1.5"/>
-      <path d="M13 20 L17 15 L21 20 L25 15" stroke="url(#cl)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      <circle cx="20" cy="20" r="2" fill="url(#cd)"/>
-      <defs>
-        <linearGradient id="ci" x1="0" y1="0" x2="40" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00aaff"/>
-          <stop offset="100%" stop-color="#0044ff"/>
-        </linearGradient>
-        <linearGradient id="cl" x1="13" y1="17" x2="25" y2="17" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#00e5ff"/>
-          <stop offset="100%" stop-color="#0088ff"/>
-        </linearGradient>
-        <radialGradient id="cd" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stop-color="#fff"/>
-          <stop offset="100%" stop-color="#00ccff"/>
-        </radialGradient>
-      </defs>
-    </svg>`;
-  }
-
-  function showSkeleton() {
-    listEl.innerHTML = `
-      <div class="skeleton-card"></div>
-      <div class="skeleton-card"></div>
-      <div class="skeleton-card"></div>`;
-    emptyEl.style.display = 'none';
-    errorEl.style.display = 'none';
-  }
-
-  function clearList() {
-    listEl.innerHTML = '';
-  }
-
-  function showEmpty() {
-    emptyEl.style.display = '';
-    errorEl.style.display = 'none';
-  }
-
-  function hideEmpty() {
-    emptyEl.style.display = 'none';
-  }
-
-  function showError(msg) {
-    clearList();
-    errorMsgEl.textContent = msg || 'Unknown error';
-    errorEl.style.display = '';
-    emptyEl.style.display = 'none';
-  }
-
-  function hideError() {
-    errorEl.style.display = 'none';
-  }
-
-  /* ── No text selection enforcement ──────────────── */
-  document.addEventListener('selectstart', e => {
-    // Allow selection only inside search input
-    if (e.target === searchIn) return;
-    e.preventDefault();
-  });
-
-  document.addEventListener('contextmenu', e => {
-    e.preventDefault();
-  });
-
-  document.addEventListener('copy', e => {
-    if (e.target === searchIn) return;
-    e.preventDefault();
-  });
-
-  /* ── Init ────────────────────────────────────────── */
+  /* ── Init ───────────────────────────────────────────── */
   fetchReleases();
 
 })();
