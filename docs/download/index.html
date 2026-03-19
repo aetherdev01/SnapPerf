@@ -13,6 +13,8 @@ html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
 a{text-decoration:none;color:inherit}
 button{cursor:pointer;font-family:inherit;border:none;background:none}
 svg{display:block;flex-shrink:0}
+/* CRITICAL: hidden attr must win over any display:flex/grid */
+[hidden]{display:none!important}
 
 /* ─── VARS ───────────────────────────────────────── */
 :root{
@@ -391,20 +393,20 @@ body{
   background:rgba(0,0,0,.65);
   backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
   display:flex;align-items:center;justify-content:center;
-  padding:16px;
+  padding:20px;
   opacity:0;pointer-events:none;
   transition:opacity .22s;
 }
 .mov.open{opacity:1;pointer-events:all}
 .mbox{
-  width:100%;max-width:540px;max-height:85vh;
+  width:100%;max-width:540px;max-height:82vh;
   display:flex;flex-direction:column;
   background:var(--g2);
   backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);
   border:1px solid var(--gbh);border-radius:20px;
   box-shadow:var(--sm);
-  transform:scale(.93) translateY(16px);opacity:0;
-  transition:transform .28s cubic-bezier(.34,1.56,.64,1),opacity .22s;
+  transform:scale(.94) translateY(16px);opacity:0;
+  transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .22s;
 }
 .mov.open .mbox{transform:scale(1) translateY(0);opacity:1}
 .mbox.sm{max-width:400px}
@@ -535,27 +537,55 @@ body{
 .ftr{
   position:relative;z-index:1;
   border-top:1px solid var(--dv);
-  padding:20px 16px;
+  margin-top:8px;
 }
-.ftr-in{
+.ftr-top{
   max-width:860px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;
-  flex-wrap:wrap;gap:10px;
+  padding:28px 16px 20px;
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:24px;
+  align-items:start;
 }
-.ftr-brand{display:flex;flex-direction:column;gap:3px}
-.ftr-name{font-size:13px;font-weight:600;color:var(--t2)}
-.ftr-desc{font-size:11px;color:var(--t3)}
-.ftr-links{display:flex;gap:0;flex-wrap:wrap}
+.ftr-brand-block{display:flex;flex-direction:column;gap:6px}
+.ftr-logo-row{display:flex;align-items:center;gap:8px;margin-bottom:2px}
+.ftr-logo-ico{
+  width:28px;height:28px;border-radius:7px;
+  background:var(--as);border:1px solid var(--ab);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--a);flex-shrink:0;
+}
+.ftr-logo-ico svg{width:14px;height:14px}
+.ftr-logo-name{font-size:14px;font-weight:600;letter-spacing:-.02em;color:var(--t1)}
+.ftr-tagline{font-size:12px;color:var(--t3);line-height:1.5;max-width:260px}
+.ftr-api-note{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:10.5px;color:var(--t3);margin-top:2px;
+}
+.ftr-api-dot{width:5px;height:5px;border-radius:50%;background:var(--ok);flex-shrink:0}
+
+.ftr-links-block{display:flex;flex-direction:column;align-items:flex-end;gap:4px}
+.ftr-links-title{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--t3);margin-bottom:4px}
 .ftr-link{
   display:inline-flex;align-items:center;gap:5px;
-  padding:6px 12px;border-radius:8px;
-  font-size:12.5px;color:var(--t3);
+  padding:5px 10px;border-radius:7px;
+  font-size:12.5px;color:var(--t2);
   transition:color .15s,background .15s;
+  white-space:nowrap;
 }
-.ftr-link svg{width:13px;height:13px}
-.ftr-link:hover{color:var(--t2);background:var(--g2)}
-.ftr-right{display:flex;flex-direction:column;align-items:flex-end;gap:3px}
-.ftr-api{font-size:10.5px;color:var(--t3);letter-spacing:.03em}
+.ftr-link svg{width:12px;height:12px}
+.ftr-link:hover{color:var(--t1);background:var(--g2)}
+
+.ftr-bottom{
+  border-top:1px solid var(--dv);
+  padding:12px 16px;
+  max-width:860px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;flex-wrap:wrap;
+}
+.ftr-copy{font-size:11px;color:var(--t3)}
+.ftr-copy a{color:var(--a) !important}
+.ftr-made{font-size:11px;color:var(--t3)}
 
 /* ─── RESPONSIVE ─────────────────────────────────── */
 @media(max-width:540px){
@@ -566,9 +596,12 @@ body{
   .ctoprow{flex-wrap:wrap}
   .cright{flex-direction:row;flex-wrap:wrap;width:100%;justify-content:flex-start}
   .cassets,.cfoot{padding:9px 12px}
-  .mov{padding:10px;align-items:flex-end}
-  .mbox{border-radius:20px 20px 12px 12px;max-height:90vh}
-  .ftr-right{display:none}
+  .mov{padding:12px}
+  .mbox{max-height:88vh}
+  .ftr-top{grid-template-columns:1fr;gap:16px}
+  .ftr-links-block{align-items:flex-start}
+  .ftr-links-title{display:none}
+  .ftr-bottom{flex-direction:column;align-items:flex-start;gap:4px}
 }
 @media(max-width:360px){
   .hero h1{font-size:28px}
@@ -674,24 +707,43 @@ body{
 
 <!-- ══════════ FOOTER ══════════ -->
 <footer class="ftr">
-  <div class="ftr-in">
-    <div class="ftr-brand">
-      <span class="ftr-name" id="brandTapZone">SnapPerf · <a href="https://github.com/aetherdev01" target="_blank" rel="noopener" style="color:var(--a)">@aetherdev22</a></span>
-      <span class="ftr-desc">GET01 Project · Snapdragon Optimizer Module</span>
+  <div class="ftr-top">
+    <div class="ftr-brand-block">
+      <div class="ftr-logo-row">
+        <div class="ftr-logo-ico">
+          <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="1" y="1" width="14" height="14" rx="3.5"/>
+            <path d="M4 8l2.5-3.5L9 8l2.5-3"/>
+            <circle cx="8" cy="11.5" r="1" fill="currentColor" stroke="none"/>
+          </svg>
+        </div>
+        <span class="ftr-logo-name">SnapPerf</span>
+      </div>
+      <span class="ftr-tagline">Snapdragon Performance Optimizer Module<br>Compatible with Magisk · KernelSU · APatch</span>
+      <span class="ftr-api-note">
+        <span class="ftr-api-dot"></span>
+        Data sourced live from GitHub Releases API
+      </span>
     </div>
-    <div class="ftr-links">
+    <div class="ftr-links-block">
+      <span class="ftr-links-title">Links</span>
+      <a href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener" class="ftr-link">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+        GitHub Repo
+      </a>
       <a href="https://t.me/get01projects" target="_blank" rel="noopener" class="ftr-link">
         <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
         GET01 Project
       </a>
       <a href="https://github.com/aetherdev01/SnapPerf/issues" target="_blank" rel="noopener" class="ftr-link">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="8" cy="8" r="6.5"/><path d="M8 5v4M8 11v.5"/></svg>
-        Report Bug
+        Report Issue
       </a>
     </div>
-    <div class="ftr-right">
-      <span class="ftr-api">Live · GitHub Releases API</span>
-    </div>
+  </div>
+  <div class="ftr-bottom">
+    <span class="ftr-copy">© 2024 SnapPerf · by <a href="https://github.com/aetherdev01" target="_blank" rel="noopener">@aetherdev22</a></span>
+    <span class="ftr-made" id="brandTapZone">GET01 Project</span>
   </div>
 </footer>
 
