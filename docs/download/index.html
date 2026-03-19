@@ -83,13 +83,14 @@ body{
 .nav{display:flex;align-items:center;gap:2px}
 .nav-a{
   display:inline-flex;align-items:center;gap:5px;
-  padding:6px 10px;border-radius:8px;
+  padding:6px 12px;border-radius:999px;
+  border:1px solid var(--gb);
   font-size:13px;font-weight:500;color:var(--t2);
-  transition:background .15s,color .15s;
+  transition:background .15s,color .15s,border-color .15s;
 }
-.nav-a img{width:14px;height:14px;opacity:0.7}
+.nav-a img{width:14px;height:14px;opacity:0.55}
 .nav-a span{display:inline}
-.nav-a:hover{background:var(--g2);color:var(--t1)}
+.nav-a:hover{background:var(--g2);color:var(--t1);border-color:var(--gbh)}
 .nav-a:hover img{opacity:1}
 
 .admin-btn{
@@ -282,17 +283,9 @@ body{
 .btn-full:active{transform:scale(.98)}
 .btn-full:disabled{opacity:.5;cursor:not-allowed}
 
-.ftr{position:relative;z-index:1;border-top:1px solid var(--dv);padding:16px 16px 20px}
-.ftr-in{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
-.ftr-left{display:flex;align-items:center;gap:7px}
-.ftr-left img{width:18px;height:18px;opacity:.5}
-.ftr-copy{font-size:12px;color:var(--t3)}
-.ftr-copy a{color:var(--a) !important}
-.ftr-links{display:flex;align-items:center;gap:2px}
-.ftr-lnk{display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border-radius:7px;font-size:12px;color:var(--t3);transition:color .15s,background .15s}
-.ftr-lnk img{width:12px;height:12px;opacity:.5}
-.ftr-lnk:hover{color:var(--t2);background:var(--g2)}
-.ftr-lnk:hover img{opacity:.8}
+.ftr{position:relative;z-index:1;border-top:1px solid var(--dv);padding:14px 16px}
+.ftr-in{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:center}
+.ftr-copy{font-size:12px;color:var(--t3);text-align:center}
 
 @media(max-width:540px){
   .nav-a span{display:none}
@@ -393,20 +386,7 @@ body{
 
 <footer class="ftr">
   <div class="ftr-in">
-    <div class="ftr-left">
-      <img src="assets/logo.svg" width="18" height="18" alt=""/>
-      <span class="ftr-copy">SnapPerf · <a href="https://github.com/aetherdev01" target="_blank" rel="noopener">@aetherdev22</a> · AetherDev</span>
-    </div>
-    <div class="ftr-links">
-      <a href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener" class="ftr-lnk">
-        <img src="assets/github.svg" width="12" height="12" alt=""/>
-        GitHub
-      </a>
-      <a href="https://t.me/get01projects" target="_blank" rel="noopener" class="ftr-lnk">
-        <img src="assets/telegram.svg" width="12" height="12" alt=""/>
-        Channel
-      </a>
-    </div>
+    <span class="ftr-copy">Copyright ©2026 Aether Dev | SnapPerf</span>
   </div>
 </footer>
 
