@@ -16,7 +16,7 @@ svg,img{display:block;flex-shrink:0}
 
 :root{
   --bg:#08090f;
-  --g0:rgba(14,17,32,0.92);
+  --g0:rgba(14,17,32,0.94);
   --g1:rgba(18,22,42,0.86);
   --g2:rgba(22,28,52,0.82);
   --gb:rgba(255,255,255,0.08);
@@ -58,103 +58,62 @@ body{
 .glow::before{content:'';position:absolute;width:600px;height:600px;top:-160px;left:-120px;background:radial-gradient(ellipse,rgba(20,70,200,0.16) 0%,transparent 70%);border-radius:50%}
 .glow::after{content:'';position:absolute;width:420px;height:420px;bottom:-80px;right:-60px;background:radial-gradient(ellipse,rgba(0,140,255,0.09) 0%,transparent 70%);border-radius:50%}
 
-.hdr{
-  position:sticky;top:0;z-index:200;
-  background:var(--g0);
-  backdrop-filter:var(--blur);
-  -webkit-backdrop-filter:var(--blur);
-  border-bottom:1px solid var(--gb);
-}
-.hdr-in{
-  max-width:860px;margin:0 auto;
-  padding:0 16px;height:52px;
-  display:flex;align-items:center;justify-content:space-between;gap:8px;
-}
-.brand{display:flex;align-items:center;gap:9px;flex-shrink:0}
-.brand img{width:26px;height:26px;border-radius:50%}
-.brand-name{font-size:15px;font-weight:600;letter-spacing:-.025em;color:var(--t1)}
-.admin-badge{
-  padding:2px 7px;border-radius:999px;
-  font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
-  background:rgba(245,166,35,0.14);border:1px solid rgba(245,166,35,0.3);
-  color:var(--wn);
-}
+/* ── HEADER ── */
+.hdr{position:sticky;top:0;z-index:200;background:var(--g0);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border-bottom:1px solid var(--gb)}
+.hdr-in{max-width:860px;margin:0 auto;padding:0 20px;height:50px;display:flex;align-items:center;justify-content:space-between;gap:12px}
 
-.nav{display:flex;align-items:center;gap:2px}
-.nav-a{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:6px 12px;border-radius:999px;
-  border:1px solid var(--gb);
-  font-size:13px;font-weight:500;color:var(--t2);
-  transition:background .15s,color .15s,border-color .15s;
-}
-.nav-a img{width:14px;height:14px;opacity:0.55}
-.nav-a span{display:inline}
-.nav-a:hover{background:var(--g2);color:var(--t1);border-color:var(--gbh)}
-.nav-a:hover img{opacity:1}
+.brand{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.brand-logo{width:22px;height:22px;border-radius:50%;overflow:hidden;flex-shrink:0;border:1px solid var(--gb)}
+.brand-logo img{width:100%;height:100%;object-fit:cover}
+.brand-name{font-size:14px;font-weight:650;letter-spacing:-.025em;color:var(--t1)}
+.admin-badge{padding:2px 6px;border-radius:999px;font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;background:rgba(245,166,35,0.14);border:1px solid rgba(245,166,35,0.3);color:var(--wn)}
 
-.admin-btn{
-  display:flex;align-items:center;justify-content:center;
-  width:30px;height:30px;border-radius:7px;
-  color:var(--t3);
-  transition:color .2s,background .2s;
-}
+.nav{display:flex;align-items:center;gap:6px}
+.nav-link{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;border-radius:999px;border:1px solid var(--gb);font-size:12.5px;font-weight:500;color:var(--t2);transition:background .15s,color .15s,border-color .15s;white-space:nowrap}
+.nav-link svg{width:13px;height:13px;flex-shrink:0;opacity:.6;transition:opacity .15s}
+.nav-link:hover{background:var(--g2);color:var(--t1);border-color:var(--gbh)}
+.nav-link:hover svg{opacity:1}
+
+.admin-btn{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:7px;color:var(--t3);transition:color .2s,background .2s;flex-shrink:0}
 .admin-btn:hover{color:var(--t2);background:var(--g2)}
 .admin-btn.on{color:var(--a);background:var(--as)}
-.admin-btn svg{width:14px;height:14px}
+.admin-btn svg{width:13px;height:13px}
 
-.hero{position:relative;z-index:1;padding:56px 16px 36px;text-align:center}
-.hero h1{
-  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;
-  font-size:clamp(32px,9vw,56px);font-weight:700;letter-spacing:-.04em;line-height:1.05;
-  color:var(--t1);margin-bottom:10px;
-  animation:up .45s cubic-bezier(.16,1,.3,1) both;
-}
-.hero-sub{font-size:14px;color:var(--t2);line-height:1.6;margin-bottom:28px;animation:up .45s cubic-bezier(.16,1,.3,1) .07s both}
+/* ── HERO ── */
+.hero{position:relative;z-index:1;padding:52px 16px 32px;text-align:center}
+.hero h1{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:clamp(30px,8vw,52px);font-weight:700;letter-spacing:-.04em;line-height:1.05;color:var(--t1);margin-bottom:10px;animation:up .45s cubic-bezier(.16,1,.3,1) both}
+.hero-sub{font-size:13.5px;color:var(--t2);line-height:1.6;margin-bottom:26px;animation:up .45s cubic-bezier(.16,1,.3,1) .07s both}
 @keyframes up{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-.stats{
-  display:inline-flex;align-items:stretch;
-  background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
-  border:1px solid var(--gb);border-radius:16px;
-  box-shadow:var(--sc);overflow:hidden;
-  animation:up .45s cubic-bezier(.16,1,.3,1) .14s both;
-}
-.st{display:flex;flex-direction:column;align-items:center;gap:3px;padding:14px 22px}
-.st b{font-size:17px;font-weight:700;letter-spacing:-.03em;color:var(--t1)}
+.stats{display:inline-flex;align-items:stretch;background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--gb);border-radius:16px;box-shadow:var(--sc);overflow:hidden;animation:up .45s cubic-bezier(.16,1,.3,1) .14s both}
+.st{display:flex;flex-direction:column;align-items:center;gap:3px;padding:13px 20px}
+.st b{font-size:16px;font-weight:700;letter-spacing:-.03em;color:var(--t1)}
 .st span{font-size:10px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;color:var(--t3)}
 .st-sep{width:1px;background:var(--gb);flex-shrink:0}
 
+/* ── CONTROLS ── */
 .ctrls{position:relative;z-index:1;padding:0 16px 12px}
 .ctrls-in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-
 .swrap{flex:1;min-width:180px;position:relative}
-.sico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:14px;height:14px;color:var(--t3);pointer-events:none}
-.sinput{
-  width:100%;padding:10px 32px 10px 34px;border-radius:12px;
-  border:1px solid var(--gb);background:var(--g1);
-  backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
-  color:var(--t1);font-size:14px;outline:none;
-  -webkit-appearance:none;appearance:none;
-  user-select:text;-webkit-user-select:text;
-  transition:border-color .18s,box-shadow .18s;
-}
+.sico{position:absolute;left:11px;top:50%;transform:translateY(-50%);width:13px;height:13px;color:var(--t3);pointer-events:none}
+.sinput{width:100%;padding:9px 30px 9px 32px;border-radius:11px;border:1px solid var(--gb);background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);color:var(--t1);font-size:13.5px;outline:none;-webkit-appearance:none;appearance:none;user-select:text;-webkit-user-select:text;transition:border-color .18s,box-shadow .18s}
 .sinput::placeholder{color:var(--t3)}
 .sinput::-webkit-search-cancel-button{-webkit-appearance:none}
 .sinput:focus{border-color:var(--ab);box-shadow:0 0 0 3px var(--ag)}
-.sclr{position:absolute;right:9px;top:50%;transform:translateY(-50%);display:none;align-items:center;justify-content:center;width:20px;height:20px;color:var(--t3);font-size:11px;border-radius:4px;transition:color .15s}
+.sclr{position:absolute;right:9px;top:50%;transform:translateY(-50%);display:none;align-items:center;justify-content:center;width:18px;height:18px;color:var(--t3);font-size:10px;border-radius:4px;transition:color .15s}
 .sclr.on{display:flex}
 .sclr:hover{color:var(--t1)}
 
-.pills{display:flex;gap:2px;padding:3px;border-radius:12px;border:1px solid var(--gb);background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);flex-shrink:0}
-.pill{display:inline-flex;align-items:center;gap:5px;padding:7px 13px;border-radius:9px;font-size:13px;font-weight:500;color:var(--t2);white-space:nowrap;transition:background .15s,color .15s}
+.pills{display:flex;gap:2px;padding:3px;border-radius:11px;border:1px solid var(--gb);background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);flex-shrink:0}
+.pill{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;border-radius:8px;font-size:12.5px;font-weight:500;color:var(--t2);white-space:nowrap;transition:background .15s,color .15s}
 .pill:hover:not(.on){background:var(--g2);color:var(--t1)}
 .pill.on{background:var(--a);color:#fff;box-shadow:0 2px 10px var(--ag)}
 .pdot{width:6px;height:6px;border-radius:50%}
 .pdot.s{background:var(--ok)}
 .pdot.b{background:var(--wn)}
 
-.main{position:relative;z-index:1;padding:0 16px 80px}
+/* ── MAIN ── */
+.main{position:relative;z-index:1;padding:0 16px 100px}
 .rlist{max-width:860px;margin:0 auto;display:flex;flex-direction:column;gap:10px}
 
 .skel{border-radius:var(--r);background:var(--g1);border:1px solid var(--gb);overflow:hidden;position:relative}
@@ -162,44 +121,32 @@ body{
 @keyframes sh{from{transform:translateX(-100%)}to{transform:translateX(100%)}}
 
 .sv{max-width:860px;margin:0 auto;padding:72px 16px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px}
-.sv svg{width:48px;height:48px;color:var(--t3);margin-bottom:8px}
-.sv strong{font-size:15px;font-weight:600;color:var(--t2)}
+.sv svg{width:44px;height:44px;color:var(--t3);margin-bottom:6px}
+.sv strong{font-size:14.5px;font-weight:600;color:var(--t2)}
 .sv small{font-size:13px;color:var(--t3)}
 .btn-retry{margin-top:10px;padding:9px 22px;border-radius:10px;border:1px solid var(--gb);background:var(--g1);color:var(--t1);font-size:13px;font-weight:500;transition:border-color .18s,background .18s}
 .btn-retry:hover{border-color:var(--ab);background:var(--as)}
 
-.card{
-  background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);
-  border:1px solid var(--gb);border-radius:var(--r);overflow:hidden;
-  box-shadow:var(--sc);
-  animation:up .4s cubic-bezier(.16,1,.3,1) both;
-  transition:transform .2s,border-color .2s,box-shadow .2s;
-}
+/* ── CARD ── */
+.card{background:var(--g1);backdrop-filter:var(--blur);-webkit-backdrop-filter:var(--blur);border:1px solid var(--gb);border-radius:var(--r);overflow:hidden;box-shadow:var(--sc);animation:up .4s cubic-bezier(.16,1,.3,1) both;transition:transform .2s,border-color .2s,box-shadow .2s}
 .card:hover{transform:translateY(-1px);border-color:var(--gbh);box-shadow:0 8px 36px rgba(0,0,0,.4),0 0 0 1px var(--gbh)}
-
-.chead{padding:16px 16px 14px}
+.chead{padding:15px 16px 13px}
 .ctop{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
 .cleft{flex:1;min-width:0}
 .cright{display:flex;flex-direction:column;align-items:flex-end;gap:5px;flex-shrink:0}
-
 .cver{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px}
-.cvnum{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:19px;font-weight:700;letter-spacing:-.03em;color:var(--t1)}
+.cvnum{font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Helvetica Neue",Arial,sans-serif;font-size:18px;font-weight:700;letter-spacing:-.03em;color:var(--t1)}
 .tag{display:inline-flex;align-items:center;padding:2px 8px;border-radius:999px;font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
 .tag.s{background:var(--oks);border:1px solid var(--okb);color:var(--ok)}
 .tag.b{background:var(--wns);border:1px solid var(--wnb);color:var(--wn)}
-
-.cname{font-size:13px;color:var(--t2);margin-bottom:9px;line-height:1.4}
-
-.cmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.cmi{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t3)}
+.cname{font-size:13px;color:var(--t2);margin-bottom:8px;line-height:1.4}
+.cmeta{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:7px}
+.cmi{display:flex;align-items:center;gap:4px;font-size:11.5px;color:var(--t3)}
 .cmi svg{width:11px;height:11px}
 .cmi em{font-style:normal;color:var(--t2)}
-
 .cupload{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:500;color:var(--a)}
 .cupload svg{width:11px;height:11px}
-
 .cassets{border-top:1px solid var(--dv);padding:10px 16px;display:flex;flex-direction:column;gap:6px}
-
 .arow{display:flex;align-items:center;gap:9px;padding:10px;border-radius:11px;background:var(--g2);border:1px solid var(--gb);transition:border-color .18s,background .18s}
 .arow:hover{border-color:var(--ab);background:var(--as)}
 .aico{width:32px;height:32px;border-radius:8px;background:var(--as);border:1px solid var(--ab);display:flex;align-items:center;justify-content:center;color:var(--a);flex-shrink:0}
@@ -207,28 +154,23 @@ body{
 .ainfo{flex:1;min-width:0}
 .aname{font-size:13px;font-weight:500;color:var(--t1);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-bottom:2px}
 .asub{font-size:11px;color:var(--t3);display:flex;gap:10px}
-
 .cfoot{border-top:1px solid var(--dv);padding:9px 16px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
 .cmirs{display:flex;align-items:center;gap:5px;flex:1;flex-wrap:wrap;min-width:0}
 .mchip{display:inline-flex;align-items:center;gap:3px;padding:3px 9px;border-radius:999px;background:var(--as);border:1px solid var(--ab);color:var(--a) !important;font-size:11px;font-weight:500;transition:filter .15s}
 .mchip:hover{filter:brightness(1.2)}
 .mchip svg{width:10px;height:10px}
-
 .btn-blue{display:inline-flex;align-items:center;gap:5px;padding:9px 15px;border-radius:11px;background:var(--a);color:#fff !important;font-size:13px;font-weight:600;white-space:nowrap;flex-shrink:0;box-shadow:var(--sb);transition:filter .15s,transform .12s}
 .btn-blue svg{width:13px;height:13px}
 .btn-blue:hover{filter:brightness(1.1)}
 .btn-blue:active{transform:scale(.96)}
-
 .btn-g{display:inline-flex;align-items:center;gap:4px;padding:6px 11px;border-radius:8px;border:1px solid var(--gb);background:var(--g2);color:var(--t2) !important;font-size:12px;font-weight:500;white-space:nowrap;transition:border-color .18s,color .18s,background .18s}
 .btn-g svg{width:12px;height:12px}
 .btn-g:hover{border-color:var(--ab);color:var(--a) !important;background:var(--as)}
 
+/* mirror admin */
 .mir-admin-section{border-top:1px solid var(--dv);padding:8px 16px 10px}
 .mir-admin-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
 .mir-admin-label{font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.09em;color:var(--t3)}
-.mir-admin-add{display:inline-flex;align-items:center;gap:3px;padding:4px 9px;border-radius:6px;border:1px solid var(--ab);background:var(--as);color:var(--a);font-size:11px;font-weight:600;transition:filter .15s}
-.mir-admin-add:hover{filter:brightness(1.15)}
-.mir-admin-add svg{width:10px;height:10px}
 .mir-items{display:flex;flex-direction:column;gap:4px}
 .mir-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:7px;background:var(--g1);border:1px solid var(--gb)}
 .mir-item-info{flex:1;min-width:0}
@@ -238,12 +180,12 @@ body{
 .mir-item-del:hover{color:var(--er);background:rgba(255,69,58,.1)}
 .mir-empty-note{font-size:12px;color:var(--t3);padding:2px 0 4px}
 
+/* ── MODAL ── */
 .mov{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.68);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .22s}
 .mov.open{opacity:1;pointer-events:all}
 .mbox{width:100%;max-width:520px;max-height:82vh;display:flex;flex-direction:column;background:var(--g2);backdrop-filter:blur(36px) saturate(200%);-webkit-backdrop-filter:blur(36px) saturate(200%);border:1px solid var(--gbh);border-radius:20px;box-shadow:var(--sm);transform:scale(.94) translateY(14px);opacity:0;transition:transform .3s cubic-bezier(.34,1.56,.64,1),opacity .22s}
 .mov.open .mbox{transform:scale(1) translateY(0);opacity:1}
-.mbox.sm{max-width:390px}
-
+.mbox.sm{max-width:400px}
 .mhdr{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:18px 18px 14px;border-bottom:1px solid var(--dv);flex-shrink:0}
 .mhdr-l{display:flex;flex-direction:column;gap:3px}
 .mtag{font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--a)}
@@ -251,11 +193,11 @@ body{
 .mclose{width:28px;height:28px;border-radius:7px;border:1px solid var(--gb);background:var(--g1);color:var(--t3);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s,color .15s,border-color .15s}
 .mclose:hover{background:rgba(255,59,48,.12);color:var(--er);border-color:rgba(255,59,48,.3)}
 .mclose svg{width:12px;height:12px}
-
 .mbody{padding:16px 18px;overflow-y:auto;flex:1;scrollbar-width:thin;scrollbar-color:var(--ab) transparent}
 .mbody::-webkit-scrollbar{width:4px}
 .mbody::-webkit-scrollbar-thumb{background:var(--ab);border-radius:4px}
 
+/* markdown */
 .md h1,.md h2,.md h3{letter-spacing:-.02em;margin:14px 0 5px;color:var(--t1)}
 .md h2{font-size:12.5px;color:var(--a);font-weight:600}
 .md h3{font-size:12px;color:var(--t2);font-weight:600}
@@ -270,38 +212,53 @@ body{
 .md hr{border:none;border-top:1px solid var(--dv);margin:12px 0}
 .md blockquote{border-left:2px solid var(--ab);padding-left:10px;margin:8px 0;color:var(--t2);font-style:italic}
 
+/* forms */
 .form-stack{display:flex;flex-direction:column;gap:10px}
 .form-hint{font-size:13px;color:var(--t2);line-height:1.6;margin-bottom:2px}
+.flabel{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--t3);margin-bottom:-4px}
 .finput{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--gb);background:var(--g1);color:var(--t1);font-size:13px;outline:none;user-select:text;-webkit-user-select:text;transition:border-color .18s,box-shadow .18s}
 .finput::placeholder{color:var(--t3)}
 .finput:focus{border-color:var(--ab);box-shadow:0 0 0 3px var(--ag)}
 .finput.err{border-color:var(--er)}
+.ftextarea{width:100%;padding:10px 12px;border-radius:9px;border:1px solid var(--gb);background:var(--g1);color:var(--t1);font-size:13px;outline:none;user-select:text;-webkit-user-select:text;resize:vertical;min-height:90px;transition:border-color .18s,box-shadow .18s;font-family:inherit}
+.ftextarea::placeholder{color:var(--t3)}
+.ftextarea:focus{border-color:var(--ab);box-shadow:0 0 0 3px var(--ag)}
 .ferr{font-size:12px;color:var(--er);margin-top:-4px}
 .fstatus{font-size:12px;color:var(--ok);margin-top:-4px}
 .btn-full{width:100%;padding:10px;border-radius:9px;background:var(--a);color:#fff;font-size:14px;font-weight:600;box-shadow:var(--sb);transition:filter .15s,transform .12s,opacity .15s}
 .btn-full:hover{filter:brightness(1.1)}
 .btn-full:active{transform:scale(.98)}
 .btn-full:disabled{opacity:.5;cursor:not-allowed}
+.fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
+/* FAB */
+.fab{position:fixed;bottom:28px;right:20px;z-index:300;display:none;align-items:center;gap:6px;padding:10px 18px;border-radius:14px;background:var(--a);color:#fff !important;font-size:13px;font-weight:600;box-shadow:0 8px 28px rgba(61,132,255,.55);transition:filter .15s,transform .12s;border:none;cursor:pointer}
+.fab svg{width:13px;height:13px}
+.fab:hover{filter:brightness(1.1)}
+.fab:active{transform:scale(.97)}
+
+/* footer */
 .ftr{position:relative;z-index:1;border-top:1px solid var(--dv);padding:14px 16px}
 .ftr-in{max-width:860px;margin:0 auto;display:flex;align-items:center;justify-content:center}
 .ftr-copy{font-size:12px;color:var(--t3);text-align:center}
 
 @media(max-width:540px){
-  .nav-a span{display:none}
-  .hero{padding:40px 16px 22px}
-  .st{padding:12px 14px}
-  .st b{font-size:16px}
+  .nav-link span{display:none}
+  .hero{padding:38px 16px 20px}
+  .st{padding:11px 13px}
+  .st b{font-size:15px}
   .ctop{flex-wrap:wrap}
   .cright{flex-direction:row;flex-wrap:wrap;width:100%;justify-content:flex-start}
   .cassets,.cfoot{padding:9px 12px}
   .mov{padding:12px}
   .mbox{max-height:88vh}
+  .fgrid2{grid-template-columns:1fr}
+  .fab{bottom:18px;right:14px;padding:9px 14px}
 }
 @media(max-width:360px){
-  .hero h1{font-size:28px}
+  .hero h1{font-size:26px}
   .pills{gap:1px}
-  .pill{padding:6px 9px;font-size:12px}
+  .pill{padding:5px 9px;font-size:12px}
 }
 </style>
 </head>
@@ -309,23 +266,24 @@ body{
 
 <div class="glow" aria-hidden="true"></div>
 
+<!-- HEADER -->
 <header class="hdr">
   <div class="hdr-in">
     <div class="brand">
-      <img src="assets/logo.svg" width="26" height="26" alt="SnapPerf"/>
+      <div class="brand-logo">
+        <img src="assets/logo.svg" alt="SnapPerf" width="22" height="22"/>
+      </div>
       <span class="brand-name">SnapPerf</span>
       <span class="admin-badge" id="adminBadge" hidden>Admin</span>
     </div>
     <nav class="nav">
-      <a href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener" class="nav-a">
-        <img src="assets/github.svg" width="14" height="14" alt=""/>
-        <span>GitHub</span>
-      </a>
-      <a href="https://t.me/get01projects" target="_blank" rel="noopener" class="nav-a">
-        <img src="assets/telegram.svg" width="14" height="14" alt=""/>
+      <a href="https://t.me/get01projects" target="_blank" rel="noopener" class="nav-link">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+        </svg>
         <span>Channel</span>
       </a>
-      <button class="admin-btn" id="adminBtn" title="Admin" aria-label="Admin login" style="display:none">
+      <button class="admin-btn" id="adminBtn" title="Admin login" aria-label="Admin login" style="display:none">
         <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
           <rect x="3" y="7" width="10" height="8" rx="2"/>
           <path d="M5 7V5a3 3 0 016 0v2"/>
@@ -336,6 +294,7 @@ body{
   </div>
 </header>
 
+<!-- HERO -->
 <section class="hero">
   <h1>Downloads</h1>
   <p class="hero-sub">Snapdragon Performance Optimizer · Magisk · KernelSU · APatch</p>
@@ -348,6 +307,7 @@ body{
   </div>
 </section>
 
+<!-- CONTROLS -->
 <div class="ctrls">
   <div class="ctrls-in">
     <div class="swrap">
@@ -365,6 +325,7 @@ body{
   </div>
 </div>
 
+<!-- LIST -->
 <main class="main">
   <div id="rlist" class="rlist">
     <div class="skel" style="height:240px"></div>
@@ -379,10 +340,16 @@ body{
   <div id="svErr" class="sv" hidden>
     <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.3"><circle cx="24" cy="24" r="20"/><path d="M24 16v11M24 30v2" stroke-linecap="round"/></svg>
     <strong>Could not load releases</strong>
-    <small id="errMsg">GitHub API error</small>
+    <small id="errMsg"></small>
     <button class="btn-retry" id="retryBtn">Try again</button>
   </div>
 </main>
+
+<!-- ADMIN FAB -->
+<button class="fab" id="adminFab">
+  <svg viewBox="0 0 14 14" fill="currentColor"><path d="M7.75 1.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>
+  Post Release
+</button>
 
 <footer class="ftr">
   <div class="ftr-in">
@@ -390,6 +357,7 @@ body{
   </div>
 </footer>
 
+<!-- MODAL: Changelog -->
 <div class="mov" id="clOv" hidden>
   <div class="mbox">
     <div class="mhdr">
@@ -405,12 +373,13 @@ body{
   </div>
 </div>
 
+<!-- MODAL: Admin Login -->
 <div class="mov" id="adminOv" hidden>
   <div class="mbox sm">
     <div class="mhdr">
       <div class="mhdr-l">
-        <span class="mtag">Admin Login</span>
-        <h2 class="mtitle">GitHub Authentication</h2>
+        <span class="mtag">Admin</span>
+        <h2 class="mtitle">Admin Login</h2>
       </div>
       <button class="mclose" id="adminClose" aria-label="Close">
         <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/></svg>
@@ -418,16 +387,57 @@ body{
     </div>
     <div class="mbody">
       <div class="form-stack">
-        <p class="form-hint">Enter your GitHub personal access token (ghp_…). Must belong to <strong>@aetherdev01</strong>.</p>
-        <input type="password" id="ghToken" class="finput" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" spellcheck="false"/>
+        <p class="form-hint">Enter the admin password to manage releases.</p>
+        <input type="password" id="adminPw" class="finput" placeholder="Password" autocomplete="off" spellcheck="false"/>
         <span class="ferr" id="adminErr" hidden></span>
-        <span class="fstatus" id="adminStatus" hidden></span>
-        <button class="btn-full" id="adminSubmit">Authenticate</button>
+        <button class="btn-full" id="adminSubmit">Login</button>
       </div>
     </div>
   </div>
 </div>
 
+<!-- MODAL: Post Release -->
+<div class="mov" id="addRelOv" hidden>
+  <div class="mbox">
+    <div class="mhdr">
+      <div class="mhdr-l">
+        <span class="mtag">Admin</span>
+        <h2 class="mtitle">Post New Release</h2>
+      </div>
+      <button class="mclose" id="addRelClose" aria-label="Close">
+        <svg viewBox="0 0 16 16" fill="currentColor"><path d="M3.72 3.72a.75.75 0 011.06 0L8 6.94l3.22-3.22a.75.75 0 111.06 1.06L9.06 8l3.22 3.22a.75.75 0 11-1.06 1.06L8 9.06l-3.22 3.22a.75.75 0 01-1.06-1.06L6.94 8 3.72 4.78a.75.75 0 010-1.06z"/></svg>
+      </button>
+    </div>
+    <div class="mbody">
+      <div class="form-stack">
+        <label class="flabel">Title</label>
+        <input type="text" id="relTitle" class="finput" placeholder="e.g. SnapPerf Lite Edition"/>
+        <div class="fgrid2">
+          <div class="form-stack">
+            <label class="flabel">Version</label>
+            <input type="text" id="relVersion" class="finput" placeholder="v3.2.1"/>
+          </div>
+          <div class="form-stack">
+            <label class="flabel">Tag</label>
+            <select id="relTag" class="finput" style="appearance:none;-webkit-appearance:none;cursor:pointer">
+              <option value="stable">Stable</option>
+              <option value="beta">Beta</option>
+            </select>
+          </div>
+        </div>
+        <label class="flabel">SafeLinku / SafeFileKu Download URL</label>
+        <input type="url" id="relDownload" class="finput" placeholder="https://sfl.gl/xxxxxxx"/>
+        <label class="flabel">Description / Changelog (Markdown)</label>
+        <textarea id="relDesc" class="ftextarea" placeholder="## What's New&#10;- Improved performance&#10;- Bug fixes"></textarea>
+        <span class="ferr" id="addRelErr" hidden></span>
+        <span class="fstatus" id="addRelStatus" hidden></span>
+        <button class="btn-full" id="addRelSubmit">Post Release</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL: Add Mirror -->
 <div class="mov" id="mirOv" hidden>
   <div class="mbox sm">
     <div class="mhdr">
@@ -441,8 +451,8 @@ body{
     </div>
     <div class="mbody">
       <div class="form-stack">
-        <input type="url" id="mirUrl" class="finput" placeholder="https://example.com/SnapPerf.zip"/>
-        <input type="text" id="mirLbl" class="finput" placeholder="Label  (e.g. Mediafire, Google Drive)"/>
+        <input type="url" id="mirUrl" class="finput" placeholder="https://sfl.gl/xxxxxxx or any URL"/>
+        <input type="text" id="mirLbl" class="finput" placeholder="Label (e.g. SafeLinku, Mediafire)"/>
         <span class="ferr" id="mirErr" hidden></span>
         <button class="btn-full" id="mirSubmit">Save Mirror</button>
       </div>
@@ -454,36 +464,99 @@ body{
 (function(){
 'use strict';
 
-const REPO    = 'aetherdev01/SnapPerf';
-const OWNER   = 'aetherdev01';
-const API     = 'https://api.github.com/repos/'+REPO+'/releases?per_page=50';
-const BY      = '@AetherDev22';
-const DATA_PATH = 'download/data/mirrors.json';
-const GH_FILE = 'https://api.github.com/repos/'+REPO+'/contents/'+DATA_PATH;
-const SK      = 'sp_ghtoken';
+/* ── CONFIG ── */
+const SFL_API_KEY  = '5db758db09cbed2990ead9c2e54c5c322ddff9cd';
+const SFL_API_BASE = 'https://safelinku.com/member/tools/api';
+const ADMIN_PW     = 'aetherdev1922';
+const SK_ADMIN     = 'sp_admin_v2';
+const SK_RELEASES  = 'sp_releases_v2';
+const BY           = '@AetherDev22';
 
+/* ── STATE ── */
 let releases  = [];
-let mirrors   = {};
-let mirrorSha = null;
 let filter    = 'all';
 let sq        = '';
 let isAdmin   = false;
-let adminToken= null;
-let mirAddTag = null;
+let mirAddId  = null;
 
 const $ = id => document.getElementById(id);
-
 function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 function mk(t,c){ const e=document.createElement(t); if(c) e.className=c; return e; }
-
-function fn(n){ if(!n)return'0'; if(n>=1e6)return(n/1e6).toFixed(1)+'M'; if(n>=1e3)return(n/1e3).toFixed(1)+'k'; return String(n); }
-function fb(b){ if(!b)return'—'; if(b<1024)return b+' B'; if(b<1048576)return(b/1024).toFixed(1)+' KB'; return(b/1048576).toFixed(2)+' MB'; }
+function fn(n){
+  if(n===null||n===undefined||n==='')return'—';
+  n=+n; if(isNaN(n))return'—';
+  if(n>=1e6)return(n/1e6).toFixed(1)+'M';
+  if(n>=1e3)return(n/1e3).toFixed(1)+'k';
+  return String(n);
+}
+function fb(b){
+  if(!b&&b!==0)return'—'; b=+b;
+  if(!b)return'—';
+  if(b<1024)return b+' B';
+  if(b<1048576)return(b/1024).toFixed(1)+' KB';
+  return(b/1048576).toFixed(2)+' MB';
+}
 function fDate(iso){ if(!iso)return'—'; return new Date(iso).toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}); }
-
 function openMod(ov){ ov.hidden=false; requestAnimationFrame(()=>ov.classList.add('open')); document.body.style.overflow='hidden'; }
 function closeMod(ov){ ov.classList.remove('open'); setTimeout(()=>{ ov.hidden=true; document.body.style.overflow=''; },250); }
+function showFormErr(id,msg){ const el=$(id); el.textContent=msg; el.hidden=false; setTimeout(()=>el.hidden=true,3500); }
+function uid(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
 
-function setState(s, msg){
+/* ── PERSISTENCE ── */
+function saveReleases(){ try{ localStorage.setItem(SK_RELEASES,JSON.stringify(releases)); }catch{} }
+function loadReleases(){ try{ const r=localStorage.getItem(SK_RELEASES); return r?JSON.parse(r):[]; }catch{ return []; } }
+
+/* ── SAFELINKU API ── */
+async function fetchSflInfo(url){
+  try{
+    const endpoint = SFL_API_BASE+'?api='+SFL_API_KEY+'&url='+encodeURIComponent(url);
+    const res = await fetch(endpoint);
+    if(!res.ok) return null;
+    const json = await res.json();
+    if(!json) return null;
+    /* Normalise various possible field names */
+    const d = json.result || json.data || json;
+    if(json.status==='error'||json.error) return null;
+    return {
+      size:      +(d.file_size||d.size||d.filesize||d.file_bytes||0),
+      downloads: +(d.download_count||d.total_download||d.downloads||d.total_downloads||d.count||0),
+      filename:  d.file_name||d.filename||d.name||''
+    };
+  }catch(e){ console.warn('SafeLinku API:',e); return null; }
+}
+
+/* ── STATS ── */
+function setStats(){
+  const tdl = releases.reduce((s,r)=>s+(+(r.downloads)||0),0);
+  const stable = releases.find(r=>r.tag==='stable');
+  $('stRel').textContent  = releases.length||'0';
+  $('stDl').textContent   = fn(tdl);
+  $('stLast').textContent = stable?stable.version:(releases[0]?.version||'N/A');
+}
+
+/* ── INIT ── */
+function init(){
+  releases = loadReleases();
+  isAdmin  = sessionStorage.getItem(SK_ADMIN)==='1';
+  applyAdminUI();
+  setStats();
+  renderList();
+}
+
+function applyAdminUI(){
+  $('adminBadge').hidden = !isAdmin;
+  $('adminFab').style.display = isAdmin?'inline-flex':'none';
+  if(isAdmin){
+    $('adminBtn').classList.add('on');
+    $('adminBtn').title='Admin ON · Click to logout';
+  } else {
+    $('adminBtn').classList.remove('on');
+    $('adminBtn').title='Admin login';
+  }
+}
+
+/* ── STATE VIEWS ── */
+function setState(s,msg){
   $('rlist').innerHTML='';
   $('svEmpty').hidden=true;
   $('svErr').hidden=true;
@@ -497,62 +570,12 @@ function setState(s, msg){
   }
 }
 
-async function fetchMirrors(){
-  try{
-    const headers = {'Accept':'application/vnd.github.v3+json'};
-    if(adminToken) headers['Authorization']='Bearer '+adminToken;
-    const res = await fetch(GH_FILE,{headers});
-    if(!res.ok){ mirrors={}; return; }
-    const json = await res.json();
-    mirrorSha = json.sha;
-    mirrors = JSON.parse(atob(json.content.replace(/\n/g,''))) || {};
-  }catch{ mirrors={}; }
-}
-
-async function saveMirrors(){
-  if(!adminToken) return;
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(mirrors,null,2))));
-  const body = {message:'Update mirror links',content,sha:mirrorSha};
-  try{
-    const res = await fetch(GH_FILE,{
-      method:'PUT',
-      headers:{'Authorization':'Bearer '+adminToken,'Content-Type':'application/json','Accept':'application/vnd.github.v3+json'},
-      body:JSON.stringify(body)
-    });
-    if(res.ok){
-      const json=await res.json();
-      mirrorSha=json.content.sha;
-    }
-  }catch(e){ console.error('Mirror save failed',e); }
-}
-
-async function fetchData(){
-  setState('loading');
-  await fetchMirrors();
-  try{
-    const res=await fetch(API,{headers:{Accept:'application/vnd.github.v3+json'}});
-    if(!res.ok) throw new Error('GitHub API: HTTP '+res.status+' '+res.statusText);
-    const json=await res.json();
-    if(!Array.isArray(json)) throw new Error('Unexpected response from GitHub API');
-    releases=json.sort((a,b)=>new Date(b.published_at)-new Date(a.published_at));
-    setStats(json);
-    renderList();
-  }catch(e){ setState('error',e.message); }
-}
-
-function setStats(d){
-  const tdl=d.reduce((s,r)=>s+r.assets.reduce((a,x)=>a+(x.download_count||0),0),0);
-  const stable=d.find(r=>!r.prerelease);
-  $('stRel').textContent=d.length||'0';
-  $('stDl').textContent=fn(tdl);
-  $('stLast').textContent=stable?stable.tag_name:(d[0]?.tag_name||'N/A');
-}
-
+/* ── RENDER ── */
 function renderList(){
   const q=sq.toLowerCase();
   const fd=releases.filter(r=>{
-    const bf=filter==='stable'?!r.prerelease:filter==='beta'?r.prerelease:true;
-    const bq=!q||r.tag_name.toLowerCase().includes(q)||(r.name||'').toLowerCase().includes(q)||(r.body||'').toLowerCase().includes(q);
+    const bf=filter==='stable'?r.tag==='stable':filter==='beta'?r.tag==='beta':true;
+    const bq=!q||(r.version||'').toLowerCase().includes(q)||(r.title||'').toLowerCase().includes(q)||(r.description||'').toLowerCase().includes(q);
     return bf&&bq;
   });
   $('rlist').innerHTML='';
@@ -563,68 +586,77 @@ function renderList(){
 }
 
 function buildCard(r,idx){
-  const tag=r.tag_name, pre=r.prerelease, nm=r.name||tag;
-  const tdl=r.assets.reduce((a,x)=>a+(x.download_count||0),0);
-  const mirs=mirrors[tag]||[];
+  const pre  = r.tag==='beta';
+  const mirs = r.mirrors||[];
 
   const card=mk('div','card');
   card.style.animationDelay=(idx*50)+'ms';
 
+  /* head */
   const head=mk('div','chead');
   const ctop=mk('div','ctop');
   const left=mk('div','cleft');
   const right=mk('div','cright');
 
   const cver=mk('div','cver');
-  const vnum=mk('span','cvnum'); vnum.textContent=tag;
+  const vnum=mk('span','cvnum'); vnum.textContent=r.version||'—';
   const tg=mk('span','tag '+(pre?'b':'s')); tg.textContent=pre?'Beta':'Stable';
   cver.append(vnum,tg);
 
   const cname=mk('p','cname');
-  cname.textContent=(nm!==tag)?nm:'SnapPerf '+tag;
+  cname.textContent=r.title||('SnapPerf '+r.version);
 
   const meta=mk('div','cmeta');
   meta.append(
-    mi(iCal(),fDate(r.published_at)),
-    mi(iDl(),fn(tdl)+' downloads'),
-    mi(iPkg(),r.assets.length+' file'+(r.assets.length!==1?'s':''))
+    mi(iCal(), fDate(r.date)),
+    mi(iDl(),  fn(r.downloads)+' downloads'),
+    mi(iPkg(), fb(r.size))
   );
 
   const upl=mk('div','cupload');
-  upl.innerHTML=iUser()+' Uploaded by <strong>'+BY+'</strong>';
+  upl.innerHTML=iUser()+' Uploaded by <strong>'+esc(BY)+'</strong>';
   left.append(cver,cname,meta,upl);
 
-  const clBtn=mk('button','btn-g'); clBtn.innerHTML=iDoc()+' Changelog';
-  clBtn.addEventListener('click',()=>openCL(r));
-  right.append(clBtn);
+  if((r.description||'').trim()){
+    const clBtn=mk('button','btn-g'); clBtn.innerHTML=iDoc()+' Changelog';
+    clBtn.addEventListener('click',()=>openCL(r));
+    right.append(clBtn);
+  }
+
+  if(isAdmin){
+    const delBtn=mk('button','btn-g');
+    delBtn.style.cssText='color:var(--er)!important;border-color:rgba(255,69,58,.3)!important';
+    delBtn.innerHTML=iTrash()+' Delete';
+    delBtn.addEventListener('click',()=>deleteRelease(r.id));
+    right.append(delBtn);
+  }
+
   ctop.append(left,right);
   head.append(ctop);
 
+  /* asset */
   const asWrap=mk('div','cassets');
-  if(!r.assets.length){
-    const p=mk('p',''); p.textContent='No downloadable assets.';
+  if(r.download_url){
+    asWrap.appendChild(buildAsset(r));
+  } else {
+    const p=mk('p',''); p.textContent='No download link set.';
     p.style.cssText='font-size:13px;color:var(--t3);padding:3px 0';
     asWrap.appendChild(p);
-  } else {
-    r.assets.forEach(a=>asWrap.appendChild(buildAsset(a)));
   }
 
+  /* foot / chips */
   const foot=mk('div','cfoot');
-  foot.id='cf_'+tag.replace(/\W/g,'_');
   const chips=mk('div','cmirs');
   buildChips(chips,mirs);
-  const ghA=mk('a','btn-g');
-  ghA.href=r.html_url; ghA.target='_blank'; ghA.rel='noopener noreferrer';
-  ghA.innerHTML=iGH()+' Release page';
-  foot.append(chips,ghA);
-
+  foot.append(chips);
   card.append(head,asWrap,foot);
 
+  /* admin: mirror management */
   if(isAdmin){
     const sec=mk('div','mir-admin-section');
     const secHead=mk('div','mir-admin-head');
     const lbl=mk('span','mir-admin-label'); lbl.textContent='Mirror Links';
-    const addBtn=mk('button','mir-admin-add btn-g');
+    const addBtn=mk('button','btn-g');
     addBtn.innerHTML=iPlus()+' Add';
     addBtn.addEventListener('click',()=>openMirAdd(r));
     secHead.append(lbl,addBtn);
@@ -638,14 +670,14 @@ function buildCard(r,idx){
       mirs.forEach((m,i)=>{
         const item=mk('div','mir-item');
         const info=mk('div','mir-item-info');
-        const l=mk('div','mir-item-lbl'); l.textContent=m.label;
+        const l=mk('div','mir-item-lbl'); l.textContent=m.label||m.url;
         const u=mk('div','mir-item-url'); u.textContent=m.url;
         info.append(l,u);
         const del=mk('button','mir-item-del'); del.innerHTML='✕'; del.title='Remove';
-        del.addEventListener('click',async()=>{
-          if(mirrors[tag]) mirrors[tag].splice(i,1);
-          await saveMirrors();
-          renderList();
+        del.addEventListener('click',()=>{
+          const rel=releases.find(x=>x.id===r.id);
+          if(rel&&rel.mirrors) rel.mirrors.splice(i,1);
+          saveReleases(); renderList();
         });
         item.append(info,del);
         list.appendChild(item);
@@ -663,21 +695,22 @@ function buildChips(con,mirs){
   (mirs||[]).forEach(m=>{
     const c=mk('a','mchip');
     c.href=m.url; c.target='_blank'; c.rel='noopener noreferrer';
-    c.innerHTML=iLink()+' '+esc(m.label);
+    c.innerHTML=iLink()+' '+esc(m.label||'Mirror');
     con.appendChild(c);
   });
 }
 
-function buildAsset(a){
+function buildAsset(r){
   const row=mk('div','arow');
   const ico=mk('div','aico'); ico.innerHTML=iZip();
   const inf=mk('div','ainfo');
-  const nm=mk('div','aname'); nm.textContent=a.name;
+  const nm=mk('div','aname');
+  nm.textContent=r.filename||(r.title||'SnapPerf')+' '+r.version+'.zip';
   const sub=mk('div','asub');
-  sub.innerHTML='<span>'+fb(a.size)+'</span><span>'+fn(a.download_count)+' downloads</span>';
+  sub.innerHTML='<span>'+fb(r.size)+'</span><span>'+fn(r.downloads)+' downloads</span>';
   inf.append(nm,sub);
   const btn=mk('a','btn-blue');
-  btn.href=a.browser_download_url; btn.download='';
+  btn.href=r.download_url; btn.target='_blank'; btn.rel='noopener noreferrer';
   btn.innerHTML=iDlA()+' Download';
   row.append(ico,inf,btn);
   return row;
@@ -685,168 +718,174 @@ function buildAsset(a){
 
 function mi(ico,txt){
   const e=mk('div','cmi');
-  e.innerHTML=ico+'<em>'+txt+'</em>';
+  e.innerHTML=ico+'<em>'+esc(String(txt))+'</em>';
   return e;
 }
 
+/* ── CHANGELOG ── */
 function openCL(r){
-  $('clTag').textContent=r.tag_name;
-  $('clTitle').textContent=r.name||r.tag_name;
-  const body=(r.body||'').trim()||'*No changelog provided.*';
+  $('clTag').textContent  = r.version||'';
+  $('clTitle').textContent= r.title||r.version||'';
+  const body=(r.description||'').trim()||'*No changelog provided.*';
   $('clBody').innerHTML=(typeof marked!=='undefined')?marked.parse(body):'<pre style="white-space:pre-wrap;font-size:13px;color:var(--t2)">'+esc(body)+'</pre>';
   openMod($('clOv'));
 }
 $('clClose').addEventListener('click',()=>closeMod($('clOv')));
 
+/* ── ADMIN TRIGGER (5 taps on brand) ── */
 let tapCount=0, tapTimer;
 document.querySelector('.brand').addEventListener('click',()=>{
-  tapCount++;
-  clearTimeout(tapTimer);
+  tapCount++; clearTimeout(tapTimer);
   if(tapCount>=5){ tapCount=0; $('adminBtn').style.display='flex'; }
   else tapTimer=setTimeout(()=>tapCount=0,700);
 });
 
+/* ── ADMIN LOGIN ── */
 $('adminBtn').addEventListener('click',()=>{
   if(isAdmin){ doLogout(); }
   else {
-    $('ghToken').value='';
+    $('adminPw').value='';
     $('adminErr').hidden=true;
-    $('adminStatus').hidden=true;
-    $('adminSubmit').disabled=false;
     openMod($('adminOv'));
-    setTimeout(()=>$('ghToken').focus(),320);
+    setTimeout(()=>$('adminPw').focus(),320);
   }
 });
-
 $('adminSubmit').addEventListener('click',doLogin);
-$('ghToken').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
+$('adminPw').addEventListener('keydown',e=>{ if(e.key==='Enter') doLogin(); });
 
-async function doLogin(){
-  const tok=$('ghToken').value.trim();
-  if(!tok||!tok.startsWith('ghp_')){
-    showFormErr('adminErr','Token must start with ghp_');
-    return;
-  }
-  $('adminSubmit').disabled=true;
-  $('adminSubmit').textContent='Verifying…';
-  $('adminErr').hidden=true;
-  $('adminStatus').textContent='Checking token with GitHub…';
-  $('adminStatus').hidden=false;
-
-  try{
-    const res=await fetch('https://api.github.com/user',{
-      headers:{'Authorization':'Bearer '+tok,'Accept':'application/vnd.github.v3+json'}
-    });
-    if(!res.ok) throw new Error('Invalid token or no access');
-    const user=await res.json();
-    if(user.login.toLowerCase()!==OWNER.toLowerCase()){
-      throw new Error('Token must belong to @'+OWNER+' (got @'+user.login+')');
-    }
-    adminToken=tok;
+function doLogin(){
+  const pw=$('adminPw').value;
+  if(pw===ADMIN_PW){
     isAdmin=true;
-    sessionStorage.setItem(SK,tok);
+    sessionStorage.setItem(SK_ADMIN,'1');
     closeMod($('adminOv'));
-    $('adminBadge').hidden=false;
-    $('adminBtn').classList.add('on');
-    $('adminBtn').title='Admin ON · Click to logout';
-    await fetchMirrors();
+    applyAdminUI();
     renderList();
-  }catch(e){
-    showFormErr('adminErr',e.message);
-    $('adminStatus').hidden=true;
+  } else {
+    showFormErr('adminErr','Incorrect password');
+    $('adminPw').classList.add('err');
+    setTimeout(()=>$('adminPw').classList.remove('err'),600);
   }
-  $('adminSubmit').disabled=false;
-  $('adminSubmit').textContent='Authenticate';
 }
-
 function doLogout(){
-  isAdmin=false; adminToken=null;
-  sessionStorage.removeItem(SK);
-  $('adminBadge').hidden=true;
-  $('adminBtn').classList.remove('on');
-  $('adminBtn').title='Admin';
+  isAdmin=false;
+  sessionStorage.removeItem(SK_ADMIN);
+  applyAdminUI();
   renderList();
 }
-
-async function restoreSession(){
-  const saved=sessionStorage.getItem(SK);
-  if(!saved) return;
-  try{
-    const res=await fetch('https://api.github.com/user',{
-      headers:{'Authorization':'Bearer '+saved,'Accept':'application/vnd.github.v3+json'}
-    });
-    if(!res.ok) return;
-    const user=await res.json();
-    if(user.login.toLowerCase()!==OWNER.toLowerCase()) return;
-    adminToken=saved;
-    isAdmin=true;
-    $('adminBadge').hidden=false;
-    $('adminBtn').style.display='flex';
-    $('adminBtn').classList.add('on');
-    $('adminBtn').title='Admin ON · Click to logout';
-  }catch{}
-}
-
 $('adminClose').addEventListener('click',()=>closeMod($('adminOv')));
 
+/* ── POST RELEASE ── */
+$('adminFab').addEventListener('click',openAddRelease);
+function openAddRelease(){
+  ['relTitle','relVersion','relDownload','relDesc'].forEach(id=>$(id).value='');
+  $('relTag').value='stable';
+  $('addRelErr').hidden=true;
+  $('addRelStatus').hidden=true;
+  $('addRelSubmit').disabled=false;
+  $('addRelSubmit').textContent='Post Release';
+  openMod($('addRelOv'));
+  setTimeout(()=>$('relTitle').focus(),320);
+}
+$('addRelClose').addEventListener('click',()=>closeMod($('addRelOv')));
+
+$('addRelSubmit').addEventListener('click',async()=>{
+  const title   = $('relTitle').value.trim();
+  const version = $('relVersion').value.trim();
+  const dlUrl   = $('relDownload').value.trim();
+  const desc    = $('relDesc').value.trim();
+  const tag     = $('relTag').value;
+
+  if(!title)   { showFormErr('addRelErr','Title is required'); return; }
+  if(!version) { showFormErr('addRelErr','Version is required'); return; }
+  if(!dlUrl)   { showFormErr('addRelErr','Download URL is required'); return; }
+  try{ new URL(dlUrl); }catch{ showFormErr('addRelErr','Enter a valid URL'); return; }
+
+  $('addRelSubmit').disabled=true;
+  $('addRelSubmit').textContent='Fetching file info…';
+
+  let size=0, downloads=0, filename='';
+  const info = await fetchSflInfo(dlUrl);
+  if(info){ size=info.size; downloads=info.downloads; filename=info.filename; }
+
+  const rel={
+    id: uid(),
+    title, version, tag, description:desc,
+    download_url: dlUrl,
+    filename, size, downloads,
+    mirrors: [],
+    date: new Date().toISOString()
+  };
+
+  releases.unshift(rel);
+  saveReleases();
+  setStats();
+
+  $('addRelStatus').textContent='Release posted successfully!';
+  $('addRelStatus').hidden=false;
+  $('addRelSubmit').textContent='Post Release';
+  $('addRelSubmit').disabled=false;
+
+  setTimeout(()=>{ closeMod($('addRelOv')); renderList(); }, 700);
+});
+
+/* ── DELETE RELEASE ── */
+function deleteRelease(id){
+  if(!confirm('Delete this release? This cannot be undone.')) return;
+  releases=releases.filter(r=>r.id!==id);
+  saveReleases(); setStats(); renderList();
+}
+
+/* ── ADD MIRROR ── */
 function openMirAdd(r){
-  mirAddTag=r.tag_name;
-  $('mirModalTitle').textContent=r.name||r.tag_name;
+  mirAddId=r.id;
+  $('mirModalTitle').textContent=r.title||r.version||'';
   $('mirUrl').value=''; $('mirLbl').value='';
   $('mirErr').hidden=true;
   openMod($('mirOv'));
   setTimeout(()=>$('mirUrl').focus(),320);
 }
-
-$('mirSubmit').addEventListener('click',async()=>{
+$('mirSubmit').addEventListener('click',()=>{
   const url=$('mirUrl').value.trim();
   const lbl=$('mirLbl').value.trim();
   if(!url){ showFormErr('mirErr','Please enter a URL'); return; }
   try{ new URL(url); }catch{ showFormErr('mirErr','Enter a valid URL'); return; }
-  $('mirSubmit').disabled=true;
-  $('mirSubmit').textContent='Saving…';
-  if(!mirrors[mirAddTag]) mirrors[mirAddTag]=[];
-  mirrors[mirAddTag].push({url,label:lbl||url});
-  await saveMirrors();
-  closeMod($('mirOv'));
-  renderList();
-  $('mirSubmit').disabled=false;
-  $('mirSubmit').textContent='Save Mirror';
+  const rel=releases.find(r=>r.id===mirAddId);
+  if(rel){ if(!rel.mirrors) rel.mirrors=[]; rel.mirrors.push({url,label:lbl||url}); saveReleases(); }
+  closeMod($('mirOv')); renderList();
 });
 $('mirUrl').addEventListener('keydown',e=>{ if(e.key==='Enter') $('mirLbl').focus(); });
 $('mirLbl').addEventListener('keydown',e=>{ if(e.key==='Enter') $('mirSubmit').click(); });
 $('mirClose').addEventListener('click',()=>closeMod($('mirOv')));
 
-function showFormErr(id,msg){
-  const el=$(id);
-  el.textContent=msg; el.hidden=false;
-  setTimeout(()=>el.hidden=true,3500);
-}
-
+/* ── SEARCH & FILTER ── */
 $('sIn').addEventListener('input',function(){ sq=this.value; $('sClr').classList.toggle('on',sq.length>0); renderList(); });
 $('sClr').addEventListener('click',()=>{ $('sIn').value=''; sq=''; $('sClr').classList.remove('on'); $('sIn').focus(); renderList(); });
-document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',function(){ document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on')); this.classList.add('on'); filter=this.dataset.f; renderList(); }));
-$('retryBtn').addEventListener('click',fetchData);
+document.querySelectorAll('.pill').forEach(b=>b.addEventListener('click',function(){
+  document.querySelectorAll('.pill').forEach(x=>x.classList.remove('on'));
+  this.classList.add('on'); filter=this.dataset.f; renderList();
+}));
+$('retryBtn').addEventListener('click',()=>renderList());
 
+/* ── COPY / CONTEXT PROTECTION ── */
 document.addEventListener('selectstart',e=>{ if(['INPUT','TEXTAREA'].includes(e.target.tagName))return; e.preventDefault(); });
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('copy',e=>{ if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return; e.preventDefault(); });
 
+/* ── ICONS ── */
 function iCal(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="2" width="12" height="11" rx="2"/><path d="M1 5h12M5 1v2M9 1v2"/></svg>'; }
 function iDl(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M7 1v8M4 6.5l3 3 3-3M1 11h12"/></svg>'; }
-function iPkg(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="1" y="5" width="12" height="8" rx="1.5"/><path d="M1 8h12M5 2l-2 3h8l-2-3z"/></svg>'; }
+function iPkg(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M1 6h12v6.5a.5.5 0 01-.5.5h-11a.5.5 0 01-.5-.5V6zM1 4.5A1.5 1.5 0 012.5 3h9A1.5 1.5 0 0113 4.5V6H1V4.5z"/></svg>'; }
 function iUser(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><circle cx="7" cy="5" r="3"/><path d="M1 13c0-3 2.7-5 6-5s6 2 6 5"/></svg>'; }
 function iDoc(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M4.5 5h5M4.5 7.5h5M4.5 10h3"/></svg>'; }
 function iLink(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M5.5 8.5a3.5 3.5 0 004.9-4.9L9.2 2.4a3.5 3.5 0 00-4.9 4.9M8.5 5.5a3.5 3.5 0 00-4.9 4.9l1.2 1.2a3.5 3.5 0 004.9-4.9"/></svg>'; }
-function iGH(){ return '<svg viewBox="0 0 14 14" fill="currentColor"><path d="M7 .175C3.5.175.7 2.95.7 6.4c0 2.75 1.8 5.1 4.3 5.925.3.05.425-.125.425-.275 0-.125-.025-.575-.025-1.075-1.675.35-2.025-.8-2.025-.8-.275-.7-.675-.875-.675-.875-.55-.375.05-.375.05-.375.6.05.925.625.925.625.55.925 1.425.675 1.775.5.05-.4.2-.675.375-.825-1.325-.125-2.725-.65-2.725-2.95 0-.65.225-1.2.625-1.625-.075-.15-.275-.775.075-1.6 0 0 .525-.175 1.7.625.5-.125 1.025-.2 1.55-.2s1.05.075 1.55.2c1.175-.8 1.7-.625 1.7-.625.35.825.15 1.45.075 1.6.4.425.625.975.625 1.625 0 2.3-1.4 2.8-2.75 2.95.225.2.425.575.425 1.175v1.75c0 .15.1.325.425.275 2.5-.825 4.3-3.175 4.3-5.925C13.3 2.95 10.5.175 7 .175z"/></svg>'; }
 function iZip(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="2" y="1" width="10" height="12" rx="1.5"/><path d="M5 1v3.5L7 6l2-1.5V1"/><circle cx="7" cy="9" r="1.2" fill="currentColor" stroke="none"/></svg>'; }
 function iDlA(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><path d="M7 1v8M4.5 6.5l2.5 3 2.5-3M1 11.5h12"/></svg>'; }
 function iPlus(){ return '<svg viewBox="0 0 14 14" fill="currentColor"><path d="M7.75 1.75a.75.75 0 00-1.5 0v4.5h-4.5a.75.75 0 000 1.5h4.5v4.5a.75.75 0 001.5 0v-4.5h4.5a.75.75 0 000-1.5h-4.5v-4.5z"/></svg>'; }
+function iTrash(){ return '<svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 4h10M5 4V2.5a.5.5 0 01.5-.5h3a.5.5 0 01.5.5V4M6 7v3.5M8 7v3.5M3.5 4l.6 7.5a.5.5 0 00.5.5h4.8a.5.5 0 00.5-.5L10.5 4"/></svg>'; }
 
-(async function init(){
-  await restoreSession();
-  await fetchData();
-})();
+/* ── BOOT ── */
+init();
 
 })();
 </script>
