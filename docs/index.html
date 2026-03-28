@@ -405,7 +405,7 @@ body{
   <nav class="nav">
     <div class="brand">
       <div class="brand-logo">
-        <img src="assets/logo.svg" alt="SnapPerf" width="20" height="20"/>
+        <img src="assets/aether.webp" alt="SnapPerf" width="20" height="20"/>
       </div>
       <span class="brand-name">SnapPerf</span>
       <span class="admin-badge" id="adminBadge" hidden>Admin</span>
@@ -559,6 +559,8 @@ body{
         </div>
         <label class="flabel">Download URL</label>
           <input type="url" id="relDownload" class="finput" placeholder="https://sfl.gl/xxxxxxx or any URL"/>
+        <label class="flabel">Ukuran File (contoh: 12.5 MB, 1.2 GB, 850 KB)</label>
+          <input type="text" id="relSize" class="finput" placeholder="12.5 MB"/>
         <label class="flabel">Description / Changelog (Markdown)</label>
         <textarea id="relDesc" class="ftextarea" placeholder="## What's New&#10;- Improved performance&#10;- Bug fixes"></textarea>
         <span class="ferr" id="postErr" hidden></span>
@@ -890,6 +892,22 @@ function buildChips(con,mirs){
   });
 }
 
+async function incrementDownload(rel){
+  /* Update lokal */
+  const r=releases.find(x=>x.id===rel.id);
+  if(r){ r.downloads=(+(r.downloads)||0)+1; }
+  saveLocal(); setStats();
+  /* Re-render sub text jika elemen masih di DOM */
+  const subEl=document.getElementById('dl-sub-'+rel.id);
+  if(subEl) subEl.innerHTML='<span>'+fb(rel.size)+'</span><span>'+fn((+(rel.downloads)||0)+1)+' downloads</span>';
+  /* Sync ke Supabase */
+  const sb=getSB(); if(!sb) return;
+  try{
+    const newCount=(+(rel.downloads)||0)+1;
+    await sb.from('sp_releases').update({downloads:newCount}).eq('id',rel.id);
+  }catch(e){ console.warn('SB dl count:',e); }
+}
+
 function buildAsset(r){
   const row=mk('div','arow');
   const ico=mk('div','aico'); ico.innerHTML=iZip();
@@ -897,11 +915,15 @@ function buildAsset(r){
   const nm =mk('div','aname');
   nm.textContent=r.filename||(r.title||'SnapPerf')+' '+r.version+'.zip';
   const sub=mk('div','asub');
+  sub.id='dl-sub-'+r.id;
   sub.innerHTML='<span>'+fb(r.size)+'</span><span>'+fn(r.downloads)+' downloads</span>';
   inf.append(nm,sub);
-  const btn=mk('a','btn-blue');
-  btn.href=r.download_url; btn.target='_blank'; btn.rel='noopener noreferrer';
+  const btn=mk('button','btn-blue');
   btn.innerHTML=iDlA()+' Download';
+  btn.addEventListener('click',async()=>{
+    incrementDownload(r);
+    window.open(r.download_url,'_blank','noopener,noreferrer');
+  });
   row.append(ico,inf,btn);
   return row;
 }
@@ -959,7 +981,7 @@ function doLogout(){
 $('adminClose').addEventListener('click',()=>closeMod($('adminOv')));
 
 function resetPostForm(){
-  ['relTitle','relVersion','relDownload','relDesc'].forEach(id=>$(id).value='');
+  ['relTitle','relVersion','relDownload','relSize','relDesc'].forEach(id=>$(id).value='');
   $('relTag').value='stable';
   $('postErr').hidden=true;
   $('postOk').hidden=true;
@@ -981,6 +1003,7 @@ function openEdit(r){
   $('relTitle').value   =r.title||'';
   $('relVersion').value =r.version||'';
   $('relDownload').value=r.download_url||'';
+  $('relSize').value=r._sizeRaw||fb(r.size)||'';
   $('relDesc').value    =r.description||'';
   $('relTag').value     =r.tag||'stable';
   $('postErr').hidden=true;
@@ -991,6 +1014,19 @@ function openEdit(r){
   $('postSubmit').textContent='Save Changes';
   openMod($('postOv'));
   setTimeout(()=>$('relTitle').focus(),300);
+}
+
+/* Parse ukuran file: "12.5 MB" → bytes */
+function parseSize(s){
+  if(!s||!s.trim()) return 0;
+  s=s.trim();
+  const n=parseFloat(s);
+  if(isNaN(n)) return 0;
+  const u=s.replace(/[0-9.,\s]/g,'').toUpperCase();
+  if(u==='GB'||u==='G') return Math.round(n*1073741824);
+  if(u==='MB'||u==='M') return Math.round(n*1048576);
+  if(u==='KB'||u==='K') return Math.round(n*1024);
+  return Math.round(n); /* raw bytes */
 }
 
 $('adminFab').addEventListener('click',openPost);
@@ -1011,19 +1047,24 @@ $('postSubmit').addEventListener('click',async()=>{
   $('postSubmit').disabled=true;
   $('postSubmit').textContent='Saving…';
 
-  const size      = 0;
-  const downloads = 0;
+  const sizeRaw   = $('relSize').value.trim();
+  const size      = parseSize(sizeRaw);
   const filename  = '';
 
   if(editId){
     const idx=releases.findIndex(r=>r.id===editId);
     if(idx>-1){
-      releases[idx]={...releases[idx],title,version,tag,description:desc,download_url:dlUrl,filename,size,downloads};
+      /* Pertahankan downloads yang sudah ada, hanya update size jika diisi */
+      const existingDl = releases[idx].downloads||0;
+      releases[idx]={...releases[idx],title,version,tag,description:desc,download_url:dlUrl,filename,
+        size:size||releases[idx].size,
+        downloads:existingDl,
+        _sizeRaw:sizeRaw||releases[idx]._sizeRaw||''};
     }
     showOk('postOk','Changes saved!');
     await save(editId);
   } else {
-    const newRel={id:uid(),title,version,tag,description:desc,download_url:dlUrl,filename,size,downloads,mirrors:[],date:new Date().toISOString()};
+    const newRel={id:uid(),title,version,tag,description:desc,download_url:dlUrl,filename,size,downloads:0,mirrors:[],date:new Date().toISOString(),_sizeRaw:sizeRaw};
     releases.unshift(newRel);
     showOk('postOk','Release posted!');
     await save(newRel.id);

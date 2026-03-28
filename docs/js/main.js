@@ -302,7 +302,7 @@ window.escHTML = escHTML;
 /* ── update.json ── */
 async function loadUpdateJson() {
   try {
-    var res = await fetch('https://raw.githubusercontent.com/aetherdev22/snapperf/main/update.json', { cache: 'no-store' });
+    var res = await fetch('https://raw.githubusercontent.com/aetherdev01/SnapPerf/refs/heads/main/server/update.json', { cache: 'no-store' });
     if (!res.ok) return;
     var d = await res.json();
     var ver = d.version || '', zipUrl = d.zipUrl || '', mirror = d.link || '';
