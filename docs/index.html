@@ -806,11 +806,10 @@ function buildCard(r,idx){
   cname.textContent=r.title||('SnapPerf '+r.version);
 
   const upl = mk('div','cupload');
-  const dlInfo = mk('span','cdlinfo');
-  dlInfo.id='dl-info-'+r.id;
-  dlInfo.innerHTML=iDl()+' <em>'+fn(r.downloads)+' downloads</em>';
   upl.innerHTML=iUser()+' Uploaded by <strong>'+esc(BY)+'</strong>';
-  left.append(cver,cname,dlInfo,upl);
+  const cdate = mk('span','cdlinfo');
+  cdate.innerHTML=iCal()+' <em>'+fDate(r.date)+'</em>';
+  left.append(cver,cname,cdate,upl);
 
   if((r.description||'').trim()){
     const b=mk('button','btn-g'); b.innerHTML=iDoc()+' Changelog';
@@ -898,9 +897,6 @@ async function incrementDownload(id){
   const newCount=(+(r.downloads)||0)+1;
   r.downloads=newCount;
   saveLocal(); setStats();
-  /* Update DOM: cdlinfo di card */
-  const infoEl=document.getElementById('dl-info-'+id);
-  if(infoEl) infoEl.innerHTML=iDl()+' <em>'+fn(newCount)+' downloads</em>';
   /* Update DOM: asub di asset row */
   const subEl=document.getElementById('dl-sub-'+id);
   if(subEl) subEl.innerHTML='<span>'+fb(r.size)+'</span><span>'+fn(newCount)+' downloads</span>';
