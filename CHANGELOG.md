@@ -1,7 +1,9 @@
-## v1.5.3 Stable
+### SnapPerf v1.5.4 (Stable)
+### Added
+- Mode Refresh Rate with (Auto/60/90/120/144)
+- Mode Touch Boost
 
-### Fix
-- Penyesuaian Profile Balanced, Performance, Battery
-- Penyesuaian Tweak
-- Delete Option Touch Boost & Refresh Rate
-- Fixed server check update not fetching latest version
+### Fixed 
+- Delete GPU Governor 
+- Bootloop in Poco F7 Pro
+- Bug Modules not Showing in APatch

@@ -1,80 +1,83 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<!DOCTYPE html><html lang="en" data-theme="light"><head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Updates – SnapPerf</title>
-<meta name="description" content="SnapPerf – Release notes, changelogs and updates."/>
-<meta name="author" content="AetherDev"/>
-<meta name="robots" content="noindex,nofollow"/>
-<meta property="og:title" content="Updates – SnapPerf"/>
-<meta property="og:image" content="assets/banner.webp"/>
-<meta property="og:type" content="website"/>
-<meta name="theme-color" content="#ffffff"/>
+<meta name="description" content="SnapPerf release history and changelogs."/>
+<meta name="author" content="AetherDev"/><meta name="robots" content="noindex,nofollow"/>
+<meta property="og:title" content="Updates – SnapPerf"/><meta property="og:image" content="assets/banner.webp"/>
 <meta http-equiv="X-Content-Type-Options" content="nosniff"/>
 <meta http-equiv="Referrer-Policy" content="strict-origin-when-cross-origin"/>
 <meta http-equiv="X-Frame-Options" content="DENY"/>
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://raw.githubusercontent.com https://api.github.com; frame-ancestors 'none'; base-uri 'self'"/>
-<link rel="canonical" href="https://aetherdev22.github.io/snapperf/updates"/>
 <link rel="icon" href="assets/aether.webp" type="image/webp"/>
 <link rel="stylesheet" href="css/style.css"/>
 <link rel="stylesheet" href="css/animations.css"/>
 </head>
 <body class="page-transitioning">
+
 <nav class="navbar" id="navbar">
   <div class="nav-pill">
-    <a href="index.html" class="nav-logo"><img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/><span>SnapPerf</span></a>
+    <a href="index.html" class="nav-logo">
+      <img src="assets/aether.webp" width="22" height="22" style="border-radius:50%;object-fit:cover;display:block;" alt="SnapPerf"/>
+      <span>SnapPerf</span>
+    </a>
     <div class="nav-links">
-      <a href="index.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
-      <a href="updates.html" class="nav-link active ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Updates</a>
-      <a href="about.html" class="nav-link ripple-btn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
+      <a href="index.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a>
+      <a href="updates.html" class="nav-link active ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a>
+      <a href="about.html" class="nav-link ripple-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a>
     </div>
     <div class="nav-right">
-      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme"><svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      <button class="lang-btn ripple-btn" id="langToggle" aria-label="Switch language">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+        <span id="langLabel">ID</span>
+      </button>
+      <button class="theme-toggle ripple-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="5" stroke="currentColor" stroke-width="2"/><path d="M12 2v2M12 20v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M2 12h2M20 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+        <svg class="icon-moon" width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3a7 7 0 009.79 9.79z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
       <button class="hamburger ripple-btn" id="hamburger" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
   </div>
 </nav>
+
 <div class="mobile-menu" id="mobileMenu">
-  <a href="index.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg>Home</a>
-  <a href="updates.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>Updates</a>
-  <a href="about.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>About</a>
+  <a href="index.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M9 21V12h6v9" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg><span data-i18n="nav.home">Home</span></a>
+  <a href="updates.html" class="mob-link active ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M7 8h10M7 12h10M7 16h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.updates">Updates</span></a>
+  <a href="about.html" class="mob-link ripple-btn"><svg width="15" height="15" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="8" r="4" stroke="currentColor" stroke-width="2"/><path d="M4 20c0-4 3.582-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span data-i18n="nav.about">About</span></a>
+  <div class="mob-sep"></div>
+  <button class="mob-lang-btn ripple-btn">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 010 20M12 2a15.3 15.3 0 000 20"/></svg>
+    <span class="mob-lang-label">Switch to English</span>
+  </button>
 </div>
 
 <div class="page-hero">
-  <div class="blob blob-1" style="opacity:.4"></div>
-  <div class="blob blob-2" style="opacity:.3"></div>
+  <div class="blob blob-1" style="opacity:.35;top:-10%;left:-5%"></div>
+  <div class="blob blob-2" style="opacity:.25;top:5%;right:-5%"></div>
   <div class="page-hero-content reveal">
-    <span class="badge badge-blue">Release Updates</span>
-    <h1>Updates &amp; Releases</h1>
-    <p>Changelogs, release notes, and development updates — synced directly from GitHub Releases.</p>
+    <span class="badge badge-blue" data-i18n="updates.badge">Rilis Terbaru</span>
+    <h1 data-i18n="updates.h1">Pembaruan &amp; Rilis</h1>
+    <p data-i18n="updates.sub">Changelog, catatan rilis, dan histori pembaruan.</p>
   </div>
 </div>
 
 <section class="section">
   <div class="container">
-    <!-- Controls: search + filter in one row -->
     <div class="updates-controls reveal">
       <div class="filter-row">
-        <button class="filter-btn active ripple-btn" data-filter="all">All</button>
-        <button class="filter-btn ripple-btn" data-filter="stable">Stable</button>
-        <button class="filter-btn ripple-btn" data-filter="fix">Fix</button>
-        <button class="filter-btn ripple-btn" data-filter="beta">Beta</button>
+        <button class="filter-btn active ripple-btn" data-filter="all" data-i18n="filter.all">Semua</button>
+        <button class="filter-btn ripple-btn" data-filter="stable" data-i18n="filter.stable">Stabil</button>
+        <button class="filter-btn ripple-btn" data-filter="fix" data-i18n="filter.fix">Perbaikan</button>
+        <button class="filter-btn ripple-btn" data-filter="beta" data-i18n="filter.beta">Beta</button>
       </div>
       <div class="search-row">
         <div class="search-box">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="2"/><path d="M21 21l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-          <input type="search" id="postSearch" placeholder="Search releases…" autocomplete="off" spellcheck="false"/>
+          <input type="search" id="postSearch" placeholder="Cari rilis…" data-i18n-placeholder="search.placeholder" autocomplete="off" spellcheck="false"/>
         </div>
       </div>
     </div>
-
-    <!-- Dynamic releases container -->
     <div id="releasesContainer">
-      <div class="releases-loading" id="releasesLoading">
-        <div class="spin"></div>
-        <span>Loading releases from GitHub…</span>
-      </div>
+      <div class="releases-loading" id="releasesLoading"><div class="spin"></div><span>Loading…</span></div>
       <div class="posts-grid" id="releasesGrid" style="display:none"></div>
       <div class="releases-empty" id="releasesEmpty" style="display:none">No releases found.</div>
       <div class="releases-error" id="releasesError" style="display:none">
@@ -82,8 +85,6 @@
         Could not load releases. <a href="https://github.com/aetherdev22/snapperf/releases" target="_blank" rel="noopener noreferrer" style="color:var(--accent);text-decoration:underline">View on GitHub</a>
       </div>
     </div>
-
-    <!-- Static Bug Report card (always visible) -->
     <div style="margin-top:1rem">
       <article class="post-card reveal" data-tags="fix" style="max-width:360px">
         <div class="post-card-inner">
@@ -91,10 +92,12 @@
             <div class="post-badges"><span class="badge badge-red">Bug Report</span></div>
           </div>
           <h2 class="post-title">Bug Reports &amp; Known Issues</h2>
-          <p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Ongoing</p>
           <p class="post-body">Found a bug? Report it on Telegram. Include your device model, Snapdragon variant, Android version, and a logcat if possible.</p>
           <div class="post-footer">
-            <a href="https://t.me/AetherDev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="13" height="13" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Report via Telegram</a>
+            <a href="https://t.me/AetherDev22" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg>
+              Report via Telegram
+            </a>
           </div>
         </div>
       </article>
@@ -104,13 +107,12 @@
 
 <footer class="footer">
   <div class="container">
-    <div class="footer-inner">
-      <div class="footer-brand"><span>SnapPerf</span></div>
-      <p class="footer-copy">&copy; 2026 AetherDev. All rights reserved.</p>
-      <div class="footer-links">
-        <a href="https://github.com/aetherdev22/snapperf" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="about.html">About</a>
+    <div class="footer-bottom-only">
+      <div class="footer-logo-row">
+        <img src="assets/aether.webp" width="18" height="18" style="border-radius:50%;object-fit:cover;" alt="SnapPerf"/>
+        <span class="footer-brand-name">SnapPerf</span>
       </div>
+      <span class="footer-copy-txt" data-i18n="footer.copy">&copy; 2026 AetherDev. Semua hak dilindungi.</span>
     </div>
   </div>
 </footer>
@@ -118,183 +120,194 @@
 <script src="js/main.js"></script>
 <script>
 (function(){
-  var COLORS=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
+ var COLORS=['#3b8fff','#00c787','#ff375f','#bf5af2','#ff9f0a','#30d158'];
+ function esc(s){return window.escHTML?window.escHTML(s):String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ function parseVersion(tag){
+ var m=tag.match(/v?([\d]+(?:\.[\d]+)*)/i);
+ return m?'v'+m[1]:tag;
+ }
+ function getReleaseTypes(release){
+ var tag=(release.tag_name||'').toLowerCase();
+ var name=(release.name||'').toLowerCase();
+ var body=(release.body||'').toLowerCase();
+ var types=[];
+ if(release.prerelease||tag.includes('beta')||tag.includes('alpha')||tag.includes('-rc')||name.includes('beta'))types.push('beta');
+ if(tag.includes('fix')||tag.includes('hotfix')||tag.includes('patch')||name.includes('fix')||body.startsWith('fix'))types.push('fix');
+ if(tag.includes('stable')||name.includes('stable'))types.push('stable');
+ if(!types.length)types.push('stable');
+ return types;
+ }
+ function getBadges(types){
+ var map={stable:'<span class="badge badge-green">Stable</span>',fix:'<span class="badge badge-red">Fix</span>',beta:'<span class="badge badge-orange">Beta</span>'};
+ return types.map(function(t){return map[t]||'';}).join('');
+ }
+ function formatDate(iso){
+ try{
+ var d=new Date(iso);
+ return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
+ }catch(e){return iso||'';}
+ }
+ function parseChangelog(body){
+ if(!body)return[];
+ var lines=body.split('\n');
+ var items=[];
+ var i=0;
+ for(var l=0;l<lines.length;l++){
+ var m=lines[l].match(/^[-*]\s+(.+)/);
+ if(m){items.push({text:esc(m[1].trim()),color:COLORS[i%COLORS.length]});i++;}
+ }
+ return items;
+ }
+ function getDownloadUrl(release){
+ var assets=release.assets||[];
+ for(var i=0;i<assets.length;i++){
+ var a=assets[i];
+ if(a.browser_download_url&&a.name&&a.name.endsWith('.zip'))return a.browser_download_url;
+ }
+ return release.zipball_url||'';
+ }
+ function formatSize(bytes){
+ if(!bytes)return null;
+ if(bytes>=1048576)return(bytes/1048576).toFixed(1)+' MB';
+ if(bytes>=1024)return Math.round(bytes/1024)+' KB';
+ return bytes+' B';
+ }
+ function getTotalDownloads(assets){
+ return(assets||[]).reduce(function(s,a){return s+(a.download_count||0);},0);
+ }
+ function buildCard(release,idx){
+ var ver=parseVersion(release.tag_name||'');
+ var types=getReleaseTypes(release);
+ var badges=getBadges(types);
+ var tagsAttr=types.join(' ');
+ var date=formatDate(release.published_at);
+ var title=esc(release.name||('SnapPerf '+ver));
+ var dlUrl=getDownloadUrl(release);
+ var ghUrl=esc(release.html_url||'https://github.com/aetherdev22/snapperf/releases');
+ var changeItems=parseChangelog(release.body);
+ var delay=(idx*0.05).toFixed(2);
+ var popId='pop-gh-'+idx;
 
-  function esc(s){return window.escHTML?window.escHTML(s):String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+ // meta info
+ var assets=release.assets||[];
+ var zipAsset=null;
+ for(var i=0;i<assets.length;i++){if(assets[i].name&&assets[i].name.endsWith('.zip')){zipAsset=assets[i];break;}}
+ var fileSize=zipAsset?formatSize(zipAsset.size):null;
+ var dlCount=getTotalDownloads(assets);
+ var dlCountStr=dlCount>0?(dlCount>=1000?(dlCount/1000).toFixed(1)+'k':dlCount+''):null;
 
-  function parseVersion(tag){
-    var m=tag.match(/v?([\d]+(?:\.[\d]+)*)/i);
-    return m?'v'+m[1]:tag;
-  }
+ // meta strip HTML
+ var metaHTML='<div class="post-meta">';
+ metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+date+'</span></span>';
+ if(fileSize)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" stroke="currentColor" stroke-width="2"/><polyline points="14 2 14 8 20 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+fileSize+'</span></span>';
+ if(dlCountStr)metaHTML+='<span class="post-meta-item"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>'+dlCountStr+' downloads</span></span>';
+ metaHTML+='</div>';
 
-  function getReleaseTypes(release){
-    var tag=(release.tag_name||'').toLowerCase();
-    var name=(release.name||'').toLowerCase();
-    var body=(release.body||'').toLowerCase();
-    var types=[];
-    if(release.prerelease||tag.includes('beta')||tag.includes('alpha')||tag.includes('-rc')||name.includes('beta'))types.push('beta');
-    if(tag.includes('fix')||tag.includes('hotfix')||tag.includes('patch')||name.includes('fix')||body.startsWith('fix'))types.push('fix');
-    if(tag.includes('stable')||name.includes('stable'))types.push('stable');
-    if(!types.length)types.push('stable');
-    return types;
-  }
+ // changelog HTML — show all, no cap
+ var changeHTML='';
+ if(changeItems.length){
+ changeHTML='<ul class="post-changes">';
+ var showMax=Math.min(changeItems.length,6);
+ for(var i=0;i<showMax;i++){
+ changeHTML+='<li><span class="cl-dot" style="background:'+changeItems[i].color+'"></span>'+changeItems[i].text+'</li>';
+ }
+ if(changeItems.length>showMax)changeHTML+='<li class="post-changes-more">+' +(changeItems.length-showMax)+' more changes</li>';
+ changeHTML+='</ul>';
+ }
 
-  function getBadges(types){
-    var map={stable:'<span class="badge badge-green">Stable</span>',fix:'<span class="badge badge-red">Fix</span>',beta:'<span class="badge badge-orange">Beta</span>'};
-    return types.map(function(t){return map[t]||'';}).join('');
-  }
+ var dlBtnHTML='';
+ if(dlUrl){
+ dlBtnHTML='<a href="'+esc(dlUrl)+'" class="btn btn-dl btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>';
+ }
 
-  function formatDate(iso){
-    try{
-      var d=new Date(iso);
-      return d.toLocaleDateString('en-GB',{day:'2-digit',month:'short',year:'numeric'});
-    }catch(e){return iso||'';}
-  }
-
-  function parseChangelog(body){
-    if(!body)return[];
-    var lines=body.split('\n');
-    var items=[];
-    var i=0;
-    for(var l=0;l<lines.length;l++){
-      var m=lines[l].match(/^[-*]\s+(.+)/);
-      if(m){items.push({text:esc(m[1].trim()),color:COLORS[i%COLORS.length]});i++;}
-    }
-    return items;
-  }
-
-  function getDownloadUrl(release){
-    var assets=release.assets||[];
-    for(var i=0;i<assets.length;i++){
-      var a=assets[i];
-      if(a.browser_download_url&&a.name&&a.name.endsWith('.zip'))return a.browser_download_url;
-    }
-    return release.zipball_url||'';
-  }
-
-  function buildCard(release,idx){
-    var ver=parseVersion(release.tag_name||'');
-    var types=getReleaseTypes(release);
-    var badges=getBadges(types);
-    var tagsAttr=types.join(' ');
-    var date=formatDate(release.published_at);
-    var title=esc(release.name||('SnapPerf '+ver));
-    var dlUrl=getDownloadUrl(release);
-    var ghUrl=esc(release.html_url||'https://github.com/aetherdev22/snapperf/releases');
-    var changeItems=parseChangelog(release.body);
-    var delay=(idx*0.05).toFixed(2);
-
-    var popId='pop-gh-'+idx;
-    var changeHTML='';
-    if(changeItems.length){
-      changeHTML='<ul class="post-changes">';
-      var max=Math.min(changeItems.length,5);
-      for(var i=0;i<max;i++){
-        changeHTML+='<li><span class="cl-dot" style="background:'+changeItems[i].color+'"></span>'+changeItems[i].text+'</li>';
-      }
-      if(changeItems.length>5)changeHTML+='<li style="color:var(--text3);font-size:.75rem">+' +(changeItems.length-5)+' more…</li>';
-      changeHTML+='</ul>';
-    }
-
-    var dlBtnHTML='';
-    if(dlUrl){
-      dlBtnHTML='<a href="'+esc(dlUrl)+'" class="btn btn-primary btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg> Download</a>';
-    }
-
-    return '<article class="post-card reveal" data-tags="'+tagsAttr+'" style="animation-delay:'+delay+'s">'+
-      '<div class="post-card-inner">'+
-      '<div class="post-header">'+
-      '<div class="post-badges"><span class="badge badge-blue">'+esc(ver)+'</span>'+badges+'</div>'+
-      '<div class="post-dots" data-popup="'+popId+'">'+
-      '<button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button>'+
-      '<div class="popup-menu" id="'+popId+'">'+
-      (dlUrl?'<a href="'+esc(dlUrl)+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Download</a>':'')+
-      '<a href="'+ghUrl+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>'+
-      '<a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Telegram</a>'+
-      '</div></div></div>'+
-      '<h2 class="post-title">'+title+'</h2>'+
-      '<p class="post-date"><svg width="11" height="11" viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="18" rx="2" stroke="currentColor" stroke-width="2"/><path d="M16 2v4M8 2v4M3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> '+date+' &middot; '+types.map(function(t){return t.charAt(0).toUpperCase()+t.slice(1);}).join(', ')+'</p>'+
-      changeHTML+
-      '<div class="post-footer">'+
-      dlBtnHTML+
-      '<a href="'+ghUrl+'" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer">View Release</a>'+
-      '</div>'+
-      '</div></article>';
-  }
-
-  async function loadReleases(){
-    var loading=document.getElementById('releasesLoading');
-    var grid=document.getElementById('releasesGrid');
-    var empty=document.getElementById('releasesEmpty');
-    var errEl=document.getElementById('releasesError');
-    try{
-      var res=await fetch('https://api.github.com/repos/aetherdev22/snapperf/releases',{
-        cache:'no-store',
-        headers:{Accept:'application/vnd.github.v3+json'}
-      });
-      if(!res.ok)throw new Error('HTTP '+res.status);
-      var releases=await res.json();
-      if(!Array.isArray(releases)||!releases.length){
-        loading.style.display='none';
-        empty.style.display='';
-        return;
-      }
-      var html='';
-      for(var i=0;i<releases.length;i++){
-        html+=buildCard(releases[i],i);
-      }
-      grid.innerHTML=html;
-      loading.style.display='none';
-      grid.style.display='';
-
-      // Re-init IntersectionObserver for new cards
-      var obs=new IntersectionObserver(function(entries){
-        entries.forEach(function(e){
-          if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
-        });
-      },{threshold:.08,rootMargin:'0px 0px -30px 0px'});
-      grid.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
-
-      // Re-init popup dots for new cards
-      grid.querySelectorAll('.post-dots').forEach(function(wrapper){
-        var btn=wrapper.querySelector('.dots-btn');
-        var pid=wrapper.dataset.popup;
-        var popup=document.getElementById(pid);
-        if(!btn||!popup)return;
-        btn.addEventListener('click',function(e){
-          e.stopPropagation();
-          var isOpen=popup.classList.contains('open');
-          document.querySelectorAll('.popup-menu.open').forEach(function(p){
-            p.classList.remove('open');p.classList.add('close');
-            p.addEventListener('animationend',function(){p.classList.remove('close');p.style.display='';},{once:true});
-          });
-          if(!isOpen){
-            popup.style.display='flex';popup.classList.remove('close');
-            requestAnimationFrame(function(){popup.classList.add('open');});
-          }
-        });
-      });
-
-      // Wire search input
-      var si=document.getElementById('postSearch');
-      if(si){
-        si.addEventListener('input',function(){
-          if(window.applyFilters)window.applyFilters();
-        });
-      }
-    }catch(err){
-      loading.style.display='none';
-      errEl.style.display='';
-    }
-  }
-
-  // Wait for main.js DOMContentLoaded to fire first, then load releases
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',loadReleases);
-  }else{
-    loadReleases();
-  }
+ return '<article class="post-card reveal" data-tags="'+tagsAttr+'" style="animation-delay:'+delay+'s">'+
+ '<div class="post-card-inner">'+
+ '<div class="post-header">'+
+ '<div class="post-badges"><span class="badge badge-blue">'+esc(ver)+'</span>'+badges+'</div>'+
+ '<div class="post-dots" data-popup="'+popId+'">'+
+ '<button class="dots-btn ripple-btn" aria-label="Options"><span></span><span></span><span></span></button>'+
+ '<div class="popup-menu" id="'+popId+'">'+
+ (dlUrl?'<a href="'+esc(dlUrl)+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M12 3v13M5 13l7 7 7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 21h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg> Download</a>':'')+
+ '<a href="'+ghUrl+'" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> View on GitHub</a>'+
+ '<a href="https://t.me/get01projects" class="popup-item" target="_blank" rel="noopener noreferrer"><svg width="12" height="12" viewBox="0 0 24 24" fill="#29b6f6"><path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.562 8.247-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.393c-.16.16-.295.295-.604.295l.213-3.053 5.56-5.022c.241-.214-.054-.334-.373-.12L8.318 13.617l-2.96-.924c-.64-.203-.658-.64.136-.954l11.565-4.46c.537-.193 1.006.132.832.942z"/></svg> Telegram</a>'+
+ '</div></div></div>'+
+ '<h2 class="post-title">'+title+'</h2>'+
+ metaHTML+
+ changeHTML+
+ '<div class="post-footer">'+
+ dlBtnHTML+
+ '<a href="'+ghUrl+'" class="btn btn-ghost btn-sm ripple-btn" target="_blank" rel="noopener noreferrer"><svg width="11" height="11" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg> GitHub</a>'+
+ '</div>'+
+ '</div></article>';
+ }
+ async function loadReleases(){
+ var loading=document.getElementById('releasesLoading');
+ var grid=document.getElementById('releasesGrid');
+ var empty=document.getElementById('releasesEmpty');
+ var errEl=document.getElementById('releasesError');
+ try{
+ var res=await fetch('https://api.github.com/repos/aetherdev22/snapperf/releases',{
+ cache:'no-store',
+ headers:{Accept:'application/vnd.github.v3+json'}
+ });
+ if(!res.ok)throw new Error('HTTP '+res.status);
+ var releases=await res.json();
+ if(!Array.isArray(releases)||!releases.length){
+ loading.style.display='none';
+ empty.style.display='';
+ return;
+ }
+ var html='';
+ for(var i=0;i<releases.length;i++){
+ html+=buildCard(releases[i],i);
+ }
+ grid.innerHTML=html;
+ loading.style.display='none';
+ grid.style.display='';
+ // Re-init IntersectionObserver for new cards
+ var obs=new IntersectionObserver(function(entries){
+ entries.forEach(function(e){
+ if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}
+ });
+ },{threshold:.08,rootMargin:'0px 0px -30px 0px'});
+ grid.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+ // Re-init popup dots for new cards
+ grid.querySelectorAll('.post-dots').forEach(function(wrapper){
+ var btn=wrapper.querySelector('.dots-btn');
+ var pid=wrapper.dataset.popup;
+ var popup=document.getElementById(pid);
+ if(!btn||!popup)return;
+ btn.addEventListener('click',function(e){
+ e.stopPropagation();
+ var isOpen=popup.classList.contains('open');
+ document.querySelectorAll('.popup-menu.open').forEach(function(p){
+ p.classList.remove('open');p.classList.add('close');
+ p.addEventListener('animationend',function(){p.classList.remove('close');p.style.display='';},{once:true});
+ });
+ if(!isOpen){
+ popup.style.display='flex';popup.classList.remove('close');
+ requestAnimationFrame(function(){popup.classList.add('open');});
+ }
+ });
+ });
+ // Wire search input
+ var si=document.getElementById('postSearch');
+ if(si){
+ si.addEventListener('input',function(){
+ if(window.applyFilters)window.applyFilters();
+ });
+ }
+ }catch(err){
+ loading.style.display='none';
+ errEl.style.display='';
+ }
+ }
+ // Wait for main.js DOMContentLoaded to fire first, then load releases
+ if(document.readyState==='loading'){
+ document.addEventListener('DOMContentLoaded',loadReleases);
+ }else{
+ loadReleases();
+ }
 })();
 </script>
-</body>
-</html>
+</body></html>
