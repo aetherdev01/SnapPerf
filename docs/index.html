@@ -356,14 +356,6 @@ body{
 .btn-full:disabled{opacity:.45;cursor:not-allowed;filter:none}
 .fgrid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-.sfl-row{display:flex;align-items:center;gap:6px}
-.sfl-row .finput{flex:1}
-.sfl-fetch{flex-shrink:0;padding:10px 12px;border-radius:var(--r);border:1px solid var(--ab);background:var(--as);color:var(--a);font-size:12.5px;font-weight:600;font-family:var(--font);white-space:nowrap;transition:filter .15s}
-.sfl-fetch:hover{filter:brightness(1.1)}
-.sfl-fetch:disabled{opacity:.5;cursor:not-allowed;filter:none}
-.sfl-info{display:flex;gap:8px;padding:8px 11px;border-radius:var(--r);background:var(--surface);border:1px solid var(--border)}
-.sfl-info span{font-size:11.5px;color:var(--t3)}
-.sfl-info span b{color:var(--t1);font-weight:600}
 
 .fab{
   position:fixed;bottom:26px;right:20px;z-index:300;
@@ -565,16 +557,8 @@ body{
             </select>
           </div>
         </div>
-        <label class="flabel">SafeLinku / SafeFileKu URL</label>
-        <div class="sfl-row">
-          <input type="url" id="relDownload" class="finput" placeholder="https://sfl.gl/xxxxxxx"/>
-          <button class="sfl-fetch" id="sflFetch">Fetch Info</button>
-        </div>
-        <div class="sfl-info" id="sflInfo" hidden>
-          <span>Size: <b id="sflSize">—</b></span>
-          <span>Downloads: <b id="sflDl">—</b></span>
-          <span>File: <b id="sflFile">—</b></span>
-        </div>
+        <label class="flabel">Download URL</label>
+          <input type="url" id="relDownload" class="finput" placeholder="https://sfl.gl/xxxxxxx or any URL"/>
         <label class="flabel">Description / Changelog (Markdown)</label>
         <textarea id="relDesc" class="ftextarea" placeholder="## What's New&#10;- Improved performance&#10;- Bug fixes"></textarea>
         <span class="ferr" id="postErr" hidden></span>
@@ -617,13 +601,12 @@ body{
 const SUPABASE_URL      = 'https://raslfimtjazsifmnmdlh.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhc2xmaW10amF6c2lmbW5tZGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2Nzc4NTEsImV4cCI6MjA5MDI1Mzg1MX0.Zuw60izhNsO2fqlz9zYBc8If7IkmJtLGrx-Gxb6NugQ';
 
-const SFL_API      = 'https://safelinku.com/member/tools/api';
-const SFL_KEY      = '5db758db09cbed2990ead9c2e54c5c322ddff9cd';
+
 const ADMIN_PW     = '1111';
 const SK_ADMIN     = 'sp_adm3';
 const SK_REL       = 'sp_rel3';
 const SK_THEME     = 'sp_theme';
-const BY           = '@AetherDev22';
+const BY           = '@AetherDev01';
 
 let releases  = [];
 let filter    = 'all';
@@ -750,41 +733,6 @@ function subscribeRealtime(){
     .subscribe();
 }
 
-async function fetchSflInfo(url){
-  try{
-    const endpoint = SFL_API+'?api='+SFL_KEY+'&url='+encodeURIComponent(url);
-    const r = await fetch(endpoint);
-    if(!r.ok) return null;
-    const j = await r.json();
-    if(!j||j.status==='error') return null;
-    const d = j.result||j.data||j;
-    return {
-      size:       +(d.file_size||d.size||d.filesize||d.file_bytes||0),
-      downloads:  +(d.download_count||d.total_download||d.downloads||d.total_downloads||d.count||0),
-      filename:    d.file_name||d.filename||d.name||''
-    };
-  }catch(e){ console.warn('SFL API:',e); return null; }
-}
-
-async function refreshSflData(rel){
-  if(!rel.download_url) return false;
-  const info = await fetchSflInfo(rel.download_url);
-  if(!info) return false;
-  rel.size      = info.size      || rel.size;
-  rel.downloads = info.downloads || rel.downloads;
-  rel.filename  = info.filename  || rel.filename;
-  return true;
-}
-
-async function refreshAllSfl(){
-  let changed=false;
-  for(const r of releases){
-    const ok = await refreshSflData(r);
-    if(ok) changed=true;
-  }
-  if(changed){ saveLocal(); setStats(); renderList(); }
-}
-
 function setStats(){
   const tdl = releases.reduce((s,r)=>s+(+(r.downloads)||0),0);
   const stable = releases.find(r=>r.tag==='stable');
@@ -813,7 +761,7 @@ async function init(){
 
   const ok = await loadRemote();
   if(ok){ setStats(); renderList(); }
-  else   { refreshAllSfl(); }
+  // no SFL fallback
   subscribeRealtime();
 }
 
@@ -1013,7 +961,6 @@ $('adminClose').addEventListener('click',()=>closeMod($('adminOv')));
 function resetPostForm(){
   ['relTitle','relVersion','relDownload','relDesc'].forEach(id=>$(id).value='');
   $('relTag').value='stable';
-  $('sflInfo').hidden=true;
   $('postErr').hidden=true;
   $('postOk').hidden=true;
   $('postSubmit').disabled=false;
@@ -1036,7 +983,6 @@ function openEdit(r){
   $('relDownload').value=r.download_url||'';
   $('relDesc').value    =r.description||'';
   $('relTag').value     =r.tag||'stable';
-  $('sflInfo').hidden=true;
   $('postErr').hidden=true;
   $('postOk').hidden=true;
   $('postSubmit').disabled=false;
@@ -1049,25 +995,6 @@ function openEdit(r){
 
 $('adminFab').addEventListener('click',openPost);
 $('postClose').addEventListener('click',()=>closeMod($('postOv')));
-
-$('sflFetch').addEventListener('click',async()=>{
-  const url=$('relDownload').value.trim();
-  if(!url){ showErr('postErr','Enter a URL first'); return; }
-  try{ new URL(url); }catch{ showErr('postErr','Invalid URL'); return; }
-  $('sflFetch').disabled=true;
-  $('sflFetch').textContent='Fetching…';
-  const info=await fetchSflInfo(url);
-  $('sflFetch').disabled=false;
-  $('sflFetch').textContent='Fetch Info';
-  if(info){
-    $('sflSize').textContent=fb(info.size)||'—';
-    $('sflDl').textContent=fn(info.downloads)||'—';
-    $('sflFile').textContent=info.filename||'—';
-    $('sflInfo').hidden=false;
-  } else {
-    showErr('postErr','Could not fetch file info from SafeLinku API');
-  }
-});
 
 $('postSubmit').addEventListener('click',async()=>{
   const title   =$('relTitle').value.trim();
@@ -1084,10 +1011,9 @@ $('postSubmit').addEventListener('click',async()=>{
   $('postSubmit').disabled=true;
   $('postSubmit').textContent='Saving…';
 
-  const info = await fetchSflInfo(dlUrl);
-  const size      = info?.size||0;
-  const downloads = info?.downloads||0;
-  const filename  = info?.filename||'';
+  const size      = 0;
+  const downloads = 0;
+  const filename  = '';
 
   if(editId){
     const idx=releases.findIndex(r=>r.id===editId);
