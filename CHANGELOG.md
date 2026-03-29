@@ -1,4 +1,4 @@
-## SnapPerf v1.5.5 (Stable)
+## v1.5.5 Stable
 
 ### Fix
 - **Refresh Rate** tidak berfungsi saat pindah ke 90Hz / 120Hz / 144Hz dari WebUI
