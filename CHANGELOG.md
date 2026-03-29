@@ -1,8 +1,8 @@
 ## v1.5.5 Stable
 
 ### Fix
-- **Refresh Rate** tidak berfungsi saat pindah ke 90Hz / 120Hz / 144Hz dari WebUI
-- **Refresh Rate** tidak persistent setelah reboot di Android 12+ (system override)
+- *Refresh Rate tidak berfungsi saat pindah ke 90Hz / 120Hz / 144Hz dari WebUI
+- *Refresh Rate tidak persistent setelah reboot di Android 12+ (system override)
 - `openDropDialog` fallback salah — jika localStorage kosong, Refresh Rate selalu reset ke Auto meski config sudah diset
 - Monitor bar CPU & GPU tampil dengan warna RGB gradient, sekarang solid 1 warna sesuai accent
 - `.cl-badge.improve` tidak memiliki styling (mismatch class name `imp` vs `improve` di CSS/JS)
