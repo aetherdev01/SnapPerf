@@ -839,40 +839,14 @@ function snack(msg){
 }
 
 async function loadRels(){
-  $('list').innerHTML='<div class="spinner"></div>';
-  if(supa){
-    try{
-      const{data,error}=await supa.from('sp_releases').select('*').order('release_date',{ascending:false});
-      if(!error&&data?.length){
-        rels=data.map(r=>({
-          id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',
-          description:r.description||'',download_url:r.download_url||'',
-          size:r.file_size||0,downloads:r.downloads||0,
-          mirrors:r.mirrors||[],date:r.release_date,_sizeRaw:''
-        }));
-        localStorage.setItem('sp_rels_cache',JSON.stringify(rels));
-        return;
-      }
-    }catch(e){}
+  const { data, error } = await supa
+    .from('sp_releases')
+    .select('*')
+    .order('release_date', { ascending: false });
+
+  if(!error){
+    rels = data || [];
   }
-  try{
-    const cached=localStorage.getItem('sp_rels_cache');
-    if(cached){const parsed=JSON.parse(cached);if(parsed?.length){rels=parsed;return;}}
-  }catch(e){}
-  try{
-    const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/releases`,{headers:{Accept:'application/vnd.github.v3+json'}});
-    if(res.ok){
-      const data=await res.json();
-      rels=data.map(r=>({
-        id:String(r.id),title:r.name||r.tag_name,version:r.tag_name,
-        tag:r.prerelease?'beta':'stable',description:r.body||'',
-        download_url:r.assets?.[0]?.browser_download_url||r.html_url,
-        size:r.assets?.[0]?.size||0,
-        downloads:r.assets?.reduce((a,b)=>a+(b.download_count||0),0)||0,
-        mirrors:[],date:r.published_at,_sizeRaw:''
-      }));
-    }
-  }catch(e){}
 }
 
 async function save(id,del=false){
@@ -1001,25 +975,50 @@ function openEdit(id){
   $('postBtn').textContent='Save';openDlg('dlgPost');setTimeout(()=>$('relTitle').focus(),300);
 }
 async function submitPost(){
-  const title=$('relTitle').value.trim(),ver=$('relVer').value.trim(),
-        dl=$('relDl').value.trim(),desc=$('relDesc').value.trim(),
-        tag=$('relTag').value,szRaw=$('relSz').value.trim();
-  if(!title){showPErr('Title required');return;}
-  if(!ver){showPErr('Version required');return;}
-  if(!dl){showPErr('Download URL required');return;}
-  try{new URL(dl);}catch{showPErr('Invalid URL');return;}
-  $('postBtn').disabled=true;$('postBtn').textContent='Saving…';
-  const sz=ps(szRaw);
-  if(editId){
-    const i=rels.findIndex(r=>r.id===editId);
-    if(i>-1)rels[i]={...rels[i],title,version:ver,tag,description:desc,download_url:dl,size:sz||rels[i].size,_sizeRaw:szRaw||rels[i]._sizeRaw||''};
-    $('postOk').hidden=false;$('postOk').textContent='Saved!';await save(editId);
-  }else{
-    const nr={id:uid(),title,version:ver,tag,description:desc,download_url:dl,size:sz,downloads:0,mirrors:[],date:new Date().toISOString(),_sizeRaw:szRaw};
-    rels.unshift(nr);$('postOk').hidden=false;$('postOk').textContent='Posted!';await save(nr.id);
+  const title = $('relTitle').value.trim();
+  const version = $('relVer').value.trim();
+  const url = $('relDl').value.trim();
+  const size = $('relSz').value.trim();
+  const tag = $('relTag').value;
+  const desc = $('relDesc').value.trim();
+
+  if(!title || !version || !url){
+    $('postErr').textContent = 'Lengkapi data!';
+    $('postErr').hidden = false;
+    return;
   }
-  setStats();$('postBtn').disabled=false;$('postBtn').textContent=editId?'Save':'Post';
-  setTimeout(()=>{closeDlg('dlgPost');render();},500);
+
+  $('postErr').hidden = true;
+
+  const data = {
+    id: Date.now().toString(),
+    title: title,
+    version: version,
+    tag: tag,
+    description: desc,
+    download_url: url,
+    filename: '',
+    file_size: 0,
+    downloads: 0,
+    mirrors: [],
+    release_date: new Date().toISOString()
+  };
+
+  const { error } = await supa
+    .from('sp_releases')
+    .insert([data]);
+
+  if(error){
+    $('postErr').textContent = error.message;
+    $('postErr').hidden = false;
+    return;
+  }
+
+  $('postOk').textContent = 'Release berhasil ditambahkan!';
+  $('postOk').hidden = false;
+
+  await loadRels(); // reload dari database
+  render();
 }
 function showPErr(m){$('postErr').hidden=false;$('postErr').textContent=m;}
 
