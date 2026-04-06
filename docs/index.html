@@ -842,6 +842,8 @@ function doLogout(){
   location.reload();
 }
 
+window.doLogout = doLogout;
+
 function openSheet(title,md){
   $('sheetTitle').textContent=title;
   $('sheetBody').innerHTML=marked.parse(md||'*No changelog.*');
