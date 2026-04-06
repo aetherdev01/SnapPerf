@@ -460,7 +460,7 @@ body{
 .info-card-body{font-size:13px;line-height:1.65;color:var(--col-on-sur-var);position:relative;}
 .info-card-body b{color:var(--col-pri);font-weight:600;}
 
-.compat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;max-width:600px;margin:0 auto 8px;}
+.compat{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:0 16px 8px;}
 .compat-tile{
   background:var(--col-sur-c);border-radius:var(--r-m);
   padding:12px 8px;text-align:center;position:relative;overflow:hidden;
@@ -768,7 +768,7 @@ const CONFIG = (() => {
   const SB_KEY = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhiR0Z6WlNJc0luSmxabUk2SW5KaGMyeG1hVzEwYW1GNmMybG1iVzV0Wkd4b0lpd2ljbTlzWlNJNklHRnViMjRpTENKcFlYUWlPakUzTnpRMk56YzROVEVzSW1WNGNDSTZNakE1TURJMU16ZzFNU3dpWm5WaU9pSmhkbVZ5SW4wLlp1dzYwemloTnNPMmZxbHo5ellCYzhJZjdJa21KdExHcngxR3hiNk51Z1E=');
 
   const SK = 'sp_admin_v2';
-  const PW_HASH = '9f6f8b5e7d4a6e9f2e0f4c2f6b8a1c3d7e5f9a0b6c2d3e4f5a6b7c8d9e0f1a2';
+  const PW_HASH = '2c1f3f5f6523af84fde4af934caa1126ae6bcebacd36e397fbddcb8a620c1d73';
 
   return { GH_USER, GH_REPO, SB_URL, SB_KEY, SK, PW_HASH };
 })();
@@ -779,16 +779,13 @@ async function hash(str){
     new TextEncoder().encode(str)
   );
   return Array.from(new Uint8Array(buf))
-    .map(b => b.toString(16).padStart(2,'0'))
+    .map(b=>b.toString(16).padStart(2,'0'))
     .join('');
 }
 
 async function checkPassword(input){
-  const h = await hash(input);
-  return h === CONFIG.PW_HASH;
+  return input === "1922";
 }
-
-})();
 
 let rels=[],admin=false,filt='all',sq='',editId=null,mirId=null,supa=null,sbTmr=null,adminHoldTmr=null;
 const $=id=>document.getElementById(id);
@@ -797,9 +794,9 @@ async function init(){
   window.addEventListener('scroll',()=>$('topBar').classList.toggle('raised',scrollY>4),{passive:true});
   const th=localStorage.getItem('sp_th')||'dark';
   document.documentElement.dataset.theme=th; updateThIco(th);
-  admin=sessionStorage.getItem(SK)==='1';
+  admin = sessionStorage.getItem(CONFIG.SK) === '1';
   applyAdmin();
-  try{supa=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
+  try{supa = supabase.createClient(CONFIG.SB_URL, CONFIG.SB_KEY);}catch(e){}
   await loadRels();
   render(); setStats();
   
@@ -819,46 +816,9 @@ function logoutAdmin(){
 }
 
 function startAdminHold(){
-  adminHoldTmr = setTimeout(()=>{
-    if(!admin){
-      $('loginErr').hidden = true;
-      $('pwIn').value = '';
-      openDlg('dlgLogin');
-      setTimeout(()=>$('pwIn').focus(), 300);
-    }
-  }, 2000);
-}
-
-async function doLogin(){
-  const input = $('pwIn').value;
-
-  if(await checkPassword(input)){
-    admin = true;
-    sessionStorage.setItem(CONFIG.SK, '1');
-    applyAdmin();
-    render();
-    closeDlg('dlgLogin');
-    snack('Welcome back, Admin 👋');
-  } else {
-    $('loginErr').hidden = false;
-  }
-}
-
-$('pwIn').addEventListener('keydown', e => {
-  if(e.key === 'Enter') doLogin();
-});
-
-function doLogout(){
-  admin = false;
-  sessionStorage.removeItem(CONFIG.SK);
-  applyAdmin();
-  render();
-  snack('Logged out');
-}
-
-function applyAdmin(){
-  $('logoutBtn').hidden = !admin;
-  $('adminFab').hidden = !admin || !document.querySelector('.nav-item.on')?.dataset.tab?.includes('Home');
+  adminHoldTmr=setTimeout(()=>{
+    if(!admin){$('loginErr').hidden=true;$('pwIn').value='';openDlg('dlgLogin');setTimeout(()=>$('pwIn').focus(),300);}
+  },2000);
 }
 
 function cancelAdminHold(){
@@ -887,6 +847,22 @@ function toggleFaq(el){el.classList.toggle('open');}
 
 function openDlg(id){$(id).classList.add('on');}
 function closeDlg(id){$(id).classList.remove('on');}
+
+function doLogin(){
+  if($('pwIn').value===PW){admin=true;sessionStorage.setItem(SK,'1');applyAdmin();render();closeDlg('dlgLogin');snack('Welcome back, Admin 👋');}
+  else{$('loginErr').hidden=false;}
+}
+$('pwIn').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+function doLogout(){admin=false;sessionStorage.removeItem(SK);applyAdmin();render();snack('Logged out');}
+function applyAdmin(){
+$('logoutBtn').hidden = !admin;
+  $('adminFab').hidden=!admin||!document.querySelector('.nav-item.on')?.dataset.tab?.includes('Home');
+}
+
+function doLogout(){
+  sessionStorage.removeItem(SK);
+  location.reload();
+}
 
 window.doLogout = doLogout;
 
