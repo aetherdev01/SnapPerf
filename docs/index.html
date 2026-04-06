@@ -499,7 +499,7 @@ body{
   <div class="bar-actions">
 
     <!-- 🔴 Logout Button -->
-    <button class="btn btn-txt" id="logoutBtn" hidden onclick="logoutAdmin()">
+    <button class="btn btn-txt" id="logoutBtn" hidden onclick="doLogout()">
       <span>Logout</span>
     </button>
 
@@ -835,6 +835,11 @@ function doLogout(){admin=false;sessionStorage.removeItem(SK);applyAdmin();rende
 function applyAdmin(){
 $('logoutBtn').hidden = !admin;
   $('adminFab').hidden=!admin||!document.querySelector('.nav-item.on')?.dataset.tab?.includes('Home');
+}
+
+function doLogout(){
+  sessionStorage.removeItem(SK);
+  location.reload();
 }
 
 function openSheet(title,md){
