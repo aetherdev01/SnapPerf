@@ -1,1 +1,1165 @@
-<!DOCTYPE html><html lang="en" data-theme="dark"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/><meta name="description" content="SnapPerf — Snapdragon Performance Optimizer for Magisk/KernelSU/APatch"/><title>SnapPerf</title><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/><script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js" defer></script><script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><style>[hidden]{display:none!important}*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}a{text-decoration:none;color:inherit}button{cursor:pointer;font-family:inherit;border:none;background:none}svg,img{display:block;flex-shrink:0}:root{ --font:'Google Sans','Roboto',sans-serif; --font-brand:'Google Sans Display','Google Sans',sans-serif; --font-mono:'Roboto Mono',monospace; --ease-std:cubic-bezier(.2,0,0,1); --ease-emp:cubic-bezier(.2,0,0,1); --dur-s2:100ms; --dur-s4:200ms; --dur-m2:300ms; --dur-m4:400ms; --r-xs:4px; --r-s:8px; --r-m:12px; --r-l:16px; --r-xl:28px; --r-f:9999px;}[data-theme="dark"]{ --col-pri:#A8C7FA; --col-on-pri:#0C2D6B; --col-pri-con:#284380; --col-on-pri-con:#D6E3FF; --col-sec:#BEC6DC; --col-on-sec:#283141; --col-sec-con:#3E4759; --col-on-sec-con:#DAE2F9; --col-ter:#D9BAE8; --col-on-ter:#3D2551; --col-ter-con:#553B69; --col-on-ter-con:#F3DAFF; --col-err:#FFB4AB; --col-on-err:#690005; --col-err-con:#93000A; --col-on-err-con:#FFDAD6; --col-sur:#131318; --col-on-sur:#E3E2E9; --col-sur-var:#44464F; --col-on-sur-var:#C4C6D0; --col-sur-lo:#0E0E13; --col-sur-cl:#1B1B21; --col-sur-c:#1F1F25; --col-sur-ch:#292A2F; --col-sur-hh:#34343A; --col-out:#8E9099; --col-out-var:#44464F; --col-inv-sur:#E3E2E9; --col-inv-on-sur:#313036; --col-inv-pri:#3E5F9F; --tint:rgba(168,199,250,.08); --el1:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15); --el2:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15); --el3:0 4px 8px 3px rgba(0,0,0,.15),0 1px 3px rgba(0,0,0,.3);}[data-theme="light"]{ --col-pri:#3E5F9F; --col-on-pri:#FFFFFF; --col-pri-con:#D6E3FF; --col-on-pri-con:#001A41; --col-sec:#565E71; --col-on-sec:#FFFFFF; --col-sec-con:#DAE2F9; --col-on-sec-con:#131C2B; --col-ter:#6E5676; --col-on-ter:#FFFFFF; --col-ter-con:#F3DAFF; --col-on-ter-con:#271430; --col-err:#BA1A1A; --col-on-err:#FFFFFF; --col-err-con:#FFDAD6; --col-on-err-con:#410002; --col-sur:#FBF8FF; --col-on-sur:#1B1B21; --col-sur-var:#E1E2EC; --col-on-sur-var:#44464F; --col-sur-lo:#FFFFFF; --col-sur-cl:#F5F3FA; --col-sur-c:#EFEDF4; --col-sur-ch:#E9E7EF; --col-sur-hh:#E3E2E9; --col-out:#757780; --col-out-var:#C4C6D0; --col-inv-sur:#313036; --col-inv-on-sur:#F2F0F7; --col-inv-pri:#A8C7FA; --tint:rgba(62,95,159,.05); --el1:0 1px 2px rgba(0,0,0,.1),0 1px 3px 1px rgba(0,0,0,.07); --el2:0 1px 2px rgba(0,0,0,.1),0 2px 6px 2px rgba(0,0,0,.07); --el3:0 4px 8px 3px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.1);}body{ font-family:var(--font); -webkit-font-smoothing:antialiased; background:var(--col-sur); color:var(--col-on-sur); min-height:100vh; overflow-x:hidden; user-select:none; -webkit-user-select:none; transition:background var(--dur-m2) var(--ease-std),color var(--dur-m2) var(--ease-std);}.top-bar{ position:fixed;top:0;left:0;right:0;z-index:200; height:64px;display:flex;align-items:center; padding:0 4px 0 16px; background:var(--col-sur-c); transition:background var(--dur-m2) var(--ease-std),box-shadow var(--dur-s4) var(--ease-std);}.top-bar.raised{background:var(--col-sur-ch);box-shadow:var(--el2);}.bar-brand{display:flex;align-items:center;gap:10px;flex:1;}.bar-logo{width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0;}.bar-logo img{width:100%;height:100%;object-fit:cover;}.bar-name{font-family:var(--font-brand);font-size:22px;font-weight:500;color:var(--col-on-sur);letter-spacing:0;cursor:pointer;user-select:none;}.admin-chip{ font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase; padding:2px 8px;border-radius:var(--r-f); background:var(--col-ter-con);color:var(--col-on-ter-con);}.bar-actions{display:flex;align-items:center;}.ic-btn{ position:relative;display:flex;align-items:center;justify-content:center; width:48px;height:48px;border-radius:var(--r-f); color:var(--col-on-sur-var);overflow:hidden; transition:color var(--dur-s4);}.ic-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}.ic-btn:hover::before{opacity:.08;}.ic-btn:active::before{opacity:.12;}.ic-btn.on{color:var(--col-pri);}.ic-btn svg{width:24px;height:24px;position:relative;z-index:1;}.nav-bar{ position:fixed;bottom:0;left:0;right:0;z-index:200; height:80px;display:flex;align-items:flex-start;padding-top:12px; background:var(--col-sur-c); box-shadow:0 -1px 0 var(--col-out-var); transition:background var(--dur-m2) var(--ease-std);}.nav-item{ flex:1;display:flex;flex-direction:column;align-items:center;gap:4px; cursor:pointer;-webkit-tap-highlight-color:transparent; position:relative;overflow:hidden;}.nav-item::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}.nav-item:hover::before{opacity:.04;}.nav-item:active::before{opacity:.08;}.nav-pill{ position:relative;display:flex;align-items:center;justify-content:center; width:64px;height:32px;border-radius:var(--r-l); background:transparent;color:var(--col-on-sur-var); transition:background var(--dur-m2),color var(--dur-m2);}.nav-item.on .nav-pill{background:var(--col-sec-con);color:var(--col-on-sec-con);}.nav-pill svg{width:24px;height:24px;}.nav-lbl{font-size:12px;font-weight:500;color:var(--col-on-sur-var);letter-spacing:.2px;transition:color var(--dur-m2);position:relative;}.nav-item.on .nav-lbl{color:var(--col-on-sur);}.main{margin-top:64px;margin-bottom:80px;min-height:calc(100vh - 144px);}.tab{display:none;}.tab.on{display:block;}.hero{padding:40px 16px 16px;text-align:center;}.hero-app-icon{ width:96px;height:96px;border-radius:var(--r-xl);overflow:hidden; margin:0 auto 14px;box-shadow:var(--el3);}.hero-app-icon img{width:100%;height:100%;object-fit:cover;}.hero-title{ font-family:var(--font-brand);font-size:clamp(26px,8vw,42px);font-weight:500; color:var(--col-on-sur);letter-spacing:-.5px;margin-bottom:8px; animation:fu .4s var(--ease-emp) both;}.hero-sub{font-size:14px;line-height:1.65;color:var(--col-on-sur-var);margin-bottom:0;animation:fu .4s var(--ease-emp) .06s both}.hero-sub b{color:var(--col-pri);font-weight:600}@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}.stats{ display:grid;grid-template-columns:repeat(3,1fr);gap:8px; margin:16px 16px 0;animation:fu .4s var(--ease-emp) .1s both;}.stat{ background:var(--col-sur-cl);border-radius:var(--r-l); padding:14px 10px;text-align:center;position:relative;overflow:hidden;}.stat::before{content:'';position:absolute;inset:0;background:var(--tint);pointer-events:none;}.stat-v{ font-family:var(--font-brand);font-size:22px;font-weight:700; color:var(--col-pri);display:block;letter-spacing:-.5px;position:relative;}.stat-l{font-size:11px;font-weight:500;color:var(--col-on-sur-var);text-transform:uppercase;letter-spacing:.6px;margin-top:2px;position:relative;}.controls{padding:12px 16px 8px;display:flex;flex-direction:column;gap:8px;}.search-wrap{position:relative;}.search-wrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--col-on-sur-var);pointer-events:none;}.search-in{ width:100%;height:56px;padding:0 48px 0 48px; border-radius:var(--r-xl);border:none; background:var(--col-sur-ch);color:var(--col-on-sur); font-size:16px;font-family:var(--font);outline:none; -webkit-appearance:none;user-select:text;-webkit-user-select:text; transition:background var(--dur-s4);}.search-in::placeholder{color:var(--col-on-sur-var);}.search-in::-webkit-search-cancel-button{-webkit-appearance:none;}.search-in:focus{background:var(--col-sur-hh);}.search-clr{ position:absolute;right:8px;top:50%;transform:translateY(-50%); width:40px;height:40px;border-radius:var(--r-f); display:none;align-items:center;justify-content:center; color:var(--col-on-sur-var);overflow:hidden;}.search-clr.on{display:flex;}.search-clr svg{width:18px;height:18px;}.search-clr::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;border-radius:inherit;transition:opacity var(--dur-s4);}.search-clr:hover::before{opacity:.08;}.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}.chips::-webkit-scrollbar{display:none;}.chip{ display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 16px; border-radius:var(--r-s);font-size:14px;font-weight:500;letter-spacing:.1px; white-space:nowrap;border:1px solid var(--col-out); background:transparent;color:var(--col-on-sur-var);flex-shrink:0; position:relative;overflow:hidden; transition:background var(--dur-s4),color var(--dur-s4),border-color var(--dur-s4);}.chip::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}.chip:hover::before{opacity:.08;}.chip.on{background:var(--col-sec-con);color:var(--col-on-sec-con);border-color:transparent;padding-left:8px;}.chip-ck{display:none;width:18px;height:18px;flex-shrink:0;}.chip.on .chip-ck{display:flex;}.rl-sec{ padding:8px 16px 32px;}.sec-hdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--col-on-sur-var);margin:8px 0 10px 4px;}.card{ background:var(--col-sur-cl);border-radius:var(--r-l); margin-bottom:8px;overflow:hidden;position:relative; transition:background var(--dur-s4); animation:fu .3s var(--ease-emp) both;}.card::before{content:'';position:absolute;inset:0;background:var(--tint);pointer-events:none;border-radius:inherit;}.card-in{padding:16px;}.card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}.card-ico{ width:40px;height:40px;border-radius:var(--r-m);flex-shrink:0; background:var(--col-pri-con);display:flex;align-items:center;justify-content:center; color:var(--col-on-pri-con);}.card-ico svg{width:20px;height:20px;}.card-meta{flex:1;min-width:0;}.card-title{ font-family:var(--font-brand);font-size:16px;font-weight:500;color:var(--col-on-sur); white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.card-ver-row{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;}.ver-badge{ font-family:var(--font-mono);font-size:12px;font-weight:500; color:var(--col-pri);background:var(--col-pri-con); padding:2px 8px;border-radius:var(--r-xs);}.tag{ font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px; padding:2px 7px;border-radius:var(--r-f);}.tag-stable{background:rgba(76,175,80,.12);color:#4CAF50;border:1px solid rgba(76,175,80,.3);}.tag-beta{background:rgba(255,152,0,.12);color:#FF9800;border:1px solid rgba(255,152,0,.3);}.tag-alpha{background:rgba(206,147,216,.12);color:#CE93D8;border:1px solid rgba(206,147,216,.3);}[data-theme="light"] .tag-stable{background:rgba(27,94,32,.08);color:#2E7D32;border-color:rgba(46,125,50,.25);}[data-theme="light"] .tag-beta{background:rgba(230,81,0,.08);color:#E65100;border-color:rgba(230,81,0,.25);}[data-theme="light"] .tag-alpha{background:rgba(74,20,140,.08);color:#6A1B9A;border-color:rgba(106,27,154,.25);}.card-info{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}.info-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--col-on-sur-var);}.info-item svg{width:14px;height:14px;flex-shrink:0;}.card-acts{display:flex;gap:8px;flex-wrap:wrap;}.divider{height:1px;background:var(--col-out-var);margin:0;}.mirrors{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px 14px;}.mir-chip{ display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px; border-radius:var(--r-s);background:var(--col-sur-c);border:1px solid var(--col-out-var); font-size:12px;font-weight:500;color:var(--col-on-sur-var);white-space:nowrap;}.mir-chip svg{width:12px;height:12px;}.admin-acts{display:flex;gap:6px;padding:8px 16px 14px;border-top:1px solid var(--col-out-var);}.btn{ display:inline-flex;align-items:center;justify-content:center;gap:8px; height:40px;padding:0 24px;border-radius:var(--r-f); font-family:var(--font);font-size:14px;font-weight:500;letter-spacing:.1px; position:relative;overflow:hidden;white-space:nowrap;flex-shrink:0; transition:box-shadow var(--dur-s4);}.btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}.btn:hover::before{opacity:.08;}.btn:active::before{opacity:.12;}.btn svg{width:18px;height:18px;position:relative;z-index:1;flex-shrink:0;}.btn span{position:relative;z-index:1;}.btn-fil{background:var(--col-pri);color:var(--col-on-pri);}.btn-fil:hover{box-shadow:var(--el1);}.btn-ton{background:var(--col-sec-con);color:var(--col-on-sec-con);}.btn-out{background:transparent;color:var(--col-pri);border:1px solid var(--col-out);padding:0 23px;}.btn-txt{background:transparent;color:var(--col-pri);padding:0 12px;}.btn-sm{height:32px;padding:0 16px;font-size:13px;}.btn-sm svg{width:16px;height:16px;}.btn-err{color:var(--col-err);}.scrim{ position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400; opacity:0;pointer-events:none; transition:opacity var(--dur-m2) var(--ease-std);}.scrim.on{opacity:1;pointer-events:all;}.sheet{ position:fixed;bottom:0;left:0;right:0;z-index:401; background:var(--col-sur-cl);border-radius:28px 28px 0 0; max-height:90vh;display:flex;flex-direction:column; transform:translateY(100%); transition:transform var(--dur-m4) var(--ease-emp);}.sheet.on{transform:translateY(0);}.sheet-handle{width:32px;height:4px;border-radius:2px;background:var(--col-on-sur-var);opacity:.4;margin:12px auto 0;flex-shrink:0;}.sheet-hdr{display:flex;align-items:center;padding:16px 16px 8px;gap:12px;flex-shrink:0;}.sheet-title{font-family:var(--font-brand);font-size:18px;font-weight:500;color:var(--col-on-sur);flex:1;}.sheet-body{overflow-y:auto;padding:0 16px 32px;flex:1;overscroll-behavior:contain;}.sheet-body h1,.sheet-body h2,.sheet-body h3{font-family:var(--font-brand);color:var(--col-on-sur);margin:20px 0 8px;}.sheet-body h1{font-size:20px;}.sheet-body h2{font-size:17px;color:var(--col-pri);}.sheet-body h3{font-size:15px;}.sheet-body p{font-size:14px;line-height:1.7;color:var(--col-on-sur-var);margin-bottom:12px;}.sheet-body ul,.sheet-body ol{padding-left:20px;margin-bottom:12px;}.sheet-body li{font-size:14px;line-height:1.7;color:var(--col-on-sur-var);margin-bottom:4px;}.sheet-body code{font-family:var(--font-mono);font-size:12px;background:var(--col-sur-ch);color:var(--col-pri);padding:2px 6px;border-radius:4px;}.sheet-body pre{background:var(--col-sur-hh);border-radius:var(--r-m);padding:12px;overflow-x:auto;margin-bottom:12px;}.sheet-body pre code{background:none;padding:0;color:var(--col-on-sur);}.dlg-scrim{ position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500; display:flex;align-items:center;justify-content:center;padding:24px; opacity:0;pointer-events:none; transition:opacity var(--dur-m2) var(--ease-std);}.dlg-scrim.on{opacity:1;pointer-events:all;}.dlg{ background:var(--col-sur-ch);border-radius:28px; width:100%;max-width:400px;max-height:90vh;overflow-y:auto; transform:scale(.9) translateY(20px); transition:transform var(--dur-m2) var(--ease-emp);}.dlg-scrim.on .dlg{transform:scale(1) translateY(0);}.dlg-hdr{padding:24px 24px 16px;}.dlg-ico{width:32px;height:32px;margin:0 auto 16px;color:var(--col-sec);}.dlg-ico svg{width:100%;height:100%;}.dlg-title{font-family:var(--font-brand);font-size:24px;font-weight:500;text-align:center;color:var(--col-on-sur);}.dlg-sub{font-size:12px;text-align:center;color:var(--col-on-sur-var);margin-top:4px;}.dlg-body{padding:0 24px 24px;display:flex;flex-direction:column;gap:12px;}.dlg-acts{padding:0 24px 24px;display:flex;justify-content:flex-end;gap:8px;}.field{}.field-lbl{font-size:12px;font-weight:500;color:var(--col-on-sur-var);margin-bottom:4px;padding-left:4px;}.field input,.field select,.field textarea{ width:100%;background:var(--col-sur-hh); border:1px solid var(--col-out);border-radius:var(--r-xs); color:var(--col-on-sur);font-family:var(--font);font-size:16px; padding:14px 16px;outline:none;-webkit-appearance:none; transition:border-color var(--dur-s4),box-shadow var(--dur-s4); user-select:text;-webkit-user-select:text;}.field textarea{min-height:80px;resize:vertical;}.field input:focus,.field select:focus,.field textarea:focus{ border-color:var(--col-pri);box-shadow:0 0 0 2px var(--col-pri-con);}.field select option{background:var(--col-sur-ch);}.msg-err{padding:10px 14px;border-radius:var(--r-s);font-size:13px;display:flex;align-items:center;gap:8px;background:var(--col-err-con);color:var(--col-on-err-con);}.msg-ok{padding:10px 14px;border-radius:var(--r-s);font-size:13px;display:flex;align-items:center;gap:8px;background:rgba(76,175,80,.12);color:#4CAF50;}[data-theme="light"] .msg-ok{background:rgba(27,94,32,.08);color:#2E7D32;}.fab{ position:fixed;bottom:96px;right:16px;z-index:190; width:56px;height:56px;border-radius:var(--r-l); background:var(--col-pri-con);color:var(--col-on-pri-con); display:flex;align-items:center;justify-content:center; box-shadow:var(--el3);overflow:hidden; transition:box-shadow var(--dur-s4),transform var(--dur-s4);}.fab::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}.fab:hover::before{opacity:.08;}.fab:active{transform:scale(.96);}.fab:active::before{opacity:.12;}.fab svg{width:24px;height:24px;position:relative;z-index:1;}.empty{text-align:center;padding:60px 24px;color:var(--col-on-sur-var);}.empty svg{width:48px;height:48px;margin:0 auto 16px;opacity:.5;}.empty p{font-size:16px;margin-bottom:8px;font-weight:500;color:var(--col-on-sur);}.empty span{font-size:14px;}.spinner{width:40px;height:40px;border:3px solid var(--col-out-var);border-top-color:var(--col-pri);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto;}@keyframes spin{to{transform:rotate(360deg)}}.snack{ position:fixed;bottom:96px;left:50%; transform:translateX(-50%) translateY(80px); z-index:600;background:var(--col-inv-sur);color:var(--col-inv-on-sur); padding:12px 16px;border-radius:var(--r-xs);font-size:14px;font-weight:500; white-space:nowrap;box-shadow:var(--el3);pointer-events:none; transition:transform var(--dur-m2) var(--ease-emp),opacity var(--dur-m2); opacity:0;}.snack.on{transform:translateX(-50%) translateY(0);opacity:1;}.sup-hero{padding:32px 16px 20px;text-align:center;}.sup-hero h1{font-family:var(--font-brand);font-size:28px;font-weight:500;color:var(--col-on-sur);margin-bottom:8px;}.sup-hero p{font-size:14px;color:var(--col-on-sur-var);line-height:1.6;}.list-hdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--col-pri);margin:20px 16px 4px;}.list-item{ display:flex;align-items:center;gap:16px;padding:12px 16px; border-radius:var(--r-xl);position:relative;overflow:hidden; cursor:pointer;-webkit-tap-highlight-color:transparent; transition:background var(--dur-s4);text-decoration:none;color:inherit; margin:0 4px;}.list-item::before{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--col-on-sur);opacity:0;transition:opacity var(--dur-s4);}.list-item:hover::before{opacity:.08;}.list-item:active::before{opacity:.12;}.list-ico{width:40px;height:40px;border-radius:var(--r-f);display:flex;align-items:center;justify-content:center;flex-shrink:0;}.list-con{flex:1;min-width:0;}.list-hl{font-size:16px;font-weight:500;color:var(--col-on-sur);margin-bottom:2px;}.list-sup{font-size:13px;color:var(--col-on-sur-var);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.list-trail{color:var(--col-on-sur-var);}.list-trail svg{width:18px;height:18px;}.info-card{ background:var(--col-sur-cl);border-radius:var(--r-l); padding:16px;margin:0 16px 8px;position:relative;overflow:hidden;}.info-card::before{content:'';position:absolute;inset:0;background:var(--tint);}.info-card-title{font-family:var(--font-brand);font-size:14px;font-weight:600;color:var(--col-on-sur);margin-bottom:8px;position:relative;}.info-card-body{font-size:13px;line-height:1.65;color:var(--col-on-sur-var);position:relative;}.info-card-body b{color:var(--col-pri);font-weight:600;}.compat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;max-width:600px;margin:0 auto 8px;}.compat-tile{ background:var(--col-sur-c);border-radius:var(--r-m); padding:12px 8px;text-align:center;position:relative;overflow:hidden;}.compat-tile::before{content:'';position:absolute;inset:0;background:var(--tint);}.compat-ico{margin:0 auto 8px;width:40px;height:40px;border-radius:var(--r-f);background:var(--col-sur-hh);display:flex;align-items:center;justify-content:center;position:relative;}.compat-name{font-size:11px;font-weight:600;color:var(--col-on-sur);margin-bottom:2px;position:relative;}.compat-tag{font-size:10px;color:var(--col-on-sur-var);text-transform:uppercase;letter-spacing:.4px;position:relative;}.faq{border-bottom:1px solid var(--col-out-var);margin:0 16px;cursor:pointer;}.faq-q{display:flex;align-items:center;gap:12px;padding:14px 0;cursor:pointer;}.faq-q-text{flex:1;font-size:14px;font-weight:500;color:var(--col-on-sur);}.faq-chev{width:20px;height:20px;flex-shrink:0;color:var(--col-on-sur-var);transition:transform var(--dur-m2);}.faq.open .faq-chev{transform:rotate(180deg);}.faq-a{max-height:0;overflow:hidden;transition:max-height var(--dur-m2) var(--ease-std);}.faq.open .faq-a{max-height:500px;}.faq-a-in{padding-bottom:16px;font-size:13px;line-height:1.65;color:var(--col-on-sur-var);}.faq-a-in a{color:var(--col-pri);text-decoration:underline;}.faq-a-in b{color:var(--col-pri);font-weight:600;}.faq-a-in code{font-family:var(--font-mono);font-size:11px;background:var(--col-sur-ch);color:var(--col-pri);padding:2px 5px;border-radius:3px;}.mir-list{display:flex;flex-direction:column;gap:4px;}.mir-list-item{display:flex;align-items:center;gap:8px;padding:8px;background:var(--col-sur-hh);border-radius:var(--r-s);}.mir-list-item-txt{flex:1;font-size:13px;color:var(--col-on-sur);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}.mir-list-del{padding:4px;color:var(--col-err);cursor:pointer;}.mir-list-del svg{width:18px;height:18px;}</style></head><body><header class="top-bar" id="topBar"><div class="bar-brand"><span class="bar-name" id="barName">SnapPerf</span></div><div class="bar-actions"><button class="btn btn-txt" id="logoutBtn" hidden onclick="doLogout()"><span>Logout</span></button><button class="ic-btn" id="themeBtn"><svg id="themeIco" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/></svg></button></div></header><main class="main"><div class="tab on" id="tabHome"><div class="hero"><div class="hero-app-icon"><img src="assets/aether.webp" alt="SnapPerf"/></div><h1 class="hero-title">SnapPerf</h1><p class="hero-sub"><b>Snapdragon-exclusive</b> module for rooted Android with <b>Magisk</b>, <b>KernelSU</b>, and <b>APatch</b>. Built-in <b>WebUI</b> for performance tuning.</p></div><div class="stats"><div class="stat"><span class="stat-v" id="sRel">—</span><div class="stat-l">Releases</div></div><div class="stat"><span class="stat-v" id="sDl">—</span><div class="stat-l">Downloads</div></div><div class="stat"><span class="stat-v" id="sVer">—</span><div class="stat-l">Latest</div></div></div><div class="controls"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg><input type="search" class="search-in" id="searchIn" placeholder="Search releases…"/><button class="search-clr" id="searchClr"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div><div class="chips"><button class="chip on" data-f="all"><svg class="chip-ck" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg> All </button><button class="chip" data-f="stable">Stable</button><button class="chip" data-f="beta">Beta</button><button class="chip" data-f="alpha">Alpha</button></div></div><div class="rl-sec"><div class="sec-hdr" id="listHdr">Releases</div><div id="list"></div></div></div><div class="tab" id="tabSupport"><div class="sup-hero"><h1>About & Support</h1><p>Learn more about SnapPerf, find help,<br>and connect with the community.</p></div><div class="info-card"><div class="info-card-title">What is SnapPerf?</div><div class="info-card-body"> SnapPerf is a <b>Snapdragon-exclusive</b> kernel & system performance module for rooted Android. Works with <b>Magisk</b>, <b>KernelSU</b>, and <b>APatch</b>. Exposes a built-in <b>WebUI</b> in <b>KernelSU & Magisk</b> with Features CPU governor, LMK, ZRAM, thermals, animation, and more. </div></div><div class="list-hdr">Community</div><a class="list-item" href="https://t.me/get01projects" target="_blank" rel="noopener"><div class="list-ico" style="background:rgba(41,182,246,.12);color:#29B6F6;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8-1.7 8.01c-.12.54-.46.67-.93.42l-2.58-1.9-1.25 1.2c-.14.14-.26.25-.53.25l.19-2.67 4.87-4.4c.21-.19-.05-.3-.33-.1l-6.02 3.79-2.59-.81c-.56-.18-.57-.56.12-.83l10.12-3.9c.47-.17.88.1.63.94z"/></svg></div><div class="list-con"><div class="list-hl">Telegram Channel</div><div class="list-sup">@get01projects - updates & announcements</div></div><div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div></a><a class="list-item" href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener"><div class="list-ico" style="background:rgba(255,255,255,.08);color:var(--col-on-sur);"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg></div><div class="list-con"><div class="list-hl">GitHub Repository</div><div class="list-sup">aetherdev01/SnapPerf - source & issues</div></div><div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div></a><a class="list-item" href="https://github.com/aetherdev01/SnapPerf/issues/new" target="_blank" rel="noopener"><div class="list-ico" style="background:rgba(244,67,54,.1);color:#EF5350;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg></div><div class="list-con"><div class="list-hl">Report a Bug</div><div class="list-sup">Open an issue on GitHub</div></div><div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div></a><div class="list-hdr">Compatibility</div><div class="compat"><div class="compat-tile"><div class="compat-ico"><img src="assets/magisk.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">Magisk</div><div class="compat-tag">v24+</div></div><div class="compat-tile"><div class="compat-ico"><img src="assets/kernelsu.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">KernelSU</div><div class="compat-tag">Support</div></div><div class="compat-tile"><div class="compat-ico"><img src="assets/apatch.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">APatch</div><div class="compat-tag">Support</div></div><div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:#4CAF50"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div class="compat-name">Android</div><div class="compat-tag">10–16</div></div><div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:#FF9800"><path d="M9 2v2H7v2H5v2H3v2h2v2H3v2h2v2h2v2h2v2h2v-2h2v2h2v-2h2v-2h2v-2h2v-2h-2v-2h2V8h-2V6h-2V4h-2V2h-2v2h-2V2H9zm-2 6h10v8H7V8z"/></svg></div><div class="compat-name">Snapdragon</div><div class="compat-tag">Only</div></div><div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-on-sur-var)"><path d="M19.14 12.94a7.43 7.43 0 0 0 .05-.94 7.43 7.43 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.65l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.41l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.47a.5.5 0 0 0 .12.65l2.03 1.58c-.03.31-.05.63-.05.94s.02.63.05.94L2.83 14.16a.5.5 0 0 0-.12.65l1.92 3.32c.14.24.43.34.7.22l2.39-.96c.51.4 1.05.71 1.63.94l.36 2.54c.05.24.25.41.49.41h3.8c.24 0 .44-.17.49-.41l.36-2.54c.58-.23 1.12-.54 1.63-.94l2.39.96c.27.11.56.02.7-.22l1.92-3.32a.5.5 0 0 0-.12-.65l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/></svg></div><div class="compat-name">ABI Support</div><div class="compat-tag">ARM/ARM64</div></div></div><div class="list-hdr">Features</div><div class="info-card" style="margin-bottom:8px;"><div class="info-card-body" style="display:grid;gap:10px;"><div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-pri)"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">WebUI Dashboard</b><span style="font-size:13px;">Take full control in WebUI Manager </span></div></div><div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#FF9800"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">CPU &amp; Thermal Tuning</b><span style="font-size:13px;">Governor, frequency limiter, thermal profiles per SoC</span></div></div><div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-ter)"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">Memory Optimization</b><span style="font-size:13px;">LMK tuning, ZRAM configuration, swap optimization</span></div></div><div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#4CAF50"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5S14.67 12 15.5 12s1.5.67 1.5 1.5S16.33 15 15.5 15zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 10 18.5 10s1.5.67 1.5 1.5S19.33 12 18.5 12z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">Gaming Mode</b><span style="font-size:13px;">Touch boost, animation scale, scheduler tuning</span></div></div></div></div><div class="list-hdr">FAQ</div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">Is my device supported?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">SnapPerf only supports <b>Snapdragon Chipset</b> Android devices (ARM/ARM64) running Android 10–16 with root via Magisk, KernelSU, or APatch. MediaTek, Exynos, SoCs are <b>not supported</b>.</div></div></div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">How do I access the WebUI?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">After installing and rebooting, Open your WebUI Manager and then select <b>SnapPerf Modules</b>. Make sure the module is enabled in your root manager.</div></div></div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">My device bootlooped after installing. Help!</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">Boot into recovery and delete the SnapPerf module from your root manager, then reboot. Report the issue on <a href="https://github.com/aetherdev01/SnapPerf/issues/new" target="_blank">GitHub Issues</a> with your SoC model, Android version, and root solution.</div></div></div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">Will this drain my battery faster?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">SnapPerf includes a <b>Battery</b> profile that can actually improve battery life. The default Balanced profile is a good middle ground. Only Performance/Gaming profiles will increase power draw significantly.</div></div></div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">How do I update SnapPerf?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">Download the latest <code>.zip</code> from the Home tab and flash it in your root manager. Settings and config are preserved. You can also use the built-in update checker in the WebUI.</div></div></div><div class="faq" onclick="toggleFaq(this)"><div class="faq-q"><div class="faq-q-text">Can I use SnapPerf without root?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">No. SnapPerf requires root to apply kernel-level tweaks via <code>/sys</code> and <code>/proc</code>. It is specifically designed as a Magisk/KernelSU/APatch module.</div></div></div><div class="faq" onclick="toggleFaq(this)" style="margin-bottom:24px;"><div class="faq-q"><div class="faq-q-text">Where are my settings stored?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div><div class="faq-a"><div class="faq-a-in">Settings are stored in <code>/data/adb/modules/snapperf/webroot/data/settings.conf</code>. Back this file up before wiping or reinstalling.</div></div></div></div></main><nav class="nav-bar"><div class="nav-item on" data-tab="Home" onclick="switchTab(this)"><div class="nav-pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div><span class="nav-lbl">Home</span></div><div class="nav-item" data-tab="Support" onclick="switchTab(this)"><div class="nav-pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></div><span class="nav-lbl">Support</span></div></nav><button class="fab" id="adminFab" hidden><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></button><div class="scrim" id="sheetScrim" onclick="closeSheet()"></div><div class="sheet" id="clSheet"><div class="sheet-handle"></div><div class="sheet-hdr"><span class="sheet-title" id="sheetTitle">Changelog</span><button class="ic-btn" onclick="closeSheet()"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg></button></div><div class="sheet-body" id="sheetBody"></div></div><div class="dlg-scrim" id="dlgLogin"><div class="dlg"><div class="dlg-hdr"><div class="dlg-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div><div class="dlg-title">Admin Login</div><div class="dlg-sub">SnapPerf release management</div></div><div class="dlg-body"><div class="field"><div class="field-lbl">Password</div><input type="password" id="pwIn"/></div><div class="msg-err" id="loginErr" hidden>Incorrect password</div></div><div class="dlg-acts"><button class="btn btn-txt" onclick="closeDlg('dlgLogin')"><span>Cancel</span></button><button class="btn btn-fil" onclick="doLogin()"><span>Login</span></button></div></div></div><div class="dlg-scrim" id="dlgPost"><div class="dlg"><div class="dlg-hdr"><div class="dlg-title" id="postTitle">New Release</div><div class="dlg-sub" id="postSub">Post a release</div></div><div class="dlg-body"><div class="field"><div class="field-lbl">Title</div><input id="relTitle"/></div><div class="field"><div class="field-lbl">Version</div><input id="relVer" placeholder="v1.5.5"/></div><div class="field"><div class="field-lbl">Download URL</div><input id="relDl"/></div><div class="field"><div class="field-lbl">File Size</div><input id="relSz" placeholder="12.4 MB"/></div><div class="field"><div class="field-lbl">Tag</div><select id="relTag"><option value="stable">Stable</option><option value="beta">Beta</option><option value="alpha">Alpha</option></select></div><div class="field"><div class="field-lbl">Description (Markdown)</div><textarea id="relDesc"></textarea></div><div class="msg-err" id="postErr" hidden></div><div class="msg-ok" id="postOk" hidden></div></div><div class="dlg-acts"><button class="btn btn-txt" onclick="closeDlg('dlgPost')"><span>Cancel</span></button><button class="btn btn-fil" id="postBtn" onclick="submitPost()"><span>Post</span></button></div></div></div><div class="dlg-scrim" id="dlgMir"><div class="dlg"><div class="dlg-hdr"><div class="dlg-title">Manage Mirrors</div><div class="dlg-sub" id="mirSub"></div></div><div class="dlg-body"><div class="mir-list" id="mirList"></div><div class="field"><div class="field-lbl">Mirror URL</div><input id="mirUrl"/></div><div class="field"><div class="field-lbl">Label (optional)</div><input id="mirLbl"/></div><div class="msg-err" id="mirErr" hidden></div></div><div class="dlg-acts"><button class="btn btn-txt" onclick="closeDlg('dlgMir')"><span>Close</span></button><button class="btn btn-fil" onclick="submitMir()"><span>Add</span></button></div></div></div><div class="snack" id="snack"></div><script>(function(){'use strict';const GH_USER='aetherdev01',GH_REPO='SnapPerf';const SB_URL='https://raslfimtjazsifmnmdlh.supabase.co';const SB_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJhc2xmaW10amF6c2lmbW5tZGxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ2Nzc4NTEsImV4cCI6MjA5MDI1Mzg1MX0.Zuw60izhNsO2fqlz9zYBc8If7IkmJtLGrx-Gxb6NugQ';const SK='sp_admin_v2',PW='snapperf2024';let rels=[],admin=false,filt='all',sq='',editId=null,mirId=null,supa=null,sbTmr=null,adminHoldTmr=null;const $=id=>document.getElementById(id);async function init(){ window.addEventListener('scroll',()=>$('topBar').classList.toggle('raised',scrollY>4),{passive:true}); const th=localStorage.getItem('sp_th')||'dark'; document.documentElement.dataset.theme=th; updateThIco(th); admin=sessionStorage.getItem(SK)==='1'; applyAdmin(); try{supa=supabase.createClient(SB_URL,SB_KEY);}catch(e){} await loadRels(); render(); setStats(); $('barName').addEventListener('mousedown',startAdminHold); $('barName').addEventListener('mouseup',cancelAdminHold); $('barName').addEventListener('mouseleave',cancelAdminHold); $('barName').addEventListener('touchstart',startAdminHold); $('barName').addEventListener('touchend',cancelAdminHold); $('barName').addEventListener('touchcancel',cancelAdminHold);}function logoutAdmin(){ sessionStorage.removeItem('sp_admin_v2'); admin = false; applyAdmin(); showSnack('Logout berhasil');}function startAdminHold(){ adminHoldTmr=setTimeout(()=>{ if(!admin){$('loginErr').hidden=true;$('pwIn').value='';openDlg('dlgLogin');setTimeout(()=>$('pwIn').focus(),300);} },2000);}function cancelAdminHold(){ if(adminHoldTmr){clearTimeout(adminHoldTmr);adminHoldTmr=null;}}$('themeBtn').onclick=()=>{ const n=document.documentElement.dataset.theme==='dark'?'light':'dark'; document.documentElement.dataset.theme=n; localStorage.setItem('sp_th',n); updateThIco(n);};function updateThIco(t){ $('themeIco').innerHTML=t==='dark' ?'<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>' :'<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';}function switchTab(el){ document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('on',n===el)); const t=el.dataset.tab; document.querySelectorAll('.tab').forEach(p=>p.classList.toggle('on',p.id==='tab'+t)); $('adminFab').hidden=!(admin&&t==='Home');}function toggleFaq(el){el.classList.toggle('open');}function openDlg(id){$(id).classList.add('on');}function closeDlg(id){$(id).classList.remove('on');}function doLogin(){ if($('pwIn').value===PW){admin=true;sessionStorage.setItem(SK,'1');applyAdmin();render();closeDlg('dlgLogin');snack('Welcome back, Admin 👋');} else{$('loginErr').hidden=false;}}$('pwIn').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});function doLogout(){admin=false;sessionStorage.removeItem(SK);applyAdmin();render();snack('Logged out');}function applyAdmin(){$('logoutBtn').hidden = !admin; $('adminFab').hidden=!admin||!document.querySelector('.nav-item.on')?.dataset.tab?.includes('Home');}function doLogout(){ sessionStorage.removeItem(SK); location.reload();}window.doLogout = doLogout;function openSheet(title,md){ $('sheetTitle').textContent=title; $('sheetBody').innerHTML=marked.parse(md||'*No changelog.*'); $('sheetScrim').classList.add('on'); $('clSheet').classList.add('on'); document.body.style.overflow='hidden';}function closeSheet(){ $('sheetScrim').classList.remove('on'); $('clSheet').classList.remove('on'); document.body.style.overflow='';}function snack(msg){ const el=$('snack');el.textContent=msg;el.classList.add('on'); clearTimeout(sbTmr);sbTmr=setTimeout(()=>el.classList.remove('on'),2800);}async function loadRels(){ $('list').innerHTML='<div class="spinner"></div>'; if(supa){ try{ const{data,error}=await supa.from('sp_releases').select('*').order('release_date',{ascending:false}); if(!error&&data?.length){ rels=data.map(r=>({ id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable', description:r.description||'',download_url:r.download_url||'', size:r.file_size||0,downloads:r.downloads||0, mirrors:r.mirrors||[],date:r.release_date,_sizeRaw:'' })); localStorage.setItem('sp_rels_cache',JSON.stringify(rels)); return; } }catch(e){} } try{ const cached=localStorage.getItem('sp_rels_cache'); if(cached){const parsed=JSON.parse(cached);if(parsed?.length){rels=parsed;return;}} }catch(e){} try{ const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/releases`,{headers:{Accept:'application/vnd.github.v3+json'}}); if(res.ok){ const data=await res.json(); rels=data.map(r=>({ id:String(r.id),title:r.name||r.tag_name,version:r.tag_name, tag:r.prerelease?'beta':'stable',description:r.body||'', download_url:r.assets?.[0]?.browser_download_url||r.html_url, size:r.assets?.[0]?.size||0, downloads:r.assets?.reduce((a,b)=>a+(b.download_count||0),0)||0, mirrors:[],date:r.published_at,_sizeRaw:'' })); } }catch(e){}}async function save(id,del=false){ try{localStorage.setItem('sp_rels_cache',JSON.stringify(rels));}catch(e){} if(!supa)return; function toRow(r){return{id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',description:r.description||'',download_url:r.download_url||'',file_size:r.size||0,downloads:r.downloads||0,mirrors:r.mirrors||[],release_date:r.date};} try{ if(del)await supa.from('sp_releases').delete().eq('id',id); else if(id){const r=rels.find(x=>x.id===id);if(r)await supa.from('sp_releases').upsert(toRow(r));} else for(const r of rels)await supa.from('sp_releases').upsert(toRow(r)); }catch(e){}}function setStats(){ $('sRel').textContent=rels.length; const dl=rels.reduce((a,r)=>a+(r.downloads||0),0); $('sDl').textContent=dl>=1000?(dl/1000).toFixed(1)+'k':dl; $('sVer').textContent=rels[0]?.version||'—';}function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}function fd(iso){if(!iso)return'';const d=new Date(iso);return d.toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'});}function ps(s){if(!s)return 0;const m=s.match(/^([\d.]+)\s*(MB|KB|GB)?$/i);if(!m)return 0;const n=parseFloat(m[1]);const u=(m[2]||'').toUpperCase();if(u==='KB')return n*1024;if(u==='MB')return n*1024*1024;if(u==='GB')return n*1024*1024*1024;return n;}function fb(b){if(!b||b<1024)return b?b+' B':'';const k=b/1024;if(k<1024)return k.toFixed(1)+' KB';const m=k/1024;if(m<1024)return m.toFixed(1)+' MB';return(m/1024).toFixed(1)+' GB';}function render(){ const el=$('list'); let data=rels; if(filt!=='all')data=data.filter(r=>r.tag===filt); if(sq)data=data.filter(r=>(r.title||'').toLowerCase().includes(sq.toLowerCase())||(r.version||'').toLowerCase().includes(sq.toLowerCase())); if(!data.length){ el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg><p>No releases found</p><span>${sq?'Try a different search':'No releases in this channel yet'}</span></div>`; return; } el.innerHTML=''; data.forEach((r,i)=>{ const c=document.createElement('div'); c.className='card';c.style.animationDelay=`${i*40}ms`; const sz=r._sizeRaw||fb(r.size)||''; const hasMir=r.mirrors?.length>0; const hasDesc=r.description?.trim(); c.innerHTML=`<div class="card-in"><div class="card-head"><div class="card-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg></div><div class="card-meta"><div class="card-title">${esc(r.title||r.version||'Untitled')}</div><div class="card-ver-row"><span class="ver-badge">${esc(r.version||'')}</span><span class="tag tag-${r.tag||'stable'}">${r.tag||'stable'}</span></div></div></div><div class="card-info"> ${r.date?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>${esc(fd(r.date))}</span>`:''} ${sz?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/></svg>${esc(sz)}</span>`:''} ${r.downloads?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>${r.downloads.toLocaleString()}</span>`:''} </div><div class="card-acts"><a class="btn btn-fil btn-sm card-dl-btn" href="${esc(r.download_url||'#')}" ${r.download_url?'target="_blank" rel="noopener"':''} data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>Download</span></a> ${hasDesc?`<button class="btn btn-out btn-sm card-cl-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg><span>Changelog</span></button>`:''} </div></div> ${hasMir?`<div class="divider"></div><div class="mirrors">${r.mirrors.map(m=>`<a class="mir-chip" href="${esc(m.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm1-4H8v2h8v-2z"/></svg>${esc(m.label||'Mirror')}</a>`).join('')}</div>`:''} ${admin?`<div class="admin-acts"><button class="btn btn-ton btn-sm card-edit-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit</span></button><button class="btn btn-txt btn-sm card-mir-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm1-4H8v2h8v-2z"/></svg><span>Mirror</span></button><button class="btn btn-txt btn-err btn-sm card-del-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>Delete</span></button></div>`:''}`; el.appendChild(c); }); el.addEventListener('click',function(e){ const dlBtn=e.target.closest('.card-dl-btn'); if(dlBtn){const id=dlBtn.dataset.id;if(id)trkDl(id);return;} const clBtn=e.target.closest('.card-cl-btn'); if(clBtn){ e.preventDefault(); const id=clBtn.dataset.id;const r=rels.find(x=>x.id===id); if(r)openSheet('Changelog — '+(r.version||''),r.description); return; } const editBtn=e.target.closest('.card-edit-btn'); if(editBtn){openEdit(editBtn.dataset.id);return;} const mirBtn=e.target.closest('.card-mir-btn'); if(mirBtn){openMir(mirBtn.dataset.id);return;} const delBtn=e.target.closest('.card-del-btn'); if(delBtn){doDelete(delBtn.dataset.id);return;} });}async function trkDl(id){ const r=rels.find(x=>x.id===id); if(!r)return; r.downloads=(r.downloads||0)+1; setStats(); if(supa){ try{await supa.from('sp_releases').update({downloads:r.downloads}).eq('id',id);}catch(e){} } try{localStorage.setItem('sp_rels_cache',JSON.stringify(rels));}catch(e){}}$('searchIn').addEventListener('input',function(){sq=this.value;$('searchClr').classList.toggle('on',sq.length>0);render();});$('searchClr').addEventListener('click',()=>{$('searchIn').value='';sq='';$('searchClr').classList.remove('on');$('searchIn').focus();render();});document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',function(){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));this.classList.add('on');filt=this.dataset.f;render();}));$('adminFab').onclick=openPost;function openPost(){ editId=null; ['relTitle','relVer','relDl','relSz','relDesc'].forEach(id=>$(id).value=''); $('relTag').value='stable';$('postErr').hidden=$('postOk').hidden=true; $('postTitle').textContent='New Release';$('postSub').textContent='Post a release'; $('postBtn').textContent='Post';openDlg('dlgPost');setTimeout(()=>$('relTitle').focus(),300);}function openEdit(id){ editId=id;const r=rels.find(x=>x.id===id);if(!r)return; $('relTitle').value=r.title||'';$('relVer').value=r.version||''; $('relDl').value=r.download_url||'';$('relSz').value=r._sizeRaw||fb(r.size)||''; $('relDesc').value=r.description||'';$('relTag').value=r.tag||'stable'; $('postErr').hidden=$('postOk').hidden=true; $('postTitle').textContent='Edit Release';$('postSub').textContent=r.title||r.version||''; $('postBtn').textContent='Save';openDlg('dlgPost');setTimeout(()=>$('relTitle').focus(),300);}async function submitPost(){ const title=$('relTitle').value.trim(),ver=$('relVer').value.trim(), dl=$('relDl').value.trim(),desc=$('relDesc').value.trim(), tag=$('relTag').value,szRaw=$('relSz').value.trim(); if(!title){showPErr('Title required');return;} if(!ver){showPErr('Version required');return;} if(!dl){showPErr('Download URL required');return;} try{new URL(dl);}catch{showPErr('Invalid URL');return;} $('postBtn').disabled=true;$('postBtn').textContent='Saving…'; const sz=ps(szRaw); if(editId){ const i=rels.findIndex(r=>r.id===editId); if(i>-1)rels[i]={...rels[i],title,version:ver,tag,description:desc,download_url:dl,size:sz||rels[i].size,_sizeRaw:szRaw||rels[i]._sizeRaw||''}; $('postOk').hidden=false;$('postOk').textContent='Saved!';await save(editId); }else{ const nr={id:uid(),title,version:ver,tag,description:desc,download_url:dl,size:sz,downloads:0,mirrors:[],date:new Date().toISOString(),_sizeRaw:szRaw}; rels.unshift(nr);$('postOk').hidden=false;$('postOk').textContent='Posted!';await save(nr.id); } setStats();$('postBtn').disabled=false;$('postBtn').textContent=editId?'Save':'Post'; setTimeout(()=>{closeDlg('dlgPost');render();},500);}function showPErr(m){$('postErr').hidden=false;$('postErr').textContent=m;}async function doDelete(id){ if(!confirm('Delete this release?'))return; rels=rels.filter(r=>r.id!==id);await save(id,true);setStats();render();snack('Release deleted');}function openMir(id){ mirId=id;const r=rels.find(x=>x.id===id); $('mirSub').textContent=r?.title||r?.version||''; $('mirUrl').value=$('mirLbl').value='';$('mirErr').hidden=true; renderMirList(); openDlg('dlgMir');setTimeout(()=>$('mirUrl').focus(),300);}function renderMirList(){ const r=rels.find(x=>x.id===mirId); const list=$('mirList'); if(!r||!r.mirrors||r.mirrors.length===0){ list.innerHTML='<p style="font-size:13px;color:var(--col-on-sur-var);text-align:center;padding:16px 0;">No mirrors yet</p>'; return; } list.innerHTML=r.mirrors.map((m,i)=>`<div class="mir-list-item"><span class="mir-list-item-txt">${esc(m.label||m.url)}</span><button class="mir-list-del" onclick="deleteMir(${i})"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></button></div>`).join('');}async function deleteMir(idx){ const r=rels.find(x=>x.id===mirId); if(!r||!r.mirrors)return; r.mirrors.splice(idx,1); await save(mirId); renderMirList(); render(); snack('Mirror deleted');}async function submitMir(){ const url=$('mirUrl').value.trim(),lbl=$('mirLbl').value.trim(); if(!url){$('mirErr').hidden=false;$('mirErr').textContent='URL required';return;} try{new URL(url);}catch{$('mirErr').hidden=false;$('mirErr').textContent='Invalid URL';return;} const r=rels.find(x=>x.id===mirId); if(r){if(!r.mirrors)r.mirrors=[];r.mirrors.push({url,label:lbl||url});} await save(mirId); $('mirUrl').value=$('mirLbl').value=''; renderMirList(); render(); snack('Mirror added');}$('mirUrl').addEventListener('keydown',e=>{if(e.key==='Enter')$('mirLbl').focus();});$('mirLbl').addEventListener('keydown',e=>{if(e.key==='Enter')submitMir();});function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}document.addEventListener('selectstart',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;e.preventDefault();});document.addEventListener('contextmenu',e=>e.preventDefault());document.addEventListener('copy',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;e.preventDefault();});window.switchTab=switchTab;window.toggleFaq=toggleFaq;window.closeSheet=closeSheet;window.closeDlg=closeDlg;window.doLogin=doLogin;window.submitPost=submitPost;window.submitMir=submitMir;window.openSheet=openSheet;window.openEdit=openEdit;window.openMir=openMir;window.doDelete=doDelete;window.trkDl=trkDl;window.deleteMir=deleteMir;init();})();</script></body></html>
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="description" content="SnapPerf — Snapdragon Performance Optimizer for Magisk/KernelSU/APatch"/>
+<title>SnapPerf</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Google+Sans+Display:wght@400;500;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/marked@9/marked.min.js" defer></script>
+<script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+[hidden]{display:none!important}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-tap-highlight-color:transparent}
+a{text-decoration:none;color:inherit}
+button{cursor:pointer;font-family:inherit;border:none;background:none}
+svg,img{display:block;flex-shrink:0}
+
+:root{
+  --font:'Google Sans','Roboto',sans-serif;
+  --font-brand:'Google Sans Display','Google Sans',sans-serif;
+  --font-mono:'Roboto Mono',monospace;
+  --ease-std:cubic-bezier(.2,0,0,1);
+  --ease-emp:cubic-bezier(.2,0,0,1);
+  --dur-s2:100ms;
+  --dur-s4:200ms;
+  --dur-m2:300ms;
+  --dur-m4:400ms;
+  --r-xs:4px; --r-s:8px; --r-m:12px; --r-l:16px; --r-xl:28px; --r-f:9999px;
+}
+
+[data-theme="dark"]{
+  --col-pri:#A8C7FA;
+  --col-on-pri:#0C2D6B;
+  --col-pri-con:#284380;
+  --col-on-pri-con:#D6E3FF;
+  --col-sec:#BEC6DC;
+  --col-on-sec:#283141;
+  --col-sec-con:#3E4759;
+  --col-on-sec-con:#DAE2F9;
+  --col-ter:#D9BAE8;
+  --col-on-ter:#3D2551;
+  --col-ter-con:#553B69;
+  --col-on-ter-con:#F3DAFF;
+  --col-err:#FFB4AB;
+  --col-on-err:#690005;
+  --col-err-con:#93000A;
+  --col-on-err-con:#FFDAD6;
+  --col-sur:#131318;
+  --col-on-sur:#E3E2E9;
+  --col-sur-var:#44464F;
+  --col-on-sur-var:#C4C6D0;
+  --col-sur-lo:#0E0E13;
+  --col-sur-cl:#1B1B21;
+  --col-sur-c:#1F1F25;
+  --col-sur-ch:#292A2F;
+  --col-sur-hh:#34343A;
+  --col-out:#8E9099;
+  --col-out-var:#44464F;
+  --col-inv-sur:#E3E2E9;
+  --col-inv-on-sur:#313036;
+  --col-inv-pri:#3E5F9F;
+  --tint:rgba(168,199,250,.08);
+  --el1:0 1px 2px rgba(0,0,0,.3),0 1px 3px 1px rgba(0,0,0,.15);
+  --el2:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);
+  --el3:0 4px 8px 3px rgba(0,0,0,.15),0 1px 3px rgba(0,0,0,.3);
+}
+
+[data-theme="light"]{
+  --col-pri:#3E5F9F;
+  --col-on-pri:#FFFFFF;
+  --col-pri-con:#D6E3FF;
+  --col-on-pri-con:#001A41;
+  --col-sec:#565E71;
+  --col-on-sec:#FFFFFF;
+  --col-sec-con:#DAE2F9;
+  --col-on-sec-con:#131C2B;
+  --col-ter:#6E5676;
+  --col-on-ter:#FFFFFF;
+  --col-ter-con:#F3DAFF;
+  --col-on-ter-con:#271430;
+  --col-err:#BA1A1A;
+  --col-on-err:#FFFFFF;
+  --col-err-con:#FFDAD6;
+  --col-on-err-con:#410002;
+  --col-sur:#FBF8FF;
+  --col-on-sur:#1B1B21;
+  --col-sur-var:#E1E2EC;
+  --col-on-sur-var:#44464F;
+  --col-sur-lo:#FFFFFF;
+  --col-sur-cl:#F5F3FA;
+  --col-sur-c:#EFEDF4;
+  --col-sur-ch:#E9E7EF;
+  --col-sur-hh:#E3E2E9;
+  --col-out:#757780;
+  --col-out-var:#C4C6D0;
+  --col-inv-sur:#313036;
+  --col-inv-on-sur:#F2F0F7;
+  --col-inv-pri:#A8C7FA;
+  --tint:rgba(62,95,159,.05);
+  --el1:0 1px 2px rgba(0,0,0,.1),0 1px 3px 1px rgba(0,0,0,.07);
+  --el2:0 1px 2px rgba(0,0,0,.1),0 2px 6px 2px rgba(0,0,0,.07);
+  --el3:0 4px 8px 3px rgba(0,0,0,.07),0 1px 3px rgba(0,0,0,.1);
+}
+
+body{
+  font-family:var(--font);
+  -webkit-font-smoothing:antialiased;
+  background:var(--col-sur);
+  color:var(--col-on-sur);
+  min-height:100vh;
+  overflow-x:hidden;
+  user-select:none;
+  -webkit-user-select:none;
+  transition:background var(--dur-m2) var(--ease-std),color var(--dur-m2) var(--ease-std);
+}
+
+.top-bar{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  height:64px;display:flex;align-items:center;
+  padding:0 4px 0 16px;
+  background:var(--col-sur-c);
+  transition:background var(--dur-m2) var(--ease-std),box-shadow var(--dur-s4) var(--ease-std);
+}
+.top-bar.raised{background:var(--col-sur-ch);box-shadow:var(--el2);}
+.bar-brand{display:flex;align-items:center;gap:10px;flex:1;}
+.bar-logo{width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0;}
+.bar-logo img{width:100%;height:100%;object-fit:cover;}
+.bar-name{font-family:var(--font-brand);font-size:22px;font-weight:500;color:var(--col-on-sur);letter-spacing:0;cursor:pointer;user-select:none;}
+.admin-chip{
+  font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 8px;border-radius:var(--r-f);
+  background:var(--col-ter-con);color:var(--col-on-ter-con);
+}
+.bar-actions{display:flex;align-items:center;}
+
+.ic-btn{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:48px;height:48px;border-radius:var(--r-f);
+  color:var(--col-on-sur-var);overflow:hidden;
+  transition:color var(--dur-s4);
+}
+.ic-btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}
+.ic-btn:hover::before{opacity:.08;}
+.ic-btn:active::before{opacity:.12;}
+.ic-btn.on{color:var(--col-pri);}
+.ic-btn svg{width:24px;height:24px;position:relative;z-index:1;}
+
+.nav-bar{
+  position:fixed;bottom:0;left:0;right:0;z-index:200;
+  height:80px;display:flex;align-items:flex-start;padding-top:12px;
+  background:var(--col-sur-c);
+  box-shadow:0 -1px 0 var(--col-out-var);
+  transition:background var(--dur-m2) var(--ease-std);
+}
+.nav-item{
+  flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  position:relative;overflow:hidden;
+}
+.nav-item::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}
+.nav-item:hover::before{opacity:.04;}
+.nav-item:active::before{opacity:.08;}
+.nav-pill{
+  position:relative;display:flex;align-items:center;justify-content:center;
+  width:64px;height:32px;border-radius:var(--r-l);
+  background:transparent;color:var(--col-on-sur-var);
+  transition:background var(--dur-m2),color var(--dur-m2);
+}
+.nav-item.on .nav-pill{background:var(--col-sec-con);color:var(--col-on-sec-con);}
+.nav-pill svg{width:24px;height:24px;}
+.nav-lbl{font-size:12px;font-weight:500;color:var(--col-on-sur-var);letter-spacing:.2px;transition:color var(--dur-m2);position:relative;}
+.nav-item.on .nav-lbl{color:var(--col-on-sur);}
+
+.main{margin-top:64px;margin-bottom:80px;min-height:calc(100vh - 144px);}
+.tab{display:none;}
+.tab.on{display:block;}
+
+.hero{padding:40px 16px 16px;text-align:center;}
+.hero-app-icon{
+  width:96px;height:96px;border-radius:var(--r-xl);overflow:hidden;
+  margin:0 auto 14px;box-shadow:var(--el3);
+}
+.hero-app-icon img{width:100%;height:100%;object-fit:cover;}
+.hero-title{
+  font-family:var(--font-brand);font-size:clamp(26px,8vw,42px);font-weight:500;
+  color:var(--col-on-sur);letter-spacing:-.5px;margin-bottom:8px;
+  animation:fu .4s var(--ease-emp) both;
+}
+.hero-sub{font-size:14px;line-height:1.65;color:var(--col-on-sur-var);margin-bottom:0;animation:fu .4s var(--ease-emp) .06s both}.hero-sub b{color:var(--col-pri);font-weight:600}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+.stats{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:8px;
+  margin:16px 16px 0;animation:fu .4s var(--ease-emp) .1s both;
+}
+.stat{
+  background:var(--col-sur-cl);border-radius:var(--r-l);
+  padding:14px 10px;text-align:center;position:relative;overflow:hidden;
+}
+.stat::before{content:'';position:absolute;inset:0;background:var(--tint);pointer-events:none;}
+.stat-v{
+  font-family:var(--font-brand);font-size:22px;font-weight:700;
+  color:var(--col-pri);display:block;letter-spacing:-.5px;position:relative;
+}
+.stat-l{font-size:11px;font-weight:500;color:var(--col-on-sur-var);text-transform:uppercase;letter-spacing:.6px;margin-top:2px;position:relative;}
+
+.controls{padding:12px 16px 8px;display:flex;flex-direction:column;gap:8px;}
+.search-wrap{position:relative;}
+.search-wrap svg{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--col-on-sur-var);pointer-events:none;}
+.search-in{
+  width:100%;height:56px;padding:0 48px 0 48px;
+  border-radius:var(--r-xl);border:none;
+  background:var(--col-sur-ch);color:var(--col-on-sur);
+  font-size:16px;font-family:var(--font);outline:none;
+  -webkit-appearance:none;user-select:text;-webkit-user-select:text;
+  transition:background var(--dur-s4);
+}
+.search-in::placeholder{color:var(--col-on-sur-var);}
+.search-in::-webkit-search-cancel-button{-webkit-appearance:none;}
+.search-in:focus{background:var(--col-sur-hh);}
+.search-clr{
+  position:absolute;right:8px;top:50%;transform:translateY(-50%);
+  width:40px;height:40px;border-radius:var(--r-f);
+  display:none;align-items:center;justify-content:center;
+  color:var(--col-on-sur-var);overflow:hidden;
+}
+.search-clr.on{display:flex;}
+.search-clr svg{width:18px;height:18px;}
+.search-clr::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;border-radius:inherit;transition:opacity var(--dur-s4);}
+.search-clr:hover::before{opacity:.08;}
+
+.chips{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none;}
+.chips::-webkit-scrollbar{display:none;}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 16px;
+  border-radius:var(--r-s);font-size:14px;font-weight:500;letter-spacing:.1px;
+  white-space:nowrap;border:1px solid var(--col-out);
+  background:transparent;color:var(--col-on-sur-var);flex-shrink:0;
+  position:relative;overflow:hidden;
+  transition:background var(--dur-s4),color var(--dur-s4),border-color var(--dur-s4);
+}
+.chip::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}
+.chip:hover::before{opacity:.08;}
+.chip.on{background:var(--col-sec-con);color:var(--col-on-sec-con);border-color:transparent;padding-left:8px;}
+.chip-ck{display:none;width:18px;height:18px;flex-shrink:0;}
+.chip.on .chip-ck{display:flex;}
+
+.rl-sec{
+  padding:8px 16px 32px;
+}
+.sec-hdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--col-on-sur-var);margin:8px 0 10px 4px;}
+
+.card{
+  background:var(--col-sur-cl);border-radius:var(--r-l);
+  margin-bottom:8px;overflow:hidden;position:relative;
+  transition:background var(--dur-s4);
+  animation:fu .3s var(--ease-emp) both;
+}
+.card::before{content:'';position:absolute;inset:0;background:var(--tint);pointer-events:none;border-radius:inherit;}
+.card-in{padding:16px;}
+.card-head{display:flex;align-items:flex-start;gap:12px;margin-bottom:10px;}
+.card-ico{
+  width:40px;height:40px;border-radius:var(--r-m);flex-shrink:0;
+  background:var(--col-pri-con);display:flex;align-items:center;justify-content:center;
+  color:var(--col-on-pri-con);
+}
+.card-ico svg{width:20px;height:20px;}
+.card-meta{flex:1;min-width:0;}
+.card-title{
+  font-family:var(--font-brand);font-size:16px;font-weight:500;color:var(--col-on-sur);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.card-ver-row{display:flex;align-items:center;gap:6px;margin-top:4px;flex-wrap:wrap;}
+.ver-badge{
+  font-family:var(--font-mono);font-size:12px;font-weight:500;
+  color:var(--col-pri);background:var(--col-pri-con);
+  padding:2px 8px;border-radius:var(--r-xs);
+}
+.tag{
+  font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.5px;
+  padding:2px 7px;border-radius:var(--r-f);
+}
+.tag-stable{background:rgba(76,175,80,.12);color:#4CAF50;border:1px solid rgba(76,175,80,.3);}
+.tag-beta{background:rgba(255,152,0,.12);color:#FF9800;border:1px solid rgba(255,152,0,.3);}
+.tag-alpha{background:rgba(206,147,216,.12);color:#CE93D8;border:1px solid rgba(206,147,216,.3);}
+[data-theme="light"] .tag-stable{background:rgba(27,94,32,.08);color:#2E7D32;border-color:rgba(46,125,50,.25);}
+[data-theme="light"] .tag-beta{background:rgba(230,81,0,.08);color:#E65100;border-color:rgba(230,81,0,.25);}
+[data-theme="light"] .tag-alpha{background:rgba(74,20,140,.08);color:#6A1B9A;border-color:rgba(106,27,154,.25);}
+
+.card-info{display:flex;align-items:center;gap:14px;margin-bottom:14px;flex-wrap:wrap;}
+.info-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--col-on-sur-var);}
+.info-item svg{width:14px;height:14px;flex-shrink:0;}
+.card-acts{display:flex;gap:8px;flex-wrap:wrap;}
+
+.divider{height:1px;background:var(--col-out-var);margin:0;}
+
+.mirrors{display:flex;gap:6px;flex-wrap:wrap;padding:10px 16px 14px;}
+.mir-chip{
+  display:inline-flex;align-items:center;gap:5px;height:28px;padding:0 12px;
+  border-radius:var(--r-s);background:var(--col-sur-c);border:1px solid var(--col-out-var);
+  font-size:12px;font-weight:500;color:var(--col-on-sur-var);white-space:nowrap;
+}
+.mir-chip svg{width:12px;height:12px;}
+
+.admin-acts{display:flex;gap:6px;padding:8px 16px 14px;border-top:1px solid var(--col-out-var);}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  height:40px;padding:0 24px;border-radius:var(--r-f);
+  font-family:var(--font);font-size:14px;font-weight:500;letter-spacing:.1px;
+  position:relative;overflow:hidden;white-space:nowrap;flex-shrink:0;
+  transition:box-shadow var(--dur-s4);
+}
+.btn::before{content:'';position:absolute;inset:0;border-radius:inherit;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}
+.btn:hover::before{opacity:.08;}
+.btn:active::before{opacity:.12;}
+.btn svg{width:18px;height:18px;position:relative;z-index:1;flex-shrink:0;}
+.btn span{position:relative;z-index:1;}
+.btn-fil{background:var(--col-pri);color:var(--col-on-pri);}
+.btn-fil:hover{box-shadow:var(--el1);}
+.btn-ton{background:var(--col-sec-con);color:var(--col-on-sec-con);}
+.btn-out{background:transparent;color:var(--col-pri);border:1px solid var(--col-out);padding:0 23px;}
+.btn-txt{background:transparent;color:var(--col-pri);padding:0 12px;}
+.btn-sm{height:32px;padding:0 16px;font-size:13px;}
+.btn-sm svg{width:16px;height:16px;}
+.btn-err{color:var(--col-err);}
+
+.scrim{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:400;
+  opacity:0;pointer-events:none;
+  transition:opacity var(--dur-m2) var(--ease-std);
+}
+.scrim.on{opacity:1;pointer-events:all;}
+.sheet{
+  position:fixed;bottom:0;left:0;right:0;z-index:401;
+  background:var(--col-sur-cl);border-radius:28px 28px 0 0;
+  max-height:90vh;display:flex;flex-direction:column;
+  transform:translateY(100%);
+  transition:transform var(--dur-m4) var(--ease-emp);
+}
+.sheet.on{transform:translateY(0);}
+.sheet-handle{width:32px;height:4px;border-radius:2px;background:var(--col-on-sur-var);opacity:.4;margin:12px auto 0;flex-shrink:0;}
+.sheet-hdr{display:flex;align-items:center;padding:16px 16px 8px;gap:12px;flex-shrink:0;}
+.sheet-title{font-family:var(--font-brand);font-size:18px;font-weight:500;color:var(--col-on-sur);flex:1;}
+.sheet-body{overflow-y:auto;padding:0 16px 32px;flex:1;overscroll-behavior:contain;}
+.sheet-body h1,.sheet-body h2,.sheet-body h3{font-family:var(--font-brand);color:var(--col-on-sur);margin:20px 0 8px;}
+.sheet-body h1{font-size:20px;}
+.sheet-body h2{font-size:17px;color:var(--col-pri);}
+.sheet-body h3{font-size:15px;}
+.sheet-body p{font-size:14px;line-height:1.7;color:var(--col-on-sur-var);margin-bottom:12px;}
+.sheet-body ul,.sheet-body ol{padding-left:20px;margin-bottom:12px;}
+.sheet-body li{font-size:14px;line-height:1.7;color:var(--col-on-sur-var);margin-bottom:4px;}
+.sheet-body code{font-family:var(--font-mono);font-size:12px;background:var(--col-sur-ch);color:var(--col-pri);padding:2px 6px;border-radius:4px;}
+.sheet-body pre{background:var(--col-sur-hh);border-radius:var(--r-m);padding:12px;overflow-x:auto;margin-bottom:12px;}
+.sheet-body pre code{background:none;padding:0;color:var(--col-on-sur);}
+
+.dlg-scrim{
+  position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:500;
+  display:flex;align-items:center;justify-content:center;padding:24px;
+  opacity:0;pointer-events:none;
+  transition:opacity var(--dur-m2) var(--ease-std);
+}
+.dlg-scrim.on{opacity:1;pointer-events:all;}
+.dlg{
+  background:var(--col-sur-ch);border-radius:28px;
+  width:100%;max-width:400px;max-height:90vh;overflow-y:auto;
+  transform:scale(.9) translateY(20px);
+  transition:transform var(--dur-m2) var(--ease-emp);
+}
+.dlg-scrim.on .dlg{transform:scale(1) translateY(0);}
+.dlg-hdr{padding:24px 24px 16px;}
+.dlg-ico{width:32px;height:32px;margin:0 auto 16px;color:var(--col-sec);}
+.dlg-ico svg{width:100%;height:100%;}
+.dlg-title{font-family:var(--font-brand);font-size:24px;font-weight:500;text-align:center;color:var(--col-on-sur);}
+.dlg-sub{font-size:12px;text-align:center;color:var(--col-on-sur-var);margin-top:4px;}
+.dlg-body{padding:0 24px 24px;display:flex;flex-direction:column;gap:12px;}
+.dlg-acts{padding:0 24px 24px;display:flex;justify-content:flex-end;gap:8px;}
+.field{}
+.field-lbl{font-size:12px;font-weight:500;color:var(--col-on-sur-var);margin-bottom:4px;padding-left:4px;}
+.field input,.field select,.field textarea{
+  width:100%;background:var(--col-sur-hh);
+  border:1px solid var(--col-out);border-radius:var(--r-xs);
+  color:var(--col-on-sur);font-family:var(--font);font-size:16px;
+  padding:14px 16px;outline:none;-webkit-appearance:none;
+  transition:border-color var(--dur-s4),box-shadow var(--dur-s4);
+  user-select:text;-webkit-user-select:text;
+}
+.field textarea{min-height:80px;resize:vertical;}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--col-pri);box-shadow:0 0 0 2px var(--col-pri-con);
+}
+.field select option{background:var(--col-sur-ch);}
+.msg-err{padding:10px 14px;border-radius:var(--r-s);font-size:13px;display:flex;align-items:center;gap:8px;background:var(--col-err-con);color:var(--col-on-err-con);}
+.msg-ok{padding:10px 14px;border-radius:var(--r-s);font-size:13px;display:flex;align-items:center;gap:8px;background:rgba(76,175,80,.12);color:#4CAF50;}
+[data-theme="light"] .msg-ok{background:rgba(27,94,32,.08);color:#2E7D32;}
+
+.fab{
+  position:fixed;bottom:96px;right:16px;z-index:190;
+  width:56px;height:56px;border-radius:var(--r-l);
+  background:var(--col-pri-con);color:var(--col-on-pri-con);
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:var(--el3);overflow:hidden;
+  transition:box-shadow var(--dur-s4),transform var(--dur-s4);
+}
+.fab::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity var(--dur-s4);}
+.fab:hover::before{opacity:.08;}
+.fab:active{transform:scale(.96);}
+.fab:active::before{opacity:.12;}
+.fab svg{width:24px;height:24px;position:relative;z-index:1;}
+
+.empty{text-align:center;padding:60px 24px;color:var(--col-on-sur-var);}
+.empty svg{width:48px;height:48px;margin:0 auto 16px;opacity:.5;}
+.empty p{font-size:16px;margin-bottom:8px;font-weight:500;color:var(--col-on-sur);}
+.empty span{font-size:14px;}
+.spinner{width:40px;height:40px;border:3px solid var(--col-out-var);border-top-color:var(--col-pri);border-radius:50%;animation:spin .8s linear infinite;margin:60px auto;}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+.snack{
+  position:fixed;bottom:96px;left:50%;
+  transform:translateX(-50%) translateY(80px);
+  z-index:600;background:var(--col-inv-sur);color:var(--col-inv-on-sur);
+  padding:12px 16px;border-radius:var(--r-xs);font-size:14px;font-weight:500;
+  white-space:nowrap;box-shadow:var(--el3);pointer-events:none;
+  transition:transform var(--dur-m2) var(--ease-emp),opacity var(--dur-m2);
+  opacity:0;
+}
+.snack.on{transform:translateX(-50%) translateY(0);opacity:1;}
+
+.sup-hero{padding:32px 16px 20px;text-align:center;}
+.sup-hero h1{font-family:var(--font-brand);font-size:28px;font-weight:500;color:var(--col-on-sur);margin-bottom:8px;}
+.sup-hero p{font-size:14px;color:var(--col-on-sur-var);line-height:1.6;}
+
+.list-hdr{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.8px;color:var(--col-pri);margin:20px 16px 4px;}
+.list-item{
+  display:flex;align-items:center;gap:16px;padding:12px 16px;
+  border-radius:var(--r-xl);position:relative;overflow:hidden;
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:background var(--dur-s4);text-decoration:none;color:inherit;
+  margin:0 4px;
+}
+.list-item::before{content:'';position:absolute;inset:0;border-radius:inherit;background:var(--col-on-sur);opacity:0;transition:opacity var(--dur-s4);}
+.list-item:hover::before{opacity:.08;}
+.list-item:active::before{opacity:.12;}
+.list-ico{width:40px;height:40px;border-radius:var(--r-f);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.list-con{flex:1;min-width:0;}
+.list-hl{font-size:16px;font-weight:500;color:var(--col-on-sur);margin-bottom:2px;}
+.list-sup{font-size:13px;color:var(--col-on-sur-var);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.list-trail{color:var(--col-on-sur-var);}
+.list-trail svg{width:18px;height:18px;}
+
+.info-card{
+  background:var(--col-sur-cl);border-radius:var(--r-l);
+  padding:16px;margin:0 16px 8px;position:relative;overflow:hidden;
+}
+.info-card::before{content:'';position:absolute;inset:0;background:var(--tint);}
+.info-card-title{font-family:var(--font-brand);font-size:14px;font-weight:600;color:var(--col-on-sur);margin-bottom:8px;position:relative;}
+.info-card-body{font-size:13px;line-height:1.65;color:var(--col-on-sur-var);position:relative;}
+.info-card-body b{color:var(--col-pri);font-weight:600;}
+
+.compat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;max-width:600px;margin:0 auto 8px;}
+.compat-tile{
+  background:var(--col-sur-c);border-radius:var(--r-m);
+  padding:12px 8px;text-align:center;position:relative;overflow:hidden;
+}
+.compat-tile::before{content:'';position:absolute;inset:0;background:var(--tint);}
+.compat-ico{margin:0 auto 8px;width:40px;height:40px;border-radius:var(--r-f);background:var(--col-sur-hh);display:flex;align-items:center;justify-content:center;position:relative;}
+.compat-name{font-size:11px;font-weight:600;color:var(--col-on-sur);margin-bottom:2px;position:relative;}
+.compat-tag{font-size:10px;color:var(--col-on-sur-var);text-transform:uppercase;letter-spacing:.4px;position:relative;}
+
+.faq{border-bottom:1px solid var(--col-out-var);margin:0 16px;cursor:pointer;}
+.faq-q{display:flex;align-items:center;gap:12px;padding:14px 0;cursor:pointer;}
+.faq-q-text{flex:1;font-size:14px;font-weight:500;color:var(--col-on-sur);}
+.faq-chev{width:20px;height:20px;flex-shrink:0;color:var(--col-on-sur-var);transition:transform var(--dur-m2);}
+.faq.open .faq-chev{transform:rotate(180deg);}
+.faq-a{max-height:0;overflow:hidden;transition:max-height var(--dur-m2) var(--ease-std);}
+.faq.open .faq-a{max-height:500px;}
+.faq-a-in{padding-bottom:16px;font-size:13px;line-height:1.65;color:var(--col-on-sur-var);}
+.faq-a-in a{color:var(--col-pri);text-decoration:underline;}
+.faq-a-in b{color:var(--col-pri);font-weight:600;}
+.faq-a-in code{font-family:var(--font-mono);font-size:11px;background:var(--col-sur-ch);color:var(--col-pri);padding:2px 5px;border-radius:3px;}
+
+.mir-list{display:flex;flex-direction:column;gap:4px;}
+.mir-list-item{display:flex;align-items:center;gap:8px;padding:8px;background:var(--col-sur-hh);border-radius:var(--r-s);}
+.mir-list-item-txt{flex:1;font-size:13px;color:var(--col-on-sur);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.mir-list-del{padding:4px;color:var(--col-err);cursor:pointer;}
+.mir-list-del svg{width:18px;height:18px;}
+</style>
+</head>
+<body>
+
+<header class="top-bar" id="topBar">
+  <div class="bar-brand">
+    <span class="bar-name" id="barName">SnapPerf</span>
+  </div>
+
+  <div class="bar-actions">
+
+    <!-- 🔴 Logout Button -->
+    <button class="btn btn-txt" id="logoutBtn" hidden onclick="doLogout()">
+      <span>Logout</span>
+    </button>
+
+    <!-- Theme -->
+    <button class="ic-btn" id="themeBtn">
+      <svg id="themeIco" viewBox="0 0 24 24" fill="currentColor">
+        <path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+      </svg>
+    </button>
+
+  </div>
+</header>
+
+<main class="main">
+  <div class="tab on" id="tabHome">
+    <div class="hero">
+      <div class="hero-app-icon">
+        <img src="assets/aether.webp" alt="SnapPerf"/>
+      </div>
+      <h1 class="hero-title">SnapPerf</h1>
+      <p class="hero-sub">
+  <b>Snapdragon-exclusive</b> module for rooted Android with <b>Magisk</b>, <b>KernelSU</b>, and <b>APatch</b>. Built-in <b>WebUI</b> for performance tuning.</p>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="stat-v" id="sRel">—</span><div class="stat-l">Releases</div></div>
+      <div class="stat"><span class="stat-v" id="sDl">—</span><div class="stat-l">Downloads</div></div>
+      <div class="stat"><span class="stat-v" id="sVer">—</span><div class="stat-l">Latest</div></div>
+    </div>
+
+    <div class="controls">
+      <div class="search-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="search" class="search-in" id="searchIn" placeholder="Search releases…"/>
+        <button class="search-clr" id="searchClr">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </div>
+      <div class="chips">
+        <button class="chip on" data-f="all">
+          <svg class="chip-ck" viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+          All
+        </button>
+        <button class="chip" data-f="stable">Stable</button>
+        <button class="chip" data-f="beta">Beta</button>
+        <button class="chip" data-f="alpha">Alpha</button>
+      </div>
+    </div>
+
+    <div class="rl-sec">
+      <div class="sec-hdr" id="listHdr">Releases</div>
+      <div id="list"></div>
+    </div>
+  </div>
+
+  <div class="tab" id="tabSupport">
+    <div class="sup-hero">
+      <h1>About & Support</h1>
+      <p>Learn more about SnapPerf, find help,<br>and connect with the community.</p>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-title">What is SnapPerf?</div>
+      <div class="info-card-body">
+        SnapPerf is a <b>Snapdragon-exclusive</b> kernel & system performance module for rooted Android. Works with <b>Magisk</b>, <b>KernelSU</b>, and <b>APatch</b>. Exposes a built-in <b>WebUI</b> in <b>KernelSU & Magisk</b> with Features CPU governor, LMK, ZRAM, thermals, animation, and more.
+      </div>
+    </div>
+
+    <div class="list-hdr">Community</div>
+
+    <a class="list-item" href="https://t.me/get01projects" target="_blank" rel="noopener">
+      <div class="list-ico" style="background:rgba(41,182,246,.12);color:#29B6F6;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8-1.7 8.01c-.12.54-.46.67-.93.42l-2.58-1.9-1.25 1.2c-.14.14-.26.25-.53.25l.19-2.67 4.87-4.4c.21-.19-.05-.3-.33-.1l-6.02 3.79-2.59-.81c-.56-.18-.57-.56.12-.83l10.12-3.9c.47-.17.88.1.63.94z"/></svg>
+      </div>
+      <div class="list-con">
+        <div class="list-hl">Telegram Channel</div>
+        <div class="list-sup">@get01projects - updates & announcements</div>
+      </div>
+      <div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+    </a>
+
+    <a class="list-item" href="https://github.com/aetherdev01/SnapPerf" target="_blank" rel="noopener">
+      <div class="list-ico" style="background:rgba(255,255,255,.08);color:var(--col-on-sur);">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+      </div>
+      <div class="list-con">
+        <div class="list-hl">GitHub Repository</div>
+        <div class="list-sup">aetherdev01/SnapPerf - source & issues</div>
+      </div>
+      <div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+    </a>
+
+    <a class="list-item" href="https://github.com/aetherdev01/SnapPerf/issues/new" target="_blank" rel="noopener">
+      <div class="list-ico" style="background:rgba(244,67,54,.1);color:#EF5350;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+      </div>
+      <div class="list-con">
+        <div class="list-hl">Report a Bug</div>
+        <div class="list-sup">Open an issue on GitHub</div>
+      </div>
+      <div class="list-trail"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+    </a>
+
+    <!-- Compatibility -->
+    <div class="list-hdr">Compatibility</div>
+    <div class="compat">
+      <div class="compat-tile"><div class="compat-ico"><img src="assets/magisk.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">Magisk</div><div class="compat-tag">v24+</div></div>
+      <div class="compat-tile"><div class="compat-ico"><img src="assets/kernelsu.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">KernelSU</div><div class="compat-tag">Support</div></div>
+      <div class="compat-tile"><div class="compat-ico"><img src="assets/apatch.png" style="width:28px;height:28px;object-fit:contain;border-radius:50%"/></div><div class="compat-name">APatch</div><div class="compat-tag">Support</div></div>
+      <div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:#4CAF50"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div class="compat-name">Android</div><div class="compat-tag">10–16</div></div>
+      <div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:#FF9800"><path d="M9 2v2H7v2H5v2H3v2h2v2H3v2h2v2h2v2h2v2h2v-2h2v2h2v-2h2v-2h2v-2h2v-2h-2v-2h2V8h-2V6h-2V4h-2V2h-2v2h-2V2H9zm-2 6h10v8H7V8z"/></svg></div><div class="compat-name">Snapdragon</div><div class="compat-tag">Only</div></div>
+      <div class="compat-tile"><div class="compat-ico"><svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-on-sur-var)"><path d="M19.14 12.94a7.43 7.43 0 0 0 .05-.94 7.43 7.43 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.65l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.28 7.28 0 0 0-1.63-.94l-.36-2.54A.5.5 0 0 0 13.9 2h-3.8a.5.5 0 0 0-.49.41l-.36 2.54c-.58.23-1.12.54-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.47a.5.5 0 0 0 .12.65l2.03 1.58c-.03.31-.05.63-.05.94s.02.63.05.94L2.83 14.16a.5.5 0 0 0-.12.65l1.92 3.32c.14.24.43.34.7.22l2.39-.96c.51.4 1.05.71 1.63.94l.36 2.54c.05.24.25.41.49.41h3.8c.24 0 .44-.17.49-.41l.36-2.54c.58-.23 1.12-.54 1.63-.94l2.39.96c.27.11.56.02.7-.22l1.92-3.32a.5.5 0 0 0-.12-.65l-2.03-1.58zM12 15.5A3.5 3.5 0 1 1 12 8a3.5 3.5 0 0 1 0 7.5z"/></svg></div><div class="compat-name">ABI Support</div><div class="compat-tag">ARM/ARM64</div></div>
+</div>
+
+    <div class="list-hdr">Features</div>
+    <div class="info-card" style="margin-bottom:8px;">
+      <div class="info-card-body" style="display:grid;gap:10px;">
+        <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-pri)"><path d="M20 18c1.1 0 1.99-.9 1.99-2L22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2H0v2h24v-2h-4zM4 6h16v10H4V6z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">WebUI Dashboard</b><span style="font-size:13px;">Take full control in WebUI Manager </span></div></div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#FF9800"><path d="M7 2v11h3v9l7-12h-4l4-8z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">CPU &amp; Thermal Tuning</b><span style="font-size:13px;">Governor, frequency limiter, thermal profiles per SoC</span></div></div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-ter)"><path d="M15 9H9v6h6V9zm-2 4h-2v-2h2v2zm8-2V9h-2V7c0-1.1-.9-2-2-2h-2V3h-2v2h-2V3H9v2H7c-1.1 0-2 .9-2 2v2H3v2h2v2H3v2h2v2c0 1.1.9 2 2 2h2v2h2v-2h2v2h2v-2h2c1.1 0 2-.9 2-2v-2h2v-2h-2v-2h2zm-4 6H7V7h10v10z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">Memory Optimization</b><span style="font-size:13px;">LMK tuning, ZRAM configuration, swap optimization</span></div></div>
+        <div style="display:flex;align-items:center;gap:12px;"><span style="flex-shrink:0;width:28px;height:28px;display:flex;align-items:center;justify-content:center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" style="color:#4CAF50"><path d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-10 7H8v3H6v-3H3v-2h3V8h2v3h3v2zm4.5 2c-.83 0-1.5-.67-1.5-1.5S14.67 12 15.5 12s1.5.67 1.5 1.5S16.33 15 15.5 15zm3-3c-.83 0-1.5-.67-1.5-1.5S17.67 10 18.5 10s1.5.67 1.5 1.5S19.33 12 18.5 12z"/></svg></span><div><b style="display:block;color:var(--col-on-sur);font-size:14px;">Gaming Mode</b><span style="font-size:13px;">Touch boost, animation scale, scheduler tuning</span></div></div>
+      </div>
+    </div>
+
+    <div class="list-hdr">FAQ</div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">Is my device supported?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">SnapPerf only supports <b>Snapdragon Chipset</b> Android devices (ARM/ARM64) running Android 10–16 with root via Magisk, KernelSU, or APatch. MediaTek, Exynos, SoCs are <b>not supported</b>.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">How do I access the WebUI?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">After installing and rebooting, Open your WebUI Manager and then select <b>SnapPerf Modules</b>. Make sure the module is enabled in your root manager.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">My device bootlooped after installing. Help!</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">Boot into recovery and delete the SnapPerf module from your root manager, then reboot. Report the issue on <a href="https://github.com/aetherdev01/SnapPerf/issues/new" target="_blank">GitHub Issues</a> with your SoC model, Android version, and root solution.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">Will this drain my battery faster?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">SnapPerf includes a <b>Battery</b> profile that can actually improve battery life. The default Balanced profile is a good middle ground. Only Performance/Gaming profiles will increase power draw significantly.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">How do I update SnapPerf?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">Download the latest <code>.zip</code> from the Home tab and flash it in your root manager. Settings and config are preserved. You can also use the built-in update checker in the WebUI.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)">
+      <div class="faq-q"><div class="faq-q-text">Can I use SnapPerf without root?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">No. SnapPerf requires root to apply kernel-level tweaks via <code>/sys</code> and <code>/proc</code>. It is specifically designed as a Magisk/KernelSU/APatch module.</div></div>
+    </div>
+
+    <div class="faq" onclick="toggleFaq(this)" style="margin-bottom:24px;">
+      <div class="faq-q"><div class="faq-q-text">Where are my settings stored?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
+      <div class="faq-a"><div class="faq-a-in">Settings are stored in <code>/data/adb/modules/snapperf/webroot/data/settings.conf</code>. Back this file up before wiping or reinstalling.</div></div>
+    </div>
+  </div>
+</main>
+
+<nav class="nav-bar">
+  <div class="nav-item on" data-tab="Home" onclick="switchTab(this)">
+    <div class="nav-pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg></div>
+    <span class="nav-lbl">Home</span>
+  </div>
+  <div class="nav-item" data-tab="Support" onclick="switchTab(this)">
+    <div class="nav-pill"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H8c0-2.21 1.79-4 4-4s4 1.79 4 4c0 .88-.36 1.68-.93 2.25z"/></svg></div>
+    <span class="nav-lbl">Support</span>
+  </div>
+</nav>
+
+<button class="fab" id="adminFab" hidden>
+  <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+</button>
+
+<div class="scrim" id="sheetScrim" onclick="closeSheet()"></div>
+
+<div class="sheet" id="clSheet">
+  <div class="sheet-handle"></div>
+  <div class="sheet-hdr">
+    <span class="sheet-title" id="sheetTitle">Changelog</span>
+    <button class="ic-btn" onclick="closeSheet()">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+    </button>
+  </div>
+  <div class="sheet-body" id="sheetBody"></div>
+</div>
+
+<div class="dlg-scrim" id="dlgLogin">
+  <div class="dlg">
+    <div class="dlg-hdr">
+      <div class="dlg-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+      <div class="dlg-title">Admin Login</div>
+      <div class="dlg-sub">SnapPerf release management</div>
+    </div>
+    <div class="dlg-body">
+      <div class="field">
+        <div class="field-lbl">Password</div>
+        <input type="password" id="pwIn"/>
+      </div>
+      <div class="msg-err" id="loginErr" hidden>Incorrect password</div>
+    </div>
+    <div class="dlg-acts">
+      <button class="btn btn-txt" onclick="closeDlg('dlgLogin')"><span>Cancel</span></button>
+      <button class="btn btn-fil" onclick="doLogin()"><span>Login</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="dlg-scrim" id="dlgPost">
+  <div class="dlg">
+    <div class="dlg-hdr">
+      <div class="dlg-title" id="postTitle">New Release</div>
+      <div class="dlg-sub" id="postSub">Post a release</div>
+    </div>
+    <div class="dlg-body">
+      <div class="field"><div class="field-lbl">Title</div><input id="relTitle"/></div>
+      <div class="field"><div class="field-lbl">Version</div><input id="relVer" placeholder="v1.5.5"/></div>
+      <div class="field"><div class="field-lbl">Download URL</div><input id="relDl"/></div>
+      <div class="field"><div class="field-lbl">File Size</div><input id="relSz" placeholder="12.4 MB"/></div>
+      <div class="field"><div class="field-lbl">Tag</div><select id="relTag"><option value="stable">Stable</option><option value="beta">Beta</option><option value="alpha">Alpha</option></select></div>
+      <div class="field"><div class="field-lbl">Description (Markdown)</div><textarea id="relDesc"></textarea></div>
+      <div class="msg-err" id="postErr" hidden></div>
+      <div class="msg-ok" id="postOk" hidden></div>
+    </div>
+    <div class="dlg-acts">
+      <button class="btn btn-txt" onclick="closeDlg('dlgPost')"><span>Cancel</span></button>
+      <button class="btn btn-fil" id="postBtn" onclick="submitPost()"><span>Post</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="dlg-scrim" id="dlgMir">
+  <div class="dlg">
+    <div class="dlg-hdr">
+      <div class="dlg-title">Manage Mirrors</div>
+      <div class="dlg-sub" id="mirSub"></div>
+    </div>
+    <div class="dlg-body">
+      <div class="mir-list" id="mirList"></div>
+      <div class="field"><div class="field-lbl">Mirror URL</div><input id="mirUrl"/></div>
+      <div class="field"><div class="field-lbl">Label (optional)</div><input id="mirLbl"/></div>
+      <div class="msg-err" id="mirErr" hidden></div>
+    </div>
+    <div class="dlg-acts">
+      <button class="btn btn-txt" onclick="closeDlg('dlgMir')"><span>Close</span></button>
+      <button class="btn btn-fil" onclick="submitMir()"><span>Add</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="snack" id="snack"></div>
+
+<script>
+(function(){
+'use strict';
+
+const CONFIG = (() => {
+  const GH_USER = 'aetherdev01';
+  const GH_REPO = 'SnapPerf';
+
+  const SB_URL = atob('aHR0cHM6Ly9yYXNsZmltdGphenNpZm1ubWRsaC5zdXBhYmFzZS5jbw==');
+  const SB_KEY = atob('ZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBjM01pT2lKemRYQmhiR0Z6WlNJc0luSmxabUk2SW5KaGMyeG1hVzEwYW1GNmMybG1iVzV0Wkd4b0lpd2ljbTlzWlNJNklHRnViMjRpTENKcFlYUWlPakUzTnpRMk56YzROVEVzSW1WNGNDSTZNakE1TURJMU16ZzFNU3dpWm5WaU9pSmhkbVZ5SW4wLlp1dzYwemloTnNPMmZxbHo5ellCYzhJZjdJa21KdExHcngxR3hiNk51Z1E=');
+
+  const SK = 'sp_admin_v2';
+  const PW_HASH = '9f6f8b5e7d4a6e9f2e0f4c2f6b8a1c3d7e5f9a0b6c2d3e4f5a6b7c8d9e0f1a2';
+
+  return { GH_USER, GH_REPO, SB_URL, SB_KEY, SK, PW_HASH };
+})();
+
+async function hash(str){
+  const buf = await crypto.subtle.digest(
+    "SHA-256",
+    new TextEncoder().encode(str)
+  );
+  return Array.from(new Uint8Array(buf))
+    .map(b => b.toString(16).padStart(2,'0'))
+    .join('');
+}
+
+async function checkPassword(input){
+  const h = await hash(input);
+  return h === CONFIG.PW_HASH;
+}
+
+})();
+
+let rels=[],admin=false,filt='all',sq='',editId=null,mirId=null,supa=null,sbTmr=null,adminHoldTmr=null;
+const $=id=>document.getElementById(id);
+
+async function init(){
+  window.addEventListener('scroll',()=>$('topBar').classList.toggle('raised',scrollY>4),{passive:true});
+  const th=localStorage.getItem('sp_th')||'dark';
+  document.documentElement.dataset.theme=th; updateThIco(th);
+  admin=sessionStorage.getItem(SK)==='1';
+  applyAdmin();
+  try{supa=supabase.createClient(SB_URL,SB_KEY);}catch(e){}
+  await loadRels();
+  render(); setStats();
+  
+  $('barName').addEventListener('mousedown',startAdminHold);
+  $('barName').addEventListener('mouseup',cancelAdminHold);
+  $('barName').addEventListener('mouseleave',cancelAdminHold);
+  $('barName').addEventListener('touchstart',startAdminHold);
+  $('barName').addEventListener('touchend',cancelAdminHold);
+  $('barName').addEventListener('touchcancel',cancelAdminHold);
+}
+
+function logoutAdmin(){
+  sessionStorage.removeItem('sp_admin_v2');
+  admin = false;
+  applyAdmin();
+  showSnack('Logout berhasil');
+}
+
+function startAdminHold(){
+  adminHoldTmr = setTimeout(()=>{
+    if(!admin){
+      $('loginErr').hidden = true;
+      $('pwIn').value = '';
+      openDlg('dlgLogin');
+      setTimeout(()=>$('pwIn').focus(), 300);
+    }
+  }, 2000);
+}
+
+async function doLogin(){
+  const input = $('pwIn').value;
+
+  if(await checkPassword(input)){
+    admin = true;
+    sessionStorage.setItem(CONFIG.SK, '1');
+    applyAdmin();
+    render();
+    closeDlg('dlgLogin');
+    snack('Welcome back, Admin 👋');
+  } else {
+    $('loginErr').hidden = false;
+  }
+}
+
+$('pwIn').addEventListener('keydown', e => {
+  if(e.key === 'Enter') doLogin();
+});
+
+function doLogout(){
+  admin = false;
+  sessionStorage.removeItem(CONFIG.SK);
+  applyAdmin();
+  render();
+  snack('Logged out');
+}
+
+function applyAdmin(){
+  $('logoutBtn').hidden = !admin;
+  $('adminFab').hidden = !admin || !document.querySelector('.nav-item.on')?.dataset.tab?.includes('Home');
+}
+
+function cancelAdminHold(){
+  if(adminHoldTmr){clearTimeout(adminHoldTmr);adminHoldTmr=null;}
+}
+
+$('themeBtn').onclick=()=>{
+  const n=document.documentElement.dataset.theme==='dark'?'light':'dark';
+  document.documentElement.dataset.theme=n;
+  localStorage.setItem('sp_th',n); updateThIco(n);
+};
+function updateThIco(t){
+  $('themeIco').innerHTML=t==='dark'
+    ?'<path d="M12 3a9 9 0 1 0 9 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 0 1-4.4 2.26 5.403 5.403 0 0 1-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>'
+    :'<path d="M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zM2 13h2c.55 0 1-.45 1-1s-.45-1-1-1H2c-.55 0-1 .45-1 1s.45 1 1 1zm18 0h2c.55 0 1-.45 1-1s-.45-1-1-1h-2c-.55 0-1 .45-1 1s.45 1 1 1zM11 2v2c0 .55.45 1 1 1s1-.45 1-1V2c0-.55-.45-1-1-1s-1 .45-1 1zm0 18v2c0 .55.45 1 1 1s1-.45 1-1v-2c0-.55-.45-1-1-1s-1 .45-1 1zM5.99 4.58a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0s.39-1.03 0-1.41L5.99 4.58zm12.37 12.37a.996.996 0 0 0-1.41 0 .996.996 0 0 0 0 1.41l1.06 1.06c.39.39 1.03.39 1.41 0a.996.996 0 0 0 0-1.41l-1.06-1.06zm1.06-10.96a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06zM7.05 18.36a.996.996 0 0 0 0-1.41.996.996 0 0 0-1.41 0l-1.06 1.06c-.39.39-.39 1.03 0 1.41s1.03.39 1.41 0l1.06-1.06z"/>';
+}
+
+function switchTab(el){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('on',n===el));
+  const t=el.dataset.tab;
+  document.querySelectorAll('.tab').forEach(p=>p.classList.toggle('on',p.id==='tab'+t));
+  $('adminFab').hidden=!(admin&&t==='Home');
+}
+
+function toggleFaq(el){el.classList.toggle('open');}
+
+function openDlg(id){$(id).classList.add('on');}
+function closeDlg(id){$(id).classList.remove('on');}
+
+window.doLogout = doLogout;
+
+function openSheet(title,md){
+  $('sheetTitle').textContent=title;
+  $('sheetBody').innerHTML=marked.parse(md||'*No changelog.*');
+  $('sheetScrim').classList.add('on');
+  $('clSheet').classList.add('on');
+  document.body.style.overflow='hidden';
+}
+function closeSheet(){
+  $('sheetScrim').classList.remove('on');
+  $('clSheet').classList.remove('on');
+  document.body.style.overflow='';
+}
+
+function snack(msg){
+  const el=$('snack');el.textContent=msg;el.classList.add('on');
+  clearTimeout(sbTmr);sbTmr=setTimeout(()=>el.classList.remove('on'),2800);
+}
+
+async function loadRels(){
+  $('list').innerHTML='<div class="spinner"></div>';
+  if(supa){
+    try{
+      const{data,error}=await supa.from('sp_releases').select('*').order('release_date',{ascending:false});
+      if(!error&&data?.length){
+        rels=data.map(r=>({
+          id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',
+          description:r.description||'',download_url:r.download_url||'',
+          size:r.file_size||0,downloads:r.downloads||0,
+          mirrors:r.mirrors||[],date:r.release_date,_sizeRaw:''
+        }));
+        localStorage.setItem('sp_rels_cache',JSON.stringify(rels));
+        return;
+      }
+    }catch(e){}
+  }
+  try{
+    const cached=localStorage.getItem('sp_rels_cache');
+    if(cached){const parsed=JSON.parse(cached);if(parsed?.length){rels=parsed;return;}}
+  }catch(e){}
+  try{
+    const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/releases`,{headers:{Accept:'application/vnd.github.v3+json'}});
+    if(res.ok){
+      const data=await res.json();
+      rels=data.map(r=>({
+        id:String(r.id),title:r.name||r.tag_name,version:r.tag_name,
+        tag:r.prerelease?'beta':'stable',description:r.body||'',
+        download_url:r.assets?.[0]?.browser_download_url||r.html_url,
+        size:r.assets?.[0]?.size||0,
+        downloads:r.assets?.reduce((a,b)=>a+(b.download_count||0),0)||0,
+        mirrors:[],date:r.published_at,_sizeRaw:''
+      }));
+    }
+  }catch(e){}
+}
+
+async function save(id,del=false){
+  try{localStorage.setItem('sp_rels_cache',JSON.stringify(rels));}catch(e){}
+  if(!supa)return;
+  function toRow(r){return{id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',description:r.description||'',download_url:r.download_url||'',file_size:r.size||0,downloads:r.downloads||0,mirrors:r.mirrors||[],release_date:r.date};}
+  try{
+    if(del)await supa.from('sp_releases').delete().eq('id',id);
+    else if(id){const r=rels.find(x=>x.id===id);if(r)await supa.from('sp_releases').upsert(toRow(r));}
+    else for(const r of rels)await supa.from('sp_releases').upsert(toRow(r));
+  }catch(e){}
+}
+
+function setStats(){
+  $('sRel').textContent=rels.length;
+  const dl=rels.reduce((a,r)=>a+(r.downloads||0),0);
+  $('sDl').textContent=dl>=1000?(dl/1000).toFixed(1)+'k':dl;
+  $('sVer').textContent=rels[0]?.version||'—';
+}
+
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+function fd(iso){if(!iso)return'';const d=new Date(iso);return d.toLocaleDateString('en',{month:'short',day:'numeric',year:'numeric'});}
+function ps(s){if(!s)return 0;const m=s.match(/^([\d.]+)\s*(MB|KB|GB)?$/i);if(!m)return 0;const n=parseFloat(m[1]);const u=(m[2]||'').toUpperCase();if(u==='KB')return n*1024;if(u==='MB')return n*1024*1024;if(u==='GB')return n*1024*1024*1024;return n;}
+function fb(b){if(!b||b<1024)return b?b+' B':'';const k=b/1024;if(k<1024)return k.toFixed(1)+' KB';const m=k/1024;if(m<1024)return m.toFixed(1)+' MB';return(m/1024).toFixed(1)+' GB';}
+
+function render(){
+  const el=$('list');
+  let data=rels;
+  if(filt!=='all')data=data.filter(r=>r.tag===filt);
+  if(sq)data=data.filter(r=>(r.title||'').toLowerCase().includes(sq.toLowerCase())||(r.version||'').toLowerCase().includes(sq.toLowerCase()));
+  if(!data.length){
+    el.innerHTML=`<div class="empty"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg><p>No releases found</p><span>${sq?'Try a different search':'No releases in this channel yet'}</span></div>`;
+    return;
+  }
+  el.innerHTML='';
+  data.forEach((r,i)=>{
+    const c=document.createElement('div');
+    c.className='card';c.style.animationDelay=`${i*40}ms`;
+    const sz=r._sizeRaw||fb(r.size)||'';
+    const hasMir=r.mirrors?.length>0;
+    const hasDesc=r.description?.trim();
+    c.innerHTML=`<div class="card-in">
+      <div class="card-head">
+        <div class="card-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 3.5L18 2l-1.5 1.5L15 2l-1.5 1.5L12 2l-1.5 1.5L9 2 7.5 3.5 6 2 4.5 3.5 3 2v20l1.5-1.5L6 22l1.5-1.5L9 22l1.5-1.5L12 22l1.5-1.5L15 22l1.5-1.5L18 22l1.5-1.5L21 22V2l-1.5 1.5zM19 19.09H5V4.91h14v14.18zM6 15h12v2H6zm0-4h12v2H6zm0-4h12v2H6z"/></svg></div>
+        <div class="card-meta">
+          <div class="card-title">${esc(r.title||r.version||'Untitled')}</div>
+          <div class="card-ver-row">
+            <span class="ver-badge">${esc(r.version||'')}</span>
+            <span class="tag tag-${r.tag||'stable'}">${r.tag||'stable'}</span>
+          </div>
+        </div>
+      </div>
+      <div class="card-info">
+        ${r.date?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 3h-1V1h-2v2H7V1H5v2H4c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 18H4V8h16v13z"/></svg>${esc(fd(r.date))}</span>`:''}
+        ${sz?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 2c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6H6zm7 7V3.5L18.5 9H13z"/></svg>${esc(sz)}</span>`:''}
+        ${r.downloads?`<span class="info-item"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>${r.downloads.toLocaleString()}</span>`:''}
+      </div>
+      <div class="card-acts">
+        <a class="btn btn-fil btn-sm card-dl-btn" href="${esc(r.download_url||'#')}" ${r.download_url?'target="_blank" rel="noopener"':''} data-id="${esc(r.id)}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg><span>Download</span>
+        </a>
+        ${hasDesc?`<button class="btn btn-out btn-sm card-cl-btn" data-id="${esc(r.id)}">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg><span>Changelog</span>
+        </button>`:''}
+      </div>
+    </div>
+    ${hasMir?`<div class="divider"></div><div class="mirrors">${r.mirrors.map(m=>`<a class="mir-chip" href="${esc(m.url)}" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm1-4H8v2h8v-2z"/></svg>${esc(m.label||'Mirror')}</a>`).join('')}</div>`:''}
+    ${admin?`<div class="admin-acts">
+      <button class="btn btn-ton btn-sm card-edit-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34a.9959.9959 0 00-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/></svg><span>Edit</span></button>
+      <button class="btn btn-txt btn-sm card-mir-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M17 7h-4v2h4c1.65 0 3 1.35 3 3s-1.35 3-3 3h-4v2h4c2.76 0 5-2.24 5-5s-2.24-5-5-5zm-6 8H7c-1.65 0-3-1.35-3-3s1.35-3 3-3h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-2zm1-4H8v2h8v-2z"/></svg><span>Mirror</span></button>
+      <button class="btn btn-txt btn-err btn-sm card-del-btn" data-id="${esc(r.id)}"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg><span>Delete</span></button>
+    </div>`:''}`;
+    el.appendChild(c);
+  });
+
+  el.addEventListener('click',function(e){
+    const dlBtn=e.target.closest('.card-dl-btn');
+    if(dlBtn){const id=dlBtn.dataset.id;if(id)trkDl(id);return;}
+    const clBtn=e.target.closest('.card-cl-btn');
+    if(clBtn){
+      e.preventDefault();
+      const id=clBtn.dataset.id;const r=rels.find(x=>x.id===id);
+      if(r)openSheet('Changelog — '+(r.version||''),r.description);
+      return;
+    }
+    const editBtn=e.target.closest('.card-edit-btn');
+    if(editBtn){openEdit(editBtn.dataset.id);return;}
+    const mirBtn=e.target.closest('.card-mir-btn');
+    if(mirBtn){openMir(mirBtn.dataset.id);return;}
+    const delBtn=e.target.closest('.card-del-btn');
+    if(delBtn){doDelete(delBtn.dataset.id);return;}
+  });
+}
+
+async function trkDl(id){
+  const r=rels.find(x=>x.id===id);
+  if(!r)return;
+  r.downloads=(r.downloads||0)+1;
+  setStats();
+  if(supa){
+    try{await supa.from('sp_releases').update({downloads:r.downloads}).eq('id',id);}catch(e){}
+  }
+  try{localStorage.setItem('sp_rels_cache',JSON.stringify(rels));}catch(e){}
+}
+
+$('searchIn').addEventListener('input',function(){sq=this.value;$('searchClr').classList.toggle('on',sq.length>0);render();});
+$('searchClr').addEventListener('click',()=>{$('searchIn').value='';sq='';$('searchClr').classList.remove('on');$('searchIn').focus();render();});
+document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',function(){document.querySelectorAll('.chip').forEach(x=>x.classList.remove('on'));this.classList.add('on');filt=this.dataset.f;render();}));
+
+$('adminFab').onclick=openPost;
+
+function openPost(){
+  editId=null;
+  ['relTitle','relVer','relDl','relSz','relDesc'].forEach(id=>$(id).value='');
+  $('relTag').value='stable';$('postErr').hidden=$('postOk').hidden=true;
+  $('postTitle').textContent='New Release';$('postSub').textContent='Post a release';
+  $('postBtn').textContent='Post';openDlg('dlgPost');setTimeout(()=>$('relTitle').focus(),300);
+}
+function openEdit(id){
+  editId=id;const r=rels.find(x=>x.id===id);if(!r)return;
+  $('relTitle').value=r.title||'';$('relVer').value=r.version||'';
+  $('relDl').value=r.download_url||'';$('relSz').value=r._sizeRaw||fb(r.size)||'';
+  $('relDesc').value=r.description||'';$('relTag').value=r.tag||'stable';
+  $('postErr').hidden=$('postOk').hidden=true;
+  $('postTitle').textContent='Edit Release';$('postSub').textContent=r.title||r.version||'';
+  $('postBtn').textContent='Save';openDlg('dlgPost');setTimeout(()=>$('relTitle').focus(),300);
+}
+async function submitPost(){
+  const title=$('relTitle').value.trim(),ver=$('relVer').value.trim(),
+        dl=$('relDl').value.trim(),desc=$('relDesc').value.trim(),
+        tag=$('relTag').value,szRaw=$('relSz').value.trim();
+  if(!title){showPErr('Title required');return;}
+  if(!ver){showPErr('Version required');return;}
+  if(!dl){showPErr('Download URL required');return;}
+  try{new URL(dl);}catch{showPErr('Invalid URL');return;}
+  $('postBtn').disabled=true;$('postBtn').textContent='Saving…';
+  const sz=ps(szRaw);
+  if(editId){
+    const i=rels.findIndex(r=>r.id===editId);
+    if(i>-1)rels[i]={...rels[i],title,version:ver,tag,description:desc,download_url:dl,size:sz||rels[i].size,_sizeRaw:szRaw||rels[i]._sizeRaw||''};
+    $('postOk').hidden=false;$('postOk').textContent='Saved!';await save(editId);
+  }else{
+    const nr={id:uid(),title,version:ver,tag,description:desc,download_url:dl,size:sz,downloads:0,mirrors:[],date:new Date().toISOString(),_sizeRaw:szRaw};
+    rels.unshift(nr);$('postOk').hidden=false;$('postOk').textContent='Posted!';await save(nr.id);
+  }
+  setStats();$('postBtn').disabled=false;$('postBtn').textContent=editId?'Save':'Post';
+  setTimeout(()=>{closeDlg('dlgPost');render();},500);
+}
+function showPErr(m){$('postErr').hidden=false;$('postErr').textContent=m;}
+
+async function doDelete(id){
+  if(!confirm('Delete this release?'))return;
+  rels=rels.filter(r=>r.id!==id);await save(id,true);setStats();render();snack('Release deleted');
+}
+
+function openMir(id){
+  mirId=id;const r=rels.find(x=>x.id===id);
+  $('mirSub').textContent=r?.title||r?.version||'';
+  $('mirUrl').value=$('mirLbl').value='';$('mirErr').hidden=true;
+  renderMirList();
+  openDlg('dlgMir');setTimeout(()=>$('mirUrl').focus(),300);
+}
+
+function renderMirList(){
+  const r=rels.find(x=>x.id===mirId);
+  const list=$('mirList');
+  if(!r||!r.mirrors||r.mirrors.length===0){
+    list.innerHTML='<p style="font-size:13px;color:var(--col-on-sur-var);text-align:center;padding:16px 0;">No mirrors yet</p>';
+    return;
+  }
+  list.innerHTML=r.mirrors.map((m,i)=>`<div class="mir-list-item">
+    <span class="mir-list-item-txt">${esc(m.label||m.url)}</span>
+    <button class="mir-list-del" onclick="deleteMir(${i})">
+      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+    </button>
+  </div>`).join('');
+}
+
+async function deleteMir(idx){
+  const r=rels.find(x=>x.id===mirId);
+  if(!r||!r.mirrors)return;
+  r.mirrors.splice(idx,1);
+  await save(mirId);
+  renderMirList();
+  render();
+  snack('Mirror deleted');
+}
+
+async function submitMir(){
+  const url=$('mirUrl').value.trim(),lbl=$('mirLbl').value.trim();
+  if(!url){$('mirErr').hidden=false;$('mirErr').textContent='URL required';return;}
+  try{new URL(url);}catch{$('mirErr').hidden=false;$('mirErr').textContent='Invalid URL';return;}
+  const r=rels.find(x=>x.id===mirId);
+  if(r){if(!r.mirrors)r.mirrors=[];r.mirrors.push({url,label:lbl||url});}
+  await save(mirId);
+  $('mirUrl').value=$('mirLbl').value='';
+  renderMirList();
+  render();
+  snack('Mirror added');
+}
+$('mirUrl').addEventListener('keydown',e=>{if(e.key==='Enter')$('mirLbl').focus();});
+$('mirLbl').addEventListener('keydown',e=>{if(e.key==='Enter')submitMir();});
+
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7);}
+document.addEventListener('selectstart',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;e.preventDefault();});
+document.addEventListener('contextmenu',e=>e.preventDefault());
+document.addEventListener('copy',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;e.preventDefault();});
+
+window.switchTab=switchTab;window.toggleFaq=toggleFaq;
+window.closeSheet=closeSheet;window.closeDlg=closeDlg;
+window.doLogin=doLogin;window.submitPost=submitPost;window.submitMir=submitMir;
+window.openSheet=openSheet;window.openEdit=openEdit;
+window.openMir=openMir;window.doDelete=doDelete;window.trkDl=trkDl;
+window.deleteMir=deleteMir;
+
+init();
+})();
+</script>
+</body>
+</html>
