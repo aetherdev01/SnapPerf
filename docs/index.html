@@ -898,10 +898,25 @@ async function loadRels(){
   $('list').innerHTML='<div class="spinner"></div>';
   if(supa){
     try{
-      const{data,error}=await supa.from('releases').select('*').order('date',{ascending:false});
-      if(!error&&data?.length){rels=data.map(r=>({...r,_sizeRaw:r._sizeRaw||''}));return;}
+      const{data,error}=await supa.from('sp_releases').select('*').order('release_date',{ascending:false});
+      if(!error&&data?.length){
+        rels=data.map(r=>({
+          id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',
+          description:r.description||'',download_url:r.download_url||'',
+          size:r.file_size||0,downloads:r.downloads||0,
+          mirrors:r.mirrors||[],date:r.release_date,_sizeRaw:''
+        }));
+        localStorage.setItem('sp_rels_cache',JSON.stringify(rels));
+        return;
+      }
     }catch(e){}
   }
+  /* localStorage cache */
+  try{
+    const cached=localStorage.getItem('sp_rels_cache');
+    if(cached){const parsed=JSON.parse(cached);if(parsed?.length){rels=parsed;return;}}
+  }catch(e){}
+  /* GitHub fallback */
   try{
     const res=await fetch(`https://api.github.com/repos/${GH_USER}/${GH_REPO}/releases`,{headers:{Accept:'application/vnd.github.v3+json'}});
     if(res.ok){
@@ -919,11 +934,14 @@ async function loadRels(){
 }
 
 async function save(id,del=false){
+  /* update localStorage cache */
+  try{localStorage.setItem('sp_rels_cache',JSON.stringify(rels));}catch(e){}
   if(!supa)return;
+  function toRow(r){return{id:r.id,title:r.title||'',version:r.version||'',tag:r.tag||'stable',description:r.description||'',download_url:r.download_url||'',file_size:r.size||0,downloads:r.downloads||0,mirrors:r.mirrors||[],release_date:r.date};}
   try{
-    if(del)await supa.from('releases').delete().eq('id',id);
-    else if(id){const r=rels.find(x=>x.id===id);if(r)await supa.from('releases').upsert(r);}
-    else for(const r of rels)await supa.from('releases').upsert(r);
+    if(del)await supa.from('sp_releases').delete().eq('id',id);
+    else if(id){const r=rels.find(x=>x.id===id);if(r)await supa.from('sp_releases').upsert(toRow(r));}
+    else for(const r of rels)await supa.from('sp_releases').upsert(toRow(r));
   }catch(e){}
 }
 
@@ -1074,6 +1092,13 @@ function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2
 document.addEventListener('selectstart',e=>{if(['INPUT','TEXTAREA'].includes(e.target.tagName))return;e.preventDefault();});
 document.addEventListener('contextmenu',e=>e.preventDefault());
 document.addEventListener('copy',e=>{if(['INPUT','TEXTAREA'].includes(document.activeElement?.tagName))return;e.preventDefault();});
+
+/* expose to global for inline onclick */
+window.switchTab=switchTab;window.toggleFaq=toggleFaq;
+window.closeSheet=closeSheet;window.closeDlg=closeDlg;
+window.doLogin=doLogin;window.submitPost=submitPost;window.submitMir=submitMir;
+window.openSheet=openSheet;window.openEdit=openEdit;
+window.openMir=openMir;window.doDelete=doDelete;window.trkDl=trkDl;
 
 init();
 })();
