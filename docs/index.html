@@ -520,7 +520,10 @@ body{
 .faq-a-in{padding:0 16px 16px;font-size:14px;line-height:1.7;color:var(--col-on-sur-var);border-top:1px solid var(--col-out-var);padding-top:12px;}
 .faq-a-in a{color:var(--col-pri);}
 .faq-a-in code{font-family:var(--font-mono);font-size:12px;background:var(--col-sur-hh);padding:1px 5px;border-radius:4px;}
-
+.faq-a-in b {
+  color: var(--col-on-sur); /* lebih terang dari var(--col-on-sur-var) */
+  font-weight: 600;
+}
 /* ── SCROLLBAR ── */
 ::-webkit-scrollbar{width:4px;height:4px;}
 ::-webkit-scrollbar-track{background:transparent;}
@@ -652,7 +655,7 @@ body{
       <div class="compat-tile"><div class="compat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-sec)"><path d="M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z"/></svg></div><div class="compat-name">APatch</div><div class="compat-tag">Support</div></div>
       <div class="compat-tile"><div class="compat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:#4CAF50"><path d="M17 1.01L7 1c-1.1 0-2 .9-2 2v18c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V3c0-1.1-.9-1.99-2-1.99zM17 19H7V5h10v14z"/></svg></div><div class="compat-name">Android</div><div class="compat-tag">10–16</div></div>
       <div class="compat-tile"><div class="compat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:#FF9800"><path d="M12 3L1 9l11 6 9-4.91V17h2V9L12 3zM5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82z"/></svg></div><div class="compat-name">Snapdragon</div><div class="compat-tag">Only</div></div>
-      <div class="compat-tile"><div class="compat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-on-sur-var)"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg></div><div class="compat-name">Abi</div><div class="compat-tag">ARM/ARM64</div></div>
+      <div class="compat-tile"><div class="compat-ico"><svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" style="color:var(--col-on-sur-var)"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg></div><div class="compat-name">ABI Support</div><div class="compat-tag">ARM/ARM64</div></div>
     </div>
 
     <!-- Features -->
@@ -676,7 +679,7 @@ body{
 
     <div class="faq" onclick="toggleFaq(this)">
       <div class="faq-q"><div class="faq-q-text">How do I access the WebUI?</div><svg class="faq-chev" viewBox="0 0 24 24" fill="currentColor"><path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/></svg></div>
-      <div class="faq-a"><div class="faq-a-in">After installing and rebooting, Open your WebUI Manager and then select<b>SnapPerf Modules</b>. Make sure the module is enabled in your root manager.</div></div>
+      <div class="faq-a"><div class="faq-a-in">After installing and rebooting, Open your WebUI Manager and then select <b>SnapPerf Modules</b>. Make sure the module is enabled in your root manager.</div></div>
     </div>
 
     <div class="faq" onclick="toggleFaq(this)">
