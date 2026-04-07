@@ -1,120 +1,177 @@
-<p align="center">
-  <img src="banner.webp" width="100%">
-</p>
+# Supabase CLI
 
-# SnapPerf
+[![Coverage Status](https://coveralls.io/repos/github/supabase/cli/badge.svg?branch=develop)](https://coveralls.io/github/supabase/cli?branch=develop) [![Bitbucket Pipelines](https://img.shields.io/bitbucket/pipelines/supabase-cli/setup-cli/master?style=flat-square&label=Bitbucket%20Canary)](https://bitbucket.org/supabase-cli/setup-cli/pipelines) [![Gitlab Pipeline Status](https://img.shields.io/gitlab/pipeline-status/sweatybridge%2Fsetup-cli?label=Gitlab%20Canary)
+](https://gitlab.com/sweatybridge/setup-cli/-/pipelines)
 
-**A Magisk performance module built for Snapdragon.**  
+[Supabase](https://supabase.io) is an open source Firebase alternative. We're building the features of Firebase using enterprise-grade open source tools.
 
-## What it does
+This repository contains all the functionality for Supabase CLI.
 
-SnapPerf targets Qualcomm's architecture directly — Kryo CPU clusters, Adreno GPU, and the Hexagon DSP — and applies a hand-tuned set of kernel and system tweaks that actually make a difference.
+- [x] Running Supabase locally
+- [x] Managing database migrations
+- [x] Creating and deploying Supabase Functions
+- [x] Generating types directly from your database schema
+- [x] Making authenticated HTTP requests to [Management API](https://supabase.com/docs/reference/api/introduction)
 
-- **CPU governor** tuning per cluster (prime, gold, silver)
-- **Scheduler** latency and wake-up optimizations
-- **Adreno GPU** frequency and power profile adjustments
-- **Thermal** throttling behavior for sustained load
-- **Frame pacing** improvements for smoother display
-- **TCP buffer** and network scheduler tweaks
-- **Battery profiles** (Balanced / Performance / Battery Saver)
-- **WebUI** — configure everything from a browser, no ADB needed
+## Getting started
 
+### Install the CLI
 
-## Requirements
+Available via [NPM](https://www.npmjs.com) as dev dependency. To install:
 
-| Item | Minimum |
-|------|---------|
-| SoC | Qualcomm Snapdragon (any) |
-| Android | 10+ |
-| Root manager | Magisk v24+ **or** KernelSU |
-| RAM | 3 GB |
+```bash
+npm i supabase --save-dev
+```
 
-### Root manager compatibility
-
-| Manager | Status |
-|---------|--------|
-| Magisk v24+ | ✅ Full support |
-| Magisk Delta / Kitsune | ✅ Full support |
-| KernelSU | ✅ Full support |
-| APatch | ✅ Tested |
-| Magisk Canary | ✅ Compatible |
-
-
-## Supported devices
-
-Any device running a Qualcomm Snapdragon SoC. Tested on mid-range to flagship chips:
-
-**Snapdragon 6xx** — 660, 662, 665, 678, 680, 685, 695, 6 Gen 1, 6s Gen 3  
-**Snapdragon 7xx** — 720G, 730G, 732G, 750G, 765G, 778G, 780G, 7 Gen 1, 7s Gen 2, 7 Gen 3  
-**Snapdragon 8xx** — 845, 855, 860, 865, 870, 888, 8 Gen 1, 8+ Gen 1, 8 Gen 2, 8 Gen 3  
-
-
-## Installation
-
-**Via Magisk / KernelSU Manager (recommended)**
-
-1. Download the latest `.zip` from [Releases](https://github.com/aetherdev01/SnapPerf/releases/latest)
-2. Open Magisk Manager or KernelSU Manager
-3. Go to **Modules** → **Install from storage**
-4. Select the downloaded zip
-5. Reboot
-
-**Via TWRP / custom recovery**
-
-1. Download the `.zip`
-2. Boot into recovery
-3. Flash the zip
-4. Reboot
-
-
-## WebUI
-
-SnapPerf includes a built-in web interface served locally on the device.  
-
-- Switch profiles (Balanced / Performance / Battery)
-- Toggle individual tweaks
-- View active governor settings
-- Per-app CPU governor overrides
-- Light and dark mode
-
-
-## Profiles
-
-| Profile | Use case |
-|---------|----------|
-| **Balanced** | Daily driver — good performance without burning through battery |
-| **Performance** | Gaming sessions, benchmark runs, heavy multitasking |
-| **Battery** | Long travel days, low-charge situations |
-
-
-## Uninstall
-
-Remove via Magisk Manager or KernelSU Manager → **Modules** → tap the trash icon next to SnapPerf → Reboot.
-
-All system values revert to stock defaults on uninstall.
-
-
-## Support & community
-
-- **Telegram channel:** [t.me/get01projects](https://t.me/get01projects)
-- **Developer:** [@AetherDev22](https://t.me/AetherDev22)
-- **GitHub Issues:** for bug reports and feature requests
-
-
-## License
+When installing with yarn 4, you need to disable experimental fetch with the following nodejs config.
 
 ```
-Copyright (c) 2026 AetherDev
+NODE_OPTIONS=--no-experimental-fetch yarn add supabase
+```
 
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
+> **Note**
+For Bun versions below v1.0.17, you must add `supabase` as a [trusted dependency](https://bun.sh/guides/install/trusted) before running `bun add -D supabase`.
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<details>
+  <summary><b>macOS</b></summary>
 
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
+  Available via [Homebrew](https://brew.sh). To install:
+
+  ```sh
+  brew install supabase/tap/supabase
+  ```
+
+  To install the beta release channel:
+  
+  ```sh
+  brew install supabase/tap/supabase-beta
+  brew link --overwrite supabase-beta
+  ```
+  
+  To upgrade:
+
+  ```sh
+  brew upgrade supabase
+  ```
+</details>
+
+<details>
+  <summary><b>Windows</b></summary>
+
+  Available via [Scoop](https://scoop.sh). To install:
+
+  ```powershell
+  scoop bucket add supabase https://github.com/supabase/scoop-bucket.git
+  scoop install supabase
+  ```
+
+  To upgrade:
+
+  ```powershell
+  scoop update supabase
+  ```
+</details>
+
+<details>
+  <summary><b>Linux</b></summary>
+
+  Available via [Homebrew](https://brew.sh) and Linux packages.
+
+  #### via Homebrew
+
+  To install:
+
+  ```sh
+  brew install supabase/tap/supabase
+  ```
+
+  To upgrade:
+
+  ```sh
+  brew upgrade supabase
+  ```
+
+  #### via Linux packages
+
+  Linux packages are provided in [Releases](https://github.com/supabase/cli/releases). To install, download the `.apk`/`.deb`/`.rpm`/`.pkg.tar.zst` file depending on your package manager and run the respective commands.
+
+  ```sh
+  sudo apk add --allow-untrusted <...>.apk
+  ```
+
+  ```sh
+  sudo dpkg -i <...>.deb
+  ```
+
+  ```sh
+  sudo rpm -i <...>.rpm
+  ```
+
+  ```sh
+  sudo pacman -U <...>.pkg.tar.zst
+  ```
+</details>
+
+<details>
+  <summary><b>Other Platforms</b></summary>
+
+  You can also install the CLI via [go modules](https://go.dev/ref/mod#go-install) without the help of package managers.
+
+  ```sh
+  go install github.com/supabase/cli@latest
+  ```
+
+  Add a symlink to the binary in `$PATH` for easier access:
+
+  ```sh
+  ln -s "$(go env GOPATH)/bin/cli" /usr/bin/supabase
+  ```
+
+  This works on other non-standard Linux distros.
+</details>
+
+<details>
+  <summary><b>Community Maintained Packages</b></summary>
+
+  Available via [pkgx](https://pkgx.sh/). Package script [here](https://github.com/pkgxdev/pantry/blob/main/projects/supabase.com/cli/package.yml).
+  To install in your working directory:
+
+  ```bash
+  pkgx install supabase
+  ```
+
+  Available via [Nixpkgs](https://nixos.org/). Package script [here](https://github.com/NixOS/nixpkgs/blob/master/pkgs/development/tools/supabase-cli/default.nix).
+</details>
+
+### Run the CLI
+
+```bash
+supabase bootstrap
+```
+
+Or using npx:
+
+```bash
+npx supabase bootstrap
+```
+
+The bootstrap command will guide you through the process of setting up a Supabase project using one of the [starter](https://github.com/supabase-community/supabase-samples/blob/main/samples.json) templates.
+
+## Docs
+
+Command & config reference can be found [here](https://supabase.com/docs/reference/cli/about).
+
+## Breaking changes
+
+We follow semantic versioning for changes that directly impact CLI commands, flags, and configurations.
+
+However, due to dependencies on other service images, we cannot guarantee that schema migrations, seed.sql, and generated types will always work for the same CLI major version. If you need such guarantees, we encourage you to pin a specific version of CLI in package.json.
+
+## Developing
+
+To run from source:
+
+```sh
+# Go >= 1.22
+go run . help
 ```
